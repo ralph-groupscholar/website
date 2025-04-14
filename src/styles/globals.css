@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-gs-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-display: var(--font-gs-display), "Times New Roman", serif;
+}
+
+:root {
+  --gs-ink: #1c2628;
+  --gs-ink-soft: rgba(28, 38, 40, 0.14);
+  --gs-accent: #c95131;
+  --gs-muted: #485a5e;
+  --gs-paper: #f8f2e8;
+}
+
+::selection {
+  background: rgba(201, 81, 49, 0.22);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--gs-ink);
+  background: var(--gs-paper);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
