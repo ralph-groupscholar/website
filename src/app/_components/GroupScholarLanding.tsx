@@ -51,6 +51,14 @@ type StudioHour = {
   note: string;
 };
 
+type Host = {
+  name: string;
+  title: string;
+  focus: string;
+  availability: string;
+  note: string;
+};
+
 type FaqItem = {
   q: string;
   a: string;
@@ -360,6 +368,34 @@ export function GroupScholarLanding() {
     [],
   );
 
+  // Hosts anchor the tone and keep each room aligned with the Honor Code.
+  const hosts: Host[] = useMemo(
+    () => [
+      {
+        name: "Dr. Mira Patel",
+        title: "Lead Moderator",
+        focus: "Boundary-setting + gentle accountability.",
+        availability: "Mon + Wed",
+        note: "Known for the “two-minute debrief” rule.",
+      },
+      {
+        name: "Alex Ruiz",
+        title: "Studio Wrangler",
+        focus: "Group flow + note relay.",
+        availability: "Wed + Fri",
+        note: "Brings the soft timers and the hard questions.",
+      },
+      {
+        name: "Jun Park",
+        title: "After Hours Host",
+        focus: "Late-night focus rituals.",
+        availability: "Fri",
+        note: "Keeps the vibe playful, the exits clear.",
+      },
+    ],
+    [],
+  );
+
   const faq: FaqItem[] = useMemo(
     () => [
       {
@@ -463,6 +499,13 @@ export function GroupScholarLanding() {
       <div className="pointer-events-none fixed inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,rgba(28,38,40,0.14)_1px,transparent_1px),linear-gradient(to_bottom,rgba(28,38,40,0.14)_1px,transparent_1px)] [background-size:42px_42px]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_12%,rgba(255,255,255,0.45),transparent_38%)]" />
 
+      <a
+        href="#main-content"
+        className="absolute left-6 top-4 z-30 rounded-full bg-[color:var(--gs-ink)] px-4 py-2 text-xs font-bold text-white shadow-sm opacity-0 transition focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40"
+      >
+        Skip to content
+      </a>
+
       <header className="relative z-10 mx-auto max-w-7xl px-4 pb-8 pt-6 md:px-8 md:pt-8">
         <nav
           data-hero-nav
@@ -501,6 +544,9 @@ export function GroupScholarLanding() {
               href="#sessions"
             >
               Sessions
+            </a>
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#hosts">
+              Hosts
             </a>
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#faq">
               Conduct
@@ -651,7 +697,10 @@ export function GroupScholarLanding() {
         </section>
       </header>
 
-      <main className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-10 md:px-8 md:pt-14">
+      <main
+        id="main-content"
+        className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-10 md:px-8 md:pt-14"
+      >
         <section id="principles" data-animate="section" className="scroll-mt-28">
           <SectionHeading
             eyebrow="Mission statement"
@@ -935,6 +984,85 @@ export function GroupScholarLanding() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section
+          id="hosts"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Session hosts"
+            title="Meet the moderators who keep it kind."
+            subtitle="Every room has a host to calibrate the energy, track notes, and intervene when boundaries blur."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.2fr_0.8fr]"
+          >
+            <div className="grid gap-4">
+              {hosts.map((host) => (
+                <article
+                  key={host.name}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                        {host.title.toUpperCase()}
+                      </div>
+                      <h3 className="mt-2 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                        {host.name}
+                      </h3>
+                    </div>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-xs font-bold text-[color:var(--gs-muted)]">
+                      {host.availability}
+                    </span>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {host.focus}
+                  </p>
+                  <div className="mt-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/80 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    {host.note}
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Hosting standards
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  A calm hand on the room’s pulse.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  Hosts are trained to encourage consent-forward play, document
+                  the work, and shut down any moment that feels off.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {[
+                  "Check-in circle at the 5-minute mark.",
+                  "Rotate note-taking every 20 minutes.",
+                  "Use boundary badges to pause the room.",
+                ].map((line) => (
+                  <div
+                    key={line}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]"
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
+            </aside>
           </div>
         </section>
 

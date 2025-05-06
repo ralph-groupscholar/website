@@ -1,3 +1,8 @@
+2026-02-05 19:06:12 — Iteration 3
+- Added a Hosts section with profiles and hosting standards to spotlight the moderators and their guardrails.
+- Inserted a skip-to-content link plus a main-content anchor for keyboard-friendly navigation.
+- Extended the hero navigation to include the new Hosts anchor.
+
 2026-02-05 19:00:11 — Iteration 2
 - Added a new Session Flow section with ritual steps and a Studio Kit sidebar to clarify cadence and boundaries.
 - Extended the hero navigation and marquee to surface the new Rituals anchor.
