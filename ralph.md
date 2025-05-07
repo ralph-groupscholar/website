@@ -1,3 +1,8 @@
+2026-02-06 19:15:01 — Iteration 4
+- Added an Admissions section that turns the application steps into a visible three-stage timeline.
+- Built a readiness checklist sidebar with a direct CTA to the intake form.
+- Expanded the Apply form with helper and status messaging for clearer, accessible feedback.
+
 2026-02-05 19:06:12 — Iteration 3
 - Added a Hosts section with profiles and hosting standards to spotlight the moderators and their guardrails.
 - Inserted a skip-to-content link plus a main-content anchor for keyboard-friendly navigation.
