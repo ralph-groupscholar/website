@@ -40,6 +40,14 @@ type SessionFormat = {
   seats: string;
 };
 
+type VibeTrack = {
+  name: string;
+  tone: string;
+  capacity: string;
+  rule: string;
+  signal: string;
+};
+
 type ApplicationStep = {
   badge: string;
   title: string;
@@ -379,6 +387,40 @@ export function GroupScholarLanding() {
     [],
   );
 
+  // Matching tracks describe how we place applicants into rooms with clear tone cues.
+  const vibeTracks: VibeTrack[] = useMemo(
+    () => [
+      {
+        name: "Quiet Focus",
+        tone: "Low noise, high boundaries.",
+        capacity: "6 seats",
+        rule: "Whispers only. Notes stay private.",
+        signal: "Boundary badge: " + "Silent",
+      },
+      {
+        name: "Shared Draft",
+        tone: "Mid-volume, collaborative critique.",
+        capacity: "8 seats",
+        rule: "Ask before interrupting the flow.",
+        signal: "Boundary badge: " + "Check-in",
+      },
+      {
+        name: "After Hours",
+        tone: "Playful, permissive, consent-forward.",
+        capacity: "10 seats",
+        rule: "Exit early if the vibe shifts.",
+        signal: "Boundary badge: " + "Open",
+      },
+    ],
+    [],
+  );
+
+  // Signal codes make the room expectations explicit before anyone arrives.
+  const signalCodes = useMemo(
+    () => ["Silent", "Check-in", "Open", "Pause", "Exit"],
+    [],
+  );
+
   // Admissions steps clarify the application journey without breaking the satire.
   const applicationSteps: ApplicationStep[] = useMemo(
     () => [
@@ -601,6 +643,12 @@ export function GroupScholarLanding() {
               href="#sessions"
             >
               Sessions
+            </a>
+            <a
+              className="transition hover:text-[color:var(--gs-ink)]"
+              href="#matching"
+            >
+              Matching
             </a>
             <a
               className="transition hover:text-[color:var(--gs-ink)]"
@@ -1047,6 +1095,91 @@ export function GroupScholarLanding() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Matching section clarifies how we place applicants into rooms with clear tone cues. */}
+        <section
+          id="matching"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Vibe matching"
+            title="We match you to a room, not a ranking."
+            subtitle="Choose your tolerance, and we place you in a track with clear signals and consent-forward rules."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div className="grid gap-4">
+              {vibeTracks.map((track) => (
+                <article
+                  key={track.name}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                        Track
+                      </div>
+                      <h3 className="mt-2 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                        {track.name}
+                      </h3>
+                    </div>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-xs font-bold text-[color:var(--gs-muted)]">
+                      {track.capacity}
+                    </span>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {track.tone}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)] px-3 py-1">
+                      {track.rule}
+                    </span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {track.signal}
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Signal codes
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Boundary cues you can read at a glance.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  Every room runs on visible signals so nobody has to guess.
+                  We adjust the room before asking you to adjust yourself.
+                </p>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {signalCodes.map((code) => (
+                  <span
+                    key={code}
+                    className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-xs font-bold text-[color:var(--gs-muted)]"
+                  >
+                    {code}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4 text-xs font-bold text-[color:var(--gs-muted)]">
+                Hosts confirm signal changes every 20 minutes so the room stays
+                consensual and on tone.
+              </div>
+            </aside>
           </div>
         </section>
 
