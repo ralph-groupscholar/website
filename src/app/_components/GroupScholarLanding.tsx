@@ -81,6 +81,19 @@ type Host = {
   note: string;
 };
 
+type FieldNote = {
+  badge: string;
+  title: string;
+  desc: string;
+  session: string;
+  artifact: string;
+};
+
+type ArchiveItem = {
+  title: string;
+  desc: string;
+};
+
 type FaqItem = {
   q: string;
   a: string;
@@ -202,13 +215,18 @@ export function GroupScholarLanding() {
   const reduced = usePrefersReducedMotion();
   const helperId = useId();
   const statusId = useId();
+  const preferenceId = useId();
+  const focusId = useId();
   const [email, setEmail] = useState("");
+  const [track, setTrack] = useState("Any track");
+  const [focusNote, setFocusNote] = useState("");
   const [formStatus, setFormStatus] = useState<"idle" | "error" | "sent">("idle");
+  const formattedTrack = track === "Any track" ? "any track" : track;
   const helperMessage =
     "We only use this to match you with a room. No mailing lists.";
   const statusMessage =
     formStatus === "sent"
-      ? "Intent logged. Expect a response within 48 hours."
+      ? `Intent logged for ${formattedTrack}. Expect a response within 48 hours.`
       : formStatus === "error"
         ? "Please enter a valid email to reserve a seat."
         : "Ready when you are — share an email to start.";
@@ -307,6 +325,56 @@ export function GroupScholarLanding() {
         name: "R. Chair",
         affiliation: "Office of Institutional Mischief",
         citation: "doi:10.0000/gs.oim.2025.004",
+      },
+    ],
+    [],
+  );
+
+  // Field notes capture real-ish moments from recent sessions.
+  const fieldNotes: FieldNote[] = useMemo(
+    () => [
+      {
+        badge: "Log 01",
+        title: "The shared silence experiment",
+        desc: "Two people asked for “Silent” badges. The room followed suit. Nobody spoke for 23 minutes.",
+        session: "Whisper Lab",
+        artifact: "Soft timer imprint",
+      },
+      {
+        badge: "Log 02",
+        title: "The note relay success",
+        desc: "We rotated the scribe role three times. Everyone left with identical notes and different memories.",
+        session: "Studio Critique",
+        artifact: "Relay ledger",
+      },
+      {
+        badge: "Log 03",
+        title: "The graceful exit",
+        desc: "A guest changed tracks mid-session. The host paused, reset the room, and the vibe held.",
+        session: "After Hours Salon",
+        artifact: "Exit slip",
+      },
+    ],
+    [],
+  );
+
+  const archiveItems: ArchiveItem[] = useMemo(
+    () => [
+      {
+        title: "Boundary badge roll call",
+        desc: "Every badge is counted and logged before the room opens.",
+      },
+      {
+        title: "Minute-by-minute notes",
+        desc: "Hosts keep a gentle ledger so no one has to remember everything.",
+      },
+      {
+        title: "Exit acknowledgements",
+        desc: "Quiet confirmations that someone left on their own terms.",
+      },
+      {
+        title: "Consent reset stamp",
+        desc: "Applied whenever the track or noise level shifts.",
       },
     ],
     [],
@@ -940,6 +1008,89 @@ export function GroupScholarLanding() {
           </div>
         </section>
 
+        {/* Field notes showcase highlights and artifacts from recent sessions. */}
+        <section
+          id="field-notes"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Field notes"
+            title="We log the moments between the minutes."
+            subtitle="Hosts keep a soft record of what worked, what shifted, and what stayed respectful."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div className="grid gap-4">
+              {fieldNotes.map((note) => (
+                <article
+                  key={note.title}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">{note.badge}</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {note.session}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {note.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {note.desc}
+                  </p>
+                  <div className="mt-4 text-xs font-bold uppercase tracking-wide text-[color:var(--gs-muted)]">
+                    Artifact:{" "}
+                    <span className="normal-case text-[color:var(--gs-ink)]">
+                      {note.artifact}
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Archive shelf
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Receipts, not rumors.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  We document outcomes so the room feels safe, not surveilled.
+                  Notes are anonymized and reset weekly.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {archiveItems.map((item) => (
+                  <div
+                    key={item.title}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3"
+                  >
+                    <div className="text-sm font-bold text-[color:var(--gs-ink)]">
+                      {item.title}
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {item.desc}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Archive refresh: every Sunday at 10 PM, local time.
+              </div>
+            </aside>
+          </div>
+        </section>
+
         <section
           id="rituals"
           data-animate="section"
@@ -1405,7 +1556,7 @@ export function GroupScholarLanding() {
               </div>
 
               <form
-                className="mx-auto mt-8 flex max-w-xl flex-col gap-3 sm:flex-row"
+                className="mx-auto mt-8 grid max-w-xl gap-3 sm:grid-cols-2"
                 onSubmit={(event) => {
                   event.preventDefault();
                   if (!email.trim()) {
@@ -1434,11 +1585,64 @@ export function GroupScholarLanding() {
                   }}
                   aria-invalid={formStatus === "error"}
                   aria-describedby={`${helperId} ${statusId}`}
-                  className="h-12 w-full rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-5 text-sm font-bold text-[color:var(--gs-ink)] shadow-sm outline-none placeholder:text-[color:var(--gs-muted)]/60 focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40"
+                  className="h-12 w-full rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-5 text-sm font-bold text-[color:var(--gs-ink)] shadow-sm outline-none placeholder:text-[color:var(--gs-muted)]/60 focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40 sm:col-span-2"
                 />
+                <label className="sr-only" htmlFor="track">
+                  Preferred track
+                </label>
+                <select
+                  id="track"
+                  value={track}
+                  aria-describedby={preferenceId}
+                  onChange={(event) => {
+                    setTrack(event.target.value);
+                    if (formStatus !== "idle") {
+                      setFormStatus("idle");
+                    }
+                  }}
+                  className="h-12 w-full rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-5 text-sm font-bold text-[color:var(--gs-ink)] shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40"
+                >
+                  {["Any track", "Quiet Focus", "Shared Draft", "After Hours"].map(
+                    (option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ),
+                  )}
+                </select>
+                <label className="sr-only" htmlFor="focus-note">
+                  Focus note
+                </label>
+                <textarea
+                  id="focus-note"
+                  rows={3}
+                  value={focusNote}
+                  aria-describedby={focusId}
+                  placeholder="Optional: name one focus goal or boundary for tonight."
+                  onChange={(event) => {
+                    setFocusNote(event.target.value);
+                    if (formStatus !== "idle") {
+                      setFormStatus("idle");
+                    }
+                  }}
+                  className="w-full rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white px-5 py-3 text-sm font-bold text-[color:var(--gs-ink)] shadow-sm outline-none placeholder:text-[color:var(--gs-muted)]/60 focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40 sm:col-span-2"
+                />
+                <p
+                  id={preferenceId}
+                  className="text-xs font-bold tracking-wide text-[color:var(--gs-muted)] sm:col-span-2"
+                >
+                  Track preference helps us match you faster. Any track keeps you
+                  open to all rooms.
+                </p>
+                <p
+                  id={focusId}
+                  className="text-xs font-bold tracking-wide text-[color:var(--gs-muted)] sm:col-span-2"
+                >
+                  Focus notes are optional and only shared with your host.
+                </p>
                 <button
                   type="submit"
-                  className="h-12 rounded-full bg-[color:var(--gs-ink)] px-6 text-sm font-bold text-white shadow-[0_16px_30px_-20px_rgba(28,38,40,0.9)] transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40"
+                  className="h-12 rounded-full bg-[color:var(--gs-ink)] px-6 text-sm font-bold text-white shadow-[0_16px_30px_-20px_rgba(28,38,40,0.9)] transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40 sm:col-span-2"
                 >
                   Apply
                 </button>

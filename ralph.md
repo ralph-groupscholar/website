@@ -1,3 +1,8 @@
+2026-02-05 19:19:40 — Iteration 6
+- Added a Field Notes section with session logs and an archive shelf to highlight real-ish moments and artifacts.
+- Expanded the intake form with track preferences and optional focus notes for clearer matching context.
+- Updated apply status messaging to reflect preferred track selections.
+
 2026-02-05 19:17:12 — Iteration 5
 - Added a Vibe Matching section with track cards and signal codes to clarify room placement.
 - Expanded the hero navigation with a Matching anchor for faster wayfinding.
