@@ -1,3 +1,3 @@
 while :; do
-  codex --approval-mode full-auto "$(cat PROMPT.md)"
+  codex exec --sandbox danger-full-access "$(cat PROMPT.md)"
 done
