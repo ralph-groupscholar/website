@@ -40,6 +40,19 @@ type SessionFormat = {
   seats: string;
 };
 
+type RoomZone = {
+  name: string;
+  desc: string;
+  etiquette: string;
+  light: string;
+};
+
+type SignalBoardItem = {
+  label: string;
+  detail: string;
+  cadence: string;
+};
+
 type VibeTrack = {
   name: string;
   tone: string;
@@ -506,6 +519,62 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const roomZones: RoomZone[] = useMemo(
+    () => [
+      {
+        name: "Quiet alcove",
+        desc: "Low conversation, deep focus, plenty of side-eye-free space.",
+        etiquette: "Headphones allowed. Requests handled via notes.",
+        light: "Soft amber lamps",
+      },
+      {
+        name: "Shared table",
+        desc: "Collaborative zone for live edits, quick questions, and gentle critique.",
+        etiquette: "Ask before you interrupt. Keep voices at room level.",
+        light: "Warm overhead glow",
+      },
+      {
+        name: "Window bench",
+        desc: "Casual decompression for micro breaks and low-stakes chats.",
+        etiquette: "Short stays only. Keep exits clear.",
+        light: "Natural spill + candles",
+      },
+      {
+        name: "Host desk",
+        desc: "Check-ins, signal resets, and boundary reminders.",
+        etiquette: "Flag a host with a badge, not a shout.",
+        light: "Desk lamp + signal board",
+      },
+    ],
+    [],
+  );
+
+  const signalBoardItems: SignalBoardItem[] = useMemo(
+    () => [
+      {
+        label: "Arrival window",
+        detail: "Hosts confirm names, track badges, and focus goals.",
+        cadence: "First 10 minutes",
+      },
+      {
+        label: "Signal scan",
+        detail: "Room checks the active badge and confirms consent.",
+        cadence: "Every 20 minutes",
+      },
+      {
+        label: "Note relay",
+        detail: "Scribe rotates, notes migrate, attention resets.",
+        cadence: "Mid-session",
+      },
+      {
+        label: "Exit sweep",
+        detail: "Quiet nods, boundary reminders, graceful departures.",
+        cadence: "Final 10 minutes",
+      },
+    ],
+    [],
+  );
+
   // Matching tracks describe how we place applicants into rooms with clear tone cues.
   const vibeTracks: VibeTrack[] = useMemo(
     () => [
@@ -821,6 +890,9 @@ export function GroupScholarLanding() {
             >
               Sessions
             </a>
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#rooms">
+              Rooms
+            </a>
             <a
               className="transition hover:text-[color:var(--gs-ink)]"
               href="#matching"
@@ -982,6 +1054,7 @@ export function GroupScholarLanding() {
               "Chemistry: Off-Syllabus",
               "Peer Review: Personal",
               "Session Rituals",
+              "Room Map",
               "Boundaries: Clear",
               "Library Stacks",
               "Signal Decoder",
@@ -1441,6 +1514,88 @@ export function GroupScholarLanding() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section
+          id="rooms"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Room map"
+            title="Every zone has a mood and a rule."
+            subtitle="We design the space so you can move between quiet focus, shared drafting, and soft exits without confusion."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div className="grid gap-4">
+              {roomZones.map((zone) => (
+                <article
+                  key={zone.name}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">ZONE</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {zone.light}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {zone.name}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {zone.desc}
+                  </p>
+                  <div className="mt-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/80 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    {zone.etiquette}
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Signal board
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  The cadence that keeps the room aligned.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  The board is visible from every table so nobody misses a reset.
+                  We use it to announce shifts before they happen.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {signalBoardItems.map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3"
+                  >
+                    <div className="text-sm font-bold text-[color:var(--gs-ink)]">
+                      {item.label}
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {item.detail}
+                    </div>
+                    <div className="mt-2 text-[11px] font-bold uppercase tracking-wide text-[color:var(--gs-muted)]">
+                      {item.cadence}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Hosts update the board in ink, not in whispers.
+              </div>
+            </aside>
           </div>
         </section>
 

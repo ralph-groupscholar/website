@@ -1,3 +1,8 @@
+2026-02-06 00:49:07 — Iteration 9
+- Added a Room Map section with zone-specific etiquette and lighting cues.
+- Built a signal board sidebar to explain the live cadence of room resets.
+- Updated navigation and marquee highlights to include the new Rooms anchor.
+
 2026-02-05 19:45:30 — Iteration 8
 - Added a Library section with archive artifacts and a checkout desk sidebar to deepen the world-building.
 - Built a Signal Decoder section with interactive badge toggles and host response details.
