@@ -1,3 +1,8 @@
+2026-02-06 00:53:01 — Iteration 10
+- Added a Calibration Studio section with a focus dial that maps to tracks, signals, and host moves.
+- Built a live calibration readout card with recommended track, signal, and session length.
+- Updated navigation and marquee highlights to surface the new calibration anchor.
+
 2026-02-06 00:49:07 — Iteration 9
 - Added a Room Map section with zone-specific etiquette and lighting cues.
 - Built a signal board sidebar to explain the live cadence of room resets.

@@ -53,6 +53,16 @@ type SignalBoardItem = {
   cadence: string;
 };
 
+type CalibrationProfile = {
+  level: number;
+  label: string;
+  desc: string;
+  track: string;
+  signal: string;
+  hostMove: string;
+  duration: string;
+};
+
 type VibeTrack = {
   name: string;
   tone: string;
@@ -250,6 +260,7 @@ export function GroupScholarLanding() {
   const [focusNote, setFocusNote] = useState("");
   const [formStatus, setFormStatus] = useState<"idle" | "error" | "sent">("idle");
   const [activeSignal, setActiveSignal] = useState("Silent");
+  const [calibrationLevel, setCalibrationLevel] = useState(3);
   const maxFocusLength = 160;
   const formattedTrack = track === "Any track" ? "any track" : track;
   const focusCount = focusNote.length;
@@ -269,6 +280,8 @@ export function GroupScholarLanding() {
       : "text-[color:var(--gs-muted)]";
   const trackPreviewId = useId();
   const focusCountId = useId();
+  const calibrationHelpId = useId();
+  const calibrationValueId = useId();
 
   const principles: Principle[] = useMemo(
     () => [
@@ -660,9 +673,75 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const calibrationProfiles: CalibrationProfile[] = useMemo(
+    () => [
+      {
+        level: 1,
+        label: "Low",
+        desc: "You want quiet accountability, minimal chatter, and a soft reset.",
+        track: "Quiet Focus",
+        signal: "Silent",
+        hostMove: "Host checks in via note card only.",
+        duration: "45–60 minutes",
+      },
+      {
+        level: 2,
+        label: "Measured",
+        desc: "You want a few check-ins without losing the flow.",
+        track: "Quiet Focus",
+        signal: "Check-in",
+        hostMove: "Host schedules two-minute status swaps.",
+        duration: "60–75 minutes",
+      },
+      {
+        level: 3,
+        label: "Balanced",
+        desc: "You want a mix of solo focus and short bursts of critique.",
+        track: "Shared Draft",
+        signal: "Check-in",
+        hostMove: "Host rotates the scribe every 20 minutes.",
+        duration: "75–90 minutes",
+      },
+      {
+        level: 4,
+        label: "Playful",
+        desc: "You want loose collaboration and a permissive energy.",
+        track: "After Hours",
+        signal: "Open",
+        hostMove: "Host opens a consent refresh before breaks.",
+        duration: "90–110 minutes",
+      },
+      {
+        level: 5,
+        label: "Open",
+        desc: "You want full flexibility, social momentum, and easy exits.",
+        track: "After Hours",
+        signal: "Open",
+        hostMove: "Host keeps exits visible and invites resets.",
+        duration: "110–120 minutes",
+      },
+    ],
+    [],
+  );
+
+  const fallbackCalibration: CalibrationProfile =
+    calibrationProfiles[2] ??
+    calibrationProfiles[0] ?? {
+      level: 3,
+      label: "Balanced",
+      desc: "You want a mix of solo focus and short bursts of critique.",
+      track: "Shared Draft",
+      signal: "Check-in",
+      hostMove: "Host rotates the scribe every 20 minutes.",
+      duration: "75–90 minutes",
+    };
+
   const activeSignalProfile =
     signalProfiles.find((profile) => profile.code === activeSignal) ??
     signalProfiles[0];
+  const activeCalibration =
+    calibrationProfiles.find((profile) => profile.level === calibrationLevel) ??
+    fallbackCalibration;
 
   // Admissions steps clarify the application journey without breaking the satire.
   const applicationSteps: ApplicationStep[] = useMemo(
@@ -899,6 +978,12 @@ export function GroupScholarLanding() {
             >
               Matching
             </a>
+            <a
+              className="transition hover:text-[color:var(--gs-ink)]"
+              href="#calibration"
+            >
+              Calibration
+            </a>
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#decoder">
               Decoder
             </a>
@@ -1058,6 +1143,7 @@ export function GroupScholarLanding() {
               "Boundaries: Clear",
               "Library Stacks",
               "Signal Decoder",
+              "Calibration Studio",
             ]}
           />
         </section>
@@ -1681,6 +1767,139 @@ export function GroupScholarLanding() {
                 consensual and on tone.
               </div>
             </aside>
+          </div>
+        </section>
+
+        <section
+          id="calibration"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Calibration studio"
+            title="Tune the room before you arrive."
+            subtitle="Slide to set your collaboration tolerance. We translate it into a track, signal, and host plan."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.05fr_0.95fr]"
+          >
+            <div
+              data-stagger-item
+              className="rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                Focus dial
+              </div>
+              <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                Choose your collaboration tolerance.
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                Low stays quiet. High invites more conversation. Every level keeps
+                boundaries explicit.
+              </p>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-5">
+                <div className="flex items-center justify-between text-xs font-bold text-[color:var(--gs-muted)]">
+                  <span>Silent-first</span>
+                  <span>Open flow</span>
+                </div>
+                <input
+                  type="range"
+                  min={1}
+                  max={5}
+                  step={1}
+                  value={calibrationLevel}
+                  aria-describedby={`${calibrationHelpId} ${calibrationValueId}`}
+                  onChange={(event) =>
+                    setCalibrationLevel(Number(event.target.value))
+                  }
+                  className="mt-4 w-full accent-[color:var(--gs-accent)]"
+                />
+                <div className="mt-4 grid grid-cols-5 gap-2 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--gs-muted)]">
+                  {calibrationProfiles.map((profile) => (
+                    <span key={profile.level}>{profile.level}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-6 grid gap-3">
+                {calibrationProfiles.map((profile) => (
+                  <div
+                    key={profile.level}
+                    className={`rounded-2xl border px-4 py-3 text-xs font-bold ${
+                      profile.level === calibrationLevel
+                        ? "border-[color:var(--gs-ink)] bg-white text-[color:var(--gs-ink)] shadow-sm"
+                        : "border-[color:var(--gs-ink-soft)] bg-white/80 text-[color:var(--gs-muted)]"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="tracking-[0.24em]">LEVEL {profile.level}</span>
+                      <span className="uppercase tracking-[0.2em]">
+                        {profile.label}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-[11px] leading-relaxed">
+                      {profile.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <p
+                id={calibrationHelpId}
+                className="mt-4 text-xs font-bold tracking-wide text-[color:var(--gs-muted)]"
+              >
+                Your calibration sets the host plan and recommended track.
+              </p>
+            </div>
+
+            <article
+              data-stagger-item
+              className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+            >
+              <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                <span className="tracking-[0.24em]">CALIBRATION</span>
+                <span
+                  id={calibrationValueId}
+                  className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1"
+                >
+                  Level {activeCalibration.level}: {activeCalibration.label}
+                </span>
+              </div>
+              <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                {activeCalibration.track} track recommended.
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                {activeCalibration.desc}
+              </p>
+              <div className="mt-5 grid gap-3 text-xs font-bold text-[color:var(--gs-muted)] sm:grid-cols-2">
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/80 px-4 py-3">
+                  <div className="text-[10px] uppercase tracking-[0.28em]">
+                    Signal
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-[color:var(--gs-ink)]">
+                    {activeCalibration.signal}
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/80 px-4 py-3">
+                  <div className="text-[10px] uppercase tracking-[0.28em]">
+                    Session length
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-[color:var(--gs-ink)]">
+                    {activeCalibration.duration}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-4 text-xs font-bold text-[color:var(--gs-muted)]">
+                Host move:{" "}
+                <span className="text-[color:var(--gs-ink)]">
+                  {activeCalibration.hostMove}
+                </span>
+              </div>
+              <div className="mt-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                If you change your mind mid-session, signal “Pause” and we
+                recalibrate in under two minutes.
+              </div>
+            </article>
           </div>
         </section>
 
