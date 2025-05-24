@@ -63,6 +63,17 @@ type CalibrationProfile = {
   duration: string;
 };
 
+type LedgerMetric = {
+  label: string;
+  value: string;
+  detail: string;
+};
+
+type LedgerProtocol = {
+  title: string;
+  desc: string;
+};
+
 type VibeTrack = {
   name: string;
   tone: string;
@@ -724,6 +735,59 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const ledgerMetrics: LedgerMetric[] = useMemo(
+    () => [
+      {
+        label: "Average focus stretch",
+        value: "38 minutes",
+        detail: "Tracked with soft timers, never with names.",
+      },
+      {
+        label: "Signal confirmations",
+        value: "Every 20 minutes",
+        detail: "Hosts re-state the active badge out loud.",
+      },
+      {
+        label: "Note relay swaps",
+        value: "3 per session",
+        detail: "Shared notes move, not the attention.",
+      },
+      {
+        label: "Consent resets",
+        value: "2 per night",
+        detail: "A quick pause whenever the vibe drifts.",
+      },
+    ],
+    [],
+  );
+
+  const ledgerProtocols: LedgerProtocol[] = useMemo(
+    () => [
+      {
+        title: "Pre-session calibration",
+        desc: "Confirm boundaries before any work begins.",
+      },
+      {
+        title: "Mid-session pulse check",
+        desc: "Hosts call for a reset if the tone shifts.",
+      },
+      {
+        title: "Exit acknowledgements",
+        desc: "Departures logged without interrogation.",
+      },
+    ],
+    [],
+  );
+
+  const ledgerPulse = useMemo(
+    () => [
+      "Sunday reset: notes sealed by 10 PM.",
+      "Wednesday audit: signal logs reviewed at 5 PM.",
+      "Friday recap: hosts close the ledger by midnight.",
+    ],
+    [],
+  );
+
   const fallbackCalibration: CalibrationProfile =
     calibrationProfiles[2] ??
     calibrationProfiles[0] ?? {
@@ -984,6 +1048,9 @@ export function GroupScholarLanding() {
             >
               Calibration
             </a>
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#ledger">
+              Ledger
+            </a>
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#decoder">
               Decoder
             </a>
@@ -1144,6 +1211,7 @@ export function GroupScholarLanding() {
               "Library Stacks",
               "Signal Decoder",
               "Calibration Studio",
+              "Focus Ledger",
             ]}
           />
         </section>
@@ -1900,6 +1968,94 @@ export function GroupScholarLanding() {
                 recalibrate in under two minutes.
               </div>
             </article>
+          </div>
+        </section>
+
+        <section
+          id="ledger"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Focus ledger"
+            title="We track the room, not the people."
+            subtitle="A light-touch log of cadence, resets, and rituals so the energy stays safe."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              {ledgerMetrics.map((metric) => (
+                <article
+                  key={metric.label}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    Metric
+                  </div>
+                  <div className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {metric.value}
+                  </div>
+                  <div className="mt-2 text-sm font-bold text-[color:var(--gs-ink)]">
+                    {metric.label}
+                  </div>
+                  <div className="mt-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/85 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    {metric.detail}
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Ledger protocol
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Gentle accountability, zero surveillance.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  We log the room’s rhythm so hosts can keep the tone steady and the
+                  consent clear.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {ledgerProtocols.map((protocol) => (
+                  <div
+                    key={protocol.title}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3"
+                  >
+                    <div className="text-sm font-bold text-[color:var(--gs-ink)]">
+                      {protocol.title}
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {protocol.desc}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-4">
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Weekly pulse
+                </div>
+                <div className="mt-3 space-y-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                  {ledgerPulse.map((item) => (
+                    <div
+                      key={item}
+                      className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white px-3 py-2"
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </aside>
           </div>
         </section>
 
