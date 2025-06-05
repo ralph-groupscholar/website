@@ -1,3 +1,8 @@
+2026-02-05 20:02:43 — Iteration 13
+- Added an Invite Packet section with packet items and arrival memo timings to clarify what guests receive.
+- Extended navigation and marquee highlights to surface the new packet anchor in the page flow.
+- Introduced new invite packet data models to keep the content structured and easy to expand.
+
 2026-02-05 20:00:51 — Iteration 12
 - Added a Debrief Lab section with structured prompts and timing cues for closing sessions.
 - Built a follow-up cadence sidebar to show how notes, check-ins, and boundary refreshes travel.
