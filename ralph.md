@@ -1,3 +1,8 @@
+2026-02-05 20:05:32 — Iteration 14
+- Added a Readiness Lab section with briefing modules and cues to stage arrivals.
+- Built a readiness briefing sidebar with timing checkpoints and archive note.
+- Updated the hero navigation and marquee highlights to surface the new Readiness anchor.
+
 2026-02-05 20:02:43 — Iteration 13
 - Added an Invite Packet section with packet items and arrival memo timings to clarify what guests receive.
 - Extended navigation and marquee highlights to surface the new packet anchor in the page flow.
