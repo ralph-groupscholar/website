@@ -1227,7 +1227,7 @@ export function GroupScholarLanding() {
         (el) => {
           gsap.fromTo(
             el,
-            { y: 20, opacity: 0 },
+            { y: 20, opacity: 0, immediateRender: false },
             {
               y: 0,
               opacity: 1,
@@ -1236,6 +1236,7 @@ export function GroupScholarLanding() {
               scrollTrigger: {
                 trigger: el,
                 start: "top 82%",
+                once: true,
               },
             },
           );
@@ -1247,7 +1248,7 @@ export function GroupScholarLanding() {
           const kids = el.querySelectorAll("[data-stagger-item]");
           gsap.fromTo(
             kids,
-            { y: 14, opacity: 0 },
+            { y: 14, opacity: 0, immediateRender: false },
             {
               y: 0,
               opacity: 1,
@@ -1257,6 +1258,7 @@ export function GroupScholarLanding() {
               scrollTrigger: {
                 trigger: el,
                 start: "top 82%",
+                once: true,
               },
             },
           );
