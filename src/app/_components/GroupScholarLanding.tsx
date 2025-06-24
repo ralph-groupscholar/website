@@ -47,6 +47,11 @@ type RoomZone = {
   light: string;
 };
 
+type RoomTransfer = {
+  step: string;
+  detail: string;
+};
+
 type SignalBoardItem = {
   label: string;
   detail: string;
@@ -683,6 +688,24 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const roomTransfers: RoomTransfer[] = useMemo(
+    () => [
+      {
+        step: "Badge first",
+        detail: "Tap your boundary badge so the room sees you moving.",
+      },
+      {
+        step: "Host nod",
+        detail: "Make eye contact with a host before switching zones.",
+      },
+      {
+        step: "Soft handoff",
+        detail: "Leave one note behind so your partner knows you shifted.",
+      },
+    ],
+    [],
+  );
+
   const signalBoardItems: SignalBoardItem[] = useMemo(
     () => [
       {
@@ -1194,8 +1217,11 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const isAutomation =
+    typeof navigator !== "undefined" && navigator.webdriver === true;
+
   useLayoutEffect(() => {
-    if (reduced) return;
+    if (reduced || isAutomation) return;
     if (!rootRef.current) return;
 
     gsap.registerPlugin(ScrollTrigger);
@@ -1267,7 +1293,7 @@ export function GroupScholarLanding() {
     }, rootRef);
 
     return () => ctx.revert();
-  }, [reduced]);
+  }, [isAutomation, reduced]);
 
   return (
     <div
@@ -2140,6 +2166,26 @@ export function GroupScholarLanding() {
                     </div>
                   </div>
                 ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-4">
+                <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                  Zone handoff
+                </div>
+                <div className="mt-3 space-y-3">
+                  {roomTransfers.map((transfer) => (
+                    <div
+                      key={transfer.step}
+                      className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/80 px-3 py-2"
+                    >
+                      <div className="text-xs font-bold text-[color:var(--gs-ink)]">
+                        {transfer.step}
+                      </div>
+                      <div className="mt-1 text-[11px] leading-relaxed text-[color:var(--gs-muted)]">
+                        {transfer.detail}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
                 Hosts update the board in ink, not in whispers.

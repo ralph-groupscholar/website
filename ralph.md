@@ -47,6 +47,11 @@
 - Wired the Outcomes anchor into the hero navigation and marquee for faster discovery.
 - Introduced outcome data models to keep the new section consistent with existing data-driven blocks.
 
+2026-02-05 20:29:26 — Iteration 9
+- Disabled scroll-triggered reveals under automation so full-page captures stay readable.
+- Added a zone handoff checklist to the Room Map sidebar for smoother transitions.
+- Verified the Bun bundler entrypoint builds via `bun build src/bun-entry.ts`.
+
 2026-02-05 19:45:30 — Iteration 8
 - Added a Library section with archive artifacts and a checkout desk sidebar to deepen the world-building.
 - Built a Signal Decoder section with interactive badge toggles and host response details.
