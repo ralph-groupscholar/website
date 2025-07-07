@@ -46,6 +46,20 @@ type BulletinItem = {
   tag: string;
 };
 
+type ForecastSlot = {
+  label: string;
+  title: string;
+  desc: string;
+  time: string;
+  room: string;
+  signal: string;
+};
+
+type ForecastNote = {
+  title: string;
+  desc: string;
+};
+
 type RoomZone = {
   name: string;
   desc: string;
@@ -680,6 +694,54 @@ export function GroupScholarLanding() {
         label: "Host shift",
         detail: "Mira + Jun on duty",
         tag: "Reset window open",
+      },
+    ],
+    [],
+  );
+
+  const forecastSlots: ForecastSlot[] = useMemo(
+    () => [
+      {
+        label: "Tonight",
+        title: "Open desk: quiet focus",
+        desc: "Deep work, low chatter, and a host keeping signals clear.",
+        time: "8:30 PM check-in",
+        room: "Lab B",
+        signal: "Silent",
+      },
+      {
+        label: "Weekend",
+        title: "Shared draft studio",
+        desc: "Bring a draft, trade margins, and keep feedback soft.",
+        time: "Saturday 4:00 PM",
+        room: "Studio C",
+        signal: "Check-in",
+      },
+      {
+        label: "After hours",
+        title: "Chemistry lab",
+        desc: "Loose collaboration with clear exits and a calm reset kit.",
+        time: "Friday 10:30 PM",
+        room: "Annex 2",
+        signal: "Open",
+      },
+    ],
+    [],
+  );
+
+  const forecastNotes: ForecastNote[] = useMemo(
+    () => [
+      {
+        title: "Signals updated",
+        desc: "Hosts restate the active badge every 20 minutes.",
+      },
+      {
+        title: "Tone checks",
+        desc: "Tracks can shift mid-session if the room spikes.",
+      },
+      {
+        title: "Weekly reset",
+        desc: "Forecast board clears Monday at 9:00 AM, local time.",
       },
     ],
     [],
@@ -1623,7 +1685,88 @@ export function GroupScholarLanding() {
         id="main-content"
         className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-10 md:px-8 md:pt-14"
       >
-        <section id="principles" data-animate="section" className="scroll-mt-28">
+        <section id="forecast" data-animate="section" className="scroll-mt-28">
+          <SectionHeading
+            eyebrow="Studio forecast"
+            title="The week in soft focus."
+            subtitle="A live-ish read on energy, signals, and room tone before you arrive."
+          />
+
+          <div className="mt-10 grid gap-4 md:grid-cols-[1.25fr_0.75fr]">
+            <div
+              data-animate="stagger"
+              className="grid gap-4 md:grid-cols-3"
+            >
+              {forecastSlots.map((slot) => (
+                <article
+                  key={slot.label}
+                  data-stagger-item
+                  className="group relative overflow-hidden rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="absolute -right-10 -top-12 size-44 rounded-full bg-[radial-gradient(circle_at_30%_30%,rgba(243,117,78,0.22),transparent_62%)] blur-2xl transition duration-500 group-hover:scale-105" />
+                  <div className="absolute -bottom-14 -left-14 size-44 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(14,116,144,0.2),transparent_60%)] blur-2xl transition duration-500 group-hover:scale-105" />
+                  <div className="relative flex items-center justify-between text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    <span>{slot.label.toUpperCase()}</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1 text-[11px] font-bold tracking-normal text-[color:var(--gs-ink)]">
+                      {slot.signal}
+                    </span>
+                  </div>
+                  <h3 className="relative mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                    {slot.title}
+                  </h3>
+                  <p className="relative mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {slot.desc}
+                  </p>
+                  <div className="relative mt-5 flex flex-wrap gap-2">
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-xs font-bold text-[color:var(--gs-muted)]">
+                      {slot.time}
+                    </span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-xs font-bold text-[color:var(--gs-muted)]">
+                      {slot.room}
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <aside className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]">
+              <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                STUDIO MEMO
+              </div>
+              <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                Board rules & tone
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                Forecasts keep expectations soft and exits clear. Hosts can
+                shift tracks if the room asks for it.
+              </p>
+              <div className="mt-5 grid gap-3">
+                {forecastNotes.map((note) => (
+                  <div
+                    key={note.title}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-4"
+                  >
+                    <div className="text-xs font-bold tracking-[0.22em] text-[color:var(--gs-muted)]">
+                      {note.title.toUpperCase()}
+                    </div>
+                    <p className="mt-2 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                      {note.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Board status: steady. Next recalibration on Monday at 9:00 AM.
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section
+          id="principles"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
           <SectionHeading
             eyebrow="Mission statement"
             title="A serious place for unserious productivity."
