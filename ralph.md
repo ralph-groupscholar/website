@@ -142,3 +142,8 @@
 - Added a Studio Forecast section with weekly slots, signals, and an advisory memo.
 - Styled forecast cards with tone badges, time/room chips, and ambient glows to match the hero.
 - Documented the board rules + recalibration cadence for world-building continuity.
+
+2026-02-05 20:55:59 — Iteration 28
+- Reviewed the live site state via Playwright and captured a full-page screenshot for baseline QA.
+- Noted a large blank gap between the hero and footer in the live render, suggesting content is not painting or is collapsed.
+- Drafted next-step ideas focused on tightening in-page navigation, visual continuity, and load-time stability.
