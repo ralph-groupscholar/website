@@ -1497,6 +1497,71 @@ export function GroupScholarLanding() {
             </a>
           </div>
 
+          <details className="relative md:hidden">
+            <summary className="flex cursor-pointer items-center gap-2 rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[color:var(--gs-muted)] shadow-sm transition hover:text-[color:var(--gs-ink)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/30">
+              Menu
+              <span className="text-[color:var(--gs-accent)]">+</span>
+            </summary>
+            <div className="absolute right-0 mt-3 w-64 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/95 p-3 text-sm font-semibold text-[color:var(--gs-ink)] shadow-[0_18px_50px_-32px_rgba(28,38,40,0.9)] backdrop-blur">
+              <div className="grid grid-cols-2 gap-2">
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#principles">
+                  Principles
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#programs">
+                  Programs
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#library">
+                  Library
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#rituals">
+                  Rituals
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#outcomes">
+                  Outcomes
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#sessions">
+                  Sessions
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#rooms">
+                  Rooms
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#matching">
+                  Matching
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#calibration">
+                  Calibration
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#reset">
+                  Reset
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#ledger">
+                  Ledger
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#decoder">
+                  Decoder
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#admissions">
+                  Admissions
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#packet">
+                  Invite packet
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#readiness">
+                  Readiness
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#hosts">
+                  Hosts
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#faq">
+                  Conduct
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#debrief">
+                  Debrief
+                </a>
+              </div>
+            </div>
+          </details>
+
           <Link
             href="#apply"
             className="rounded-full bg-[color:var(--gs-ink)] px-4 py-2 text-sm font-bold text-white shadow-[0_16px_30px_-20px_rgba(28,38,40,0.9)] transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40"
