@@ -1,3 +1,8 @@
+2026-02-05 21:11:57 — Iteration 36
+- Reviewed current codebase and recent git history for context.
+- Captured a Playwright full-page screenshot of groupscholar.com; automated render still shows a massive mid-page blank gap with the hero appearing again near the bottom.
+- Drafted a fresh set of creative follow-up tasks focused on render stability, narrative continuity, and interactive affordances.
+
 2026-02-06 21:09:18 — Iteration 35
 - Added a fixed Field Guide navigator with active-section tracking and progress for long-scroll orientation.
 - Wired an IntersectionObserver to keep the Field Guide in sync with the visible section.
