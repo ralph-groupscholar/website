@@ -192,3 +192,8 @@
 - Captured a fresh Playwright full-page snapshot of groupscholar.com to verify the live render baseline.
 - Noted the oversized blank vertical band between the hero and lower sections in the live screenshot, indicating content may be collapsing or delayed in paint.
 - Drafted next-step ideas focused on tightening scroll continuity, sharpening navigation affordances, and reinforcing the narrative cadence.
+
+2026-02-06 21:20:00 — Iteration 30
+- Captured fresh Playwright full-page snapshots of groupscholar.com and confirmed a large blank mid-page band in the render.
+- Hardened automation detection to skip scroll-triggered animations in headless runs, keeping all sections visible for snapshots.
+- Logged follow-up ideas to polish scroll continuity and capture-ready rendering.

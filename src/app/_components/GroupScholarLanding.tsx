@@ -1335,7 +1335,9 @@ export function GroupScholarLanding() {
   );
 
   const isAutomation =
-    typeof navigator !== "undefined" && navigator.webdriver === true;
+    typeof navigator !== "undefined" &&
+    (navigator.webdriver === true ||
+      /HeadlessChrome|Playwright/i.test(navigator.userAgent));
 
   useEffect(() => {
     if (typeof window === "undefined") return;
