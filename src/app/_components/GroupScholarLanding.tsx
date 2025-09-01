@@ -1851,6 +1851,34 @@ export function GroupScholarLanding() {
         id="main-content"
         className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-10 md:px-8 md:pt-14"
       >
+        <div className="sticky top-24 z-20 mb-10 md:hidden">
+          <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/95 px-4 py-3 shadow-[0_18px_45px_-30px_rgba(28,38,40,0.85)] backdrop-blur">
+            <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+              <span>Field guide</span>
+              <span className="font-mono text-[color:var(--gs-ink)]">
+                {activeIndex + 1}/{sectionIndex.length}
+              </span>
+            </div>
+            <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1">
+              {sectionIndex.map((section) => {
+                const isActive = section.id === activeSection;
+                return (
+                  <a
+                    key={`mobile-${section.id}`}
+                    href={`#${section.id}`}
+                    className={`whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                      isActive
+                        ? "border-[color:var(--gs-accent)] bg-[color:var(--gs-accent)]/15 text-[color:var(--gs-ink)]"
+                        : "border-transparent bg-white/80 text-[color:var(--gs-muted)]"
+                    }`}
+                  >
+                    {section.label}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
         <section id="forecast" data-animate="section" className="scroll-mt-28">
           <SectionHeading
             eyebrow="Studio forecast"
