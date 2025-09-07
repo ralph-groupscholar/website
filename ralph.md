@@ -212,3 +212,8 @@
 - Captured a fresh Playwright snapshot of the live site and confirmed the large mid-page blank band in headless render.
 - Added a mobile sticky Field Guide strip to keep section navigation visible while scrolling.
 - Logged next-step ideas focused on stabilizing render continuity and tightening mobile wayfinding.
+
+2026-02-05 21:25:33 — Iteration 34
+- Captured a fresh Playwright full-page snapshot of groupscholar.com and verified the live render baseline.
+- Observed a large blank vertical band mid-page in the headless render, suggesting sections are not painting or are collapsing during capture.
+- Drafted next-step ideas to stabilize section visibility, sharpen navigation continuity, and amplify narrative cadence.
