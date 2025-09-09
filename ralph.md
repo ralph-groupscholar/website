@@ -222,3 +222,8 @@
 - Captured a fresh Playwright full-page snapshot of groupscholar.com and verified the live render baseline.
 - Observed a large blank vertical band mid-page in the headless render, suggesting sections are not painting or are collapsing during capture.
 - Drafted next-step ideas focused on stabilizing rendering for headless snapshots and tightening narrative continuity.
+
+2026-02-05 21:28:17 — Iteration 36
+- Captured a fresh Playwright full-page snapshot of groupscholar.com and confirmed the live baseline render.
+- Observed a tall blank vertical band between the hero and lower sections in the headless capture, indicating content collapse or delayed paint.
+- Sketched follow-up ideas focused on rendering stability, scroll continuity, and narrative pacing.
