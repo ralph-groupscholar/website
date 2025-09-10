@@ -232,3 +232,10 @@
 - Captured a fresh Playwright full-page snapshot of groupscholar.com at desktop width for baseline reference.
 - Observed a large blank vertical band in the middle of the headless capture, with only the hero and footer regions rendering.
 - Sketched next-step ideas to stabilize render continuity, highlight the narrative arc, and improve section wayfinding.
+2026-02-06 21:31:33 — Iteration 38
+- Reviewed current codebase plus recent git history for context.
+- Captured a Playwright full-page screenshot of groupscholar.com; the headless render still shows a massive blank gap with the hero repeating near the bottom.
+- Sketched creative follow-up tasks:
+- Add a continuity ribbon between sections that shows a threaded story beat and anchors the Field Guide to the visible region.
+- Prototype a "Signal Studio" interlude with rotating badges and a brief host script to break up the long scroll.
+- Build a render-stability guard that disables scroll reveals and forces all sections to `opacity: 1` when in headless or `prefers-reduced-motion`.
