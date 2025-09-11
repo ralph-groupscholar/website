@@ -230,6 +230,19 @@ type SignalProfile = {
   response: string;
 };
 
+type StudioCue = {
+  tag: string;
+  title: string;
+  desc: string;
+  timing: string;
+};
+
+type StudioScript = {
+  title: string;
+  line: string;
+  note: string;
+};
+
 type FaqItem = {
   q: string;
   a: string;
@@ -365,6 +378,7 @@ export function GroupScholarLanding() {
       { id: "rooms", label: "Rooms", tag: "Zones" },
       { id: "matching", label: "Matching", tag: "Fit" },
       { id: "decoder", label: "Decoder", tag: "Signals" },
+      { id: "studio", label: "Studio", tag: "Signals" },
       { id: "admissions", label: "Admissions", tag: "Intake" },
       { id: "apply", label: "Apply", tag: "Seat" },
     ],
@@ -934,6 +948,51 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const signalStudioCues: StudioCue[] = useMemo(
+    () => [
+      {
+        tag: "Warm open",
+        title: "Badge sync",
+        desc: "Hosts restate the signal, then pass a single sentence around the table.",
+        timing: "First 4 minutes",
+      },
+      {
+        tag: "Mid-session",
+        title: "Quiet reset",
+        desc: "Devices face down, breaths reset, and the active cue is confirmed.",
+        timing: "Every 20 minutes",
+      },
+      {
+        tag: "Late glide",
+        title: "Soft exit",
+        desc: "The host keeps a clear lane for exits without breaking the focus mood.",
+        timing: "Final 10 minutes",
+      },
+    ],
+    [],
+  );
+
+  const signalStudioScripts: StudioScript[] = useMemo(
+    () => [
+      {
+        title: "Host opener",
+        line: "“Signal check: we’re in Silent. Tap in with one word, then we work.”",
+        note: "Keeps tone aligned without dragging the room into a meeting.",
+      },
+      {
+        title: "Reset call",
+        line: "“Pause badge is up. We reset for 60 seconds, then resume.”",
+        note: "Announces consent and time-boxes the reset to reduce friction.",
+      },
+      {
+        title: "Exit lane",
+        line: "“If you need to step out, take the west lane. No questions.”",
+        note: "Normalizes exits without spotlighting the person leaving.",
+      },
+    ],
+    [],
+  );
+
   const calibrationProfiles: CalibrationProfile[] = useMemo(
     () => [
       {
@@ -1338,6 +1397,7 @@ export function GroupScholarLanding() {
     typeof navigator !== "undefined" &&
     (navigator.webdriver === true ||
       /HeadlessChrome|Playwright/i.test(navigator.userAgent));
+  const shouldBypassMotion = reduced || isAutomation;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -1365,8 +1425,20 @@ export function GroupScholarLanding() {
     return () => observer.disconnect();
   }, [sectionIndex]);
 
+  useEffect(() => {
+    if (!shouldBypassMotion || !rootRef.current) return;
+    const nodes = rootRef.current.querySelectorAll<HTMLElement>(
+      "[data-animate='section'], [data-animate='stagger'], [data-hero-line], [data-hero-nav], [data-hero-surface]",
+    );
+    nodes.forEach((node) => {
+      node.style.opacity = "1";
+      node.style.transform = "none";
+      node.style.willChange = "auto";
+    });
+  }, [shouldBypassMotion]);
+
   useLayoutEffect(() => {
-    if (reduced || isAutomation) return;
+    if (shouldBypassMotion) return;
     if (!rootRef.current) return;
 
     gsap.registerPlugin(ScrollTrigger);
@@ -1438,7 +1510,7 @@ export function GroupScholarLanding() {
     }, rootRef);
 
     return () => ctx.revert();
-  }, [isAutomation, reduced]);
+  }, [shouldBypassMotion]);
 
   return (
     <div
@@ -1569,6 +1641,9 @@ export function GroupScholarLanding() {
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#decoder">
               Decoder
             </a>
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#studio">
+              Studio
+            </a>
             <a
               className="transition hover:text-[color:var(--gs-ink)]"
               href="#admissions"
@@ -1640,6 +1715,9 @@ export function GroupScholarLanding() {
                 </a>
                 <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#decoder">
                   Decoder
+                </a>
+                <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#studio">
+                  Studio
                 </a>
                 <a className="rounded-lg px-2 py-1 transition hover:bg-white" href="#admissions">
                   Admissions
@@ -1836,6 +1914,7 @@ export function GroupScholarLanding() {
               "Library Stacks",
               "Outcome Map",
               "Signal Decoder",
+              "Signal Studio",
               "Calibration Studio",
               "Reset Protocol",
               "Focus Ledger",
@@ -3055,6 +3134,85 @@ export function GroupScholarLanding() {
                 </div>
               </div>
             </article>
+          </div>
+        </section>
+
+        <section
+          id="studio"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Signal studio"
+            title="Rehearse the cues before the room heats up."
+            subtitle="A short interlude that keeps the room aligned, the exits clear, and the signals consistent."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div className="grid gap-4">
+              {signalStudioCues.map((cue) => (
+                <article
+                  key={cue.title}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">{cue.tag}</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {cue.timing}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {cue.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {cue.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Host script
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Lines that keep it kind.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  The host uses short, repeatable prompts so nobody has to
+                  improvise consent language mid-session.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {signalStudioScripts.map((script) => (
+                  <div
+                    key={script.title}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3"
+                  >
+                    <div className="text-xs font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                      {script.title}
+                    </div>
+                    <div className="mt-2 text-sm font-semibold text-[color:var(--gs-ink)]">
+                      {script.line}
+                    </div>
+                    <div className="mt-2 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {script.note}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Studio rule: say the signal out loud before you change it.
+              </div>
+            </aside>
           </div>
         </section>
 
