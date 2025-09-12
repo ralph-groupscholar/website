@@ -60,6 +60,14 @@ type ForecastNote = {
   desc: string;
 };
 
+type ContinuityBeat = {
+  badge: string;
+  title: string;
+  desc: string;
+  signal: string;
+  timing: string;
+};
+
 type RoomZone = {
   name: string;
   desc: string;
@@ -70,6 +78,12 @@ type RoomZone = {
 type RoomTransfer = {
   step: string;
   detail: string;
+};
+
+type RoomLegendItem = {
+  label: string;
+  detail: string;
+  color: string;
 };
 
 type SignalBoardItem = {
@@ -789,6 +803,33 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const continuityBeats: ContinuityBeat[] = useMemo(
+    () => [
+      {
+        badge: "Thread 01",
+        title: "Arrival pulse",
+        desc: "A quick sync to name focus, boundaries, and the first active signal.",
+        signal: "Check-in",
+        timing: "2 minutes",
+      },
+      {
+        badge: "Thread 02",
+        title: "Mid-session drift",
+        desc: "Scribes rotate, notes circulate, and the room resets without breaking flow.",
+        signal: "Silent",
+        timing: "Every 20 minutes",
+      },
+      {
+        badge: "Thread 03",
+        title: "Soft exit",
+        desc: "Departures stay calm and acknowledged; the room keeps the tone intact.",
+        signal: "Exit",
+        timing: "Final 10 minutes",
+      },
+    ],
+    [],
+  );
+
   const roomZones: RoomZone[] = useMemo(
     () => [
       {
@@ -814,6 +855,27 @@ export function GroupScholarLanding() {
         desc: "Check-ins, signal resets, and boundary reminders.",
         etiquette: "Flag a host with a badge, not a shout.",
         light: "Desk lamp + signal board",
+      },
+    ],
+    [],
+  );
+
+  const roomLegend: RoomLegendItem[] = useMemo(
+    () => [
+      {
+        label: "Quiet Focus",
+        detail: "Low noise, long stretches, minimal interruptions.",
+        color: "rgba(14,116,144,0.16)",
+      },
+      {
+        label: "Shared Draft",
+        detail: "Light critique, collaborative edits, clear consent cues.",
+        color: "rgba(201,81,49,0.18)",
+      },
+      {
+        label: "Reset Window",
+        detail: "Host-led pause when the room needs a breath.",
+        color: "rgba(28,38,40,0.12)",
       },
     ],
     [],
@@ -2038,6 +2100,60 @@ export function GroupScholarLanding() {
         </section>
 
         <section
+          data-animate="section"
+          aria-label="Continuity ribbon"
+          className="mt-12 md:mt-16"
+        >
+          <div className="rounded-[32px] border border-[color:var(--gs-ink-soft)] bg-[linear-gradient(120deg,rgba(255,255,255,0.94),rgba(249,241,227,0.86))] p-6 shadow-[0_28px_70px_-52px_rgba(28,38,40,0.85)] md:p-8">
+            <div className="grid gap-6 md:grid-cols-[1.1fr_1.9fr] md:items-start">
+              <div className="space-y-3">
+                <div className="text-xs font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Continuity ribbon
+                </div>
+                <h3 className="font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                  A single thread from arrival to debrief.
+                </h3>
+                <p className="text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  We keep the tone consistent even as the room shifts. These three
+                  beats show how focus, consent, and exits stay aligned.
+                </p>
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                  Cue status: steady. Hosts announce each transition out loud.
+                </div>
+              </div>
+              <div data-animate="stagger" className="grid gap-4 md:grid-cols-3">
+                {continuityBeats.map((beat) => (
+                  <article
+                    key={beat.badge}
+                    data-stagger-item
+                    className="group relative overflow-hidden rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-5 shadow-[0_18px_48px_-36px_rgba(28,38,40,0.85)]"
+                  >
+                    <div className="absolute -right-10 -top-12 size-40 rounded-full bg-[radial-gradient(circle_at_30%_30%,rgba(243,117,78,0.22),transparent_62%)] blur-2xl transition duration-500 group-hover:scale-105" />
+                    <div className="relative text-xs font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                      {beat.badge}
+                    </div>
+                    <h4 className="relative mt-3 font-[family-name:var(--font-gs-display)] text-2xl font-semibold">
+                      {beat.title}
+                    </h4>
+                    <p className="relative mt-2 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                      {beat.desc}
+                    </p>
+                    <div className="relative mt-4 flex flex-wrap gap-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                      <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                        {beat.signal}
+                      </span>
+                      <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                        {beat.timing}
+                      </span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
           id="principles"
           data-animate="section"
           className="mt-16 scroll-mt-28 md:mt-24"
@@ -2657,6 +2773,30 @@ export function GroupScholarLanding() {
                       </div>
                       <div className="mt-1 text-[11px] leading-relaxed text-[color:var(--gs-muted)]">
                         {transfer.detail}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-4">
+                <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                  Room legend
+                </div>
+                <div className="mt-3 space-y-3">
+                  {roomLegend.map((item) => (
+                    <div
+                      key={item.label}
+                      className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white px-3 py-3 shadow-sm"
+                    >
+                      <div className="flex items-center gap-2 text-xs font-bold text-[color:var(--gs-ink)]">
+                        <span
+                          className="inline-flex size-2.5 rounded-full"
+                          style={{ backgroundColor: item.color }}
+                        />
+                        {item.label}
+                      </div>
+                      <div className="mt-2 text-[11px] leading-relaxed text-[color:var(--gs-muted)]">
+                        {item.detail}
                       </div>
                     </div>
                   ))}
