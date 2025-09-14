@@ -137,6 +137,13 @@ type OutcomeNote = {
   desc: string;
 };
 
+type PulseHighlight = {
+  tag: string;
+  title: string;
+  desc: string;
+  timing: string;
+};
+
 type VibeTrack = {
   name: string;
   tone: string;
@@ -387,6 +394,7 @@ export function GroupScholarLanding() {
       { id: "programs", label: "Programs", tag: "Catalog" },
       { id: "library", label: "Library", tag: "Archive" },
       { id: "outcomes", label: "Outcomes", tag: "Map" },
+      { id: "pulse", label: "Pulse", tag: "Bridge" },
       { id: "rituals", label: "Rituals", tag: "Flow" },
       { id: "sessions", label: "Sessions", tag: "Rhythm" },
       { id: "rooms", label: "Rooms", tag: "Zones" },
@@ -573,6 +581,30 @@ export function GroupScholarLanding() {
       {
         title: "Weekly reviews keep it honest.",
         desc: "Hosts share a Monday recap with adjustments for the next cycle.",
+      },
+    ],
+    [],
+  );
+
+  const pulseHighlights: PulseHighlight[] = useMemo(
+    () => [
+      {
+        tag: "Next up",
+        title: "Rituals briefing",
+        desc: "Refresh the arrival, drift, and exit cues before you enter the room.",
+        timing: "2 minutes",
+      },
+      {
+        tag: "On deck",
+        title: "Room tone scan",
+        desc: "Map zones by noise level, then choose the boundary badge that matches.",
+        timing: "Quick glance",
+      },
+      {
+        tag: "After",
+        title: "Matching desk",
+        desc: "Share your track and focus note so hosts can align the room.",
+        timing: "Before check-in",
       },
     ],
     [],
@@ -2439,6 +2471,101 @@ export function GroupScholarLanding() {
                 Next review: Monday at 9:00 AM, local time.
               </div>
             </aside>
+          </div>
+        </section>
+
+        <section
+          id="pulse"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Studio pulse"
+            title="A mid-scroll alignment check."
+            subtitle="When the story gets long, we restate the cues so the room stays kind."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid gap-4 md:grid-cols-[1.05fr_0.95fr]"
+          >
+            <aside
+              data-stagger-item
+              className="relative overflow-hidden rounded-[32px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/92 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div className="absolute -right-10 -top-12 size-56 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(243,117,78,0.18),transparent_65%)] blur-2xl" />
+              <div className="absolute -bottom-16 -left-12 size-56 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(14,116,144,0.18),transparent_62%)] blur-2xl" />
+              <div className="relative">
+                <div className="text-xs font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Signal window
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Read the room before you enter it.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  Hosts re-state the active signal every 20 minutes. This checkpoint
+                  keeps the scroll grounded in the live room tone.
+                </p>
+              </div>
+
+              <div className="relative mt-6 grid gap-3">
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4">
+                  <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    Active signals
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {["Silent", "Check-in", "Open", "Pause", "Exit"].map((label) => (
+                      <span
+                        key={label}
+                        className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-xs font-bold text-[color:var(--gs-muted)]"
+                      >
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4">
+                  <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    <span>Calibration</span>
+                    <span className="font-mono text-[color:var(--gs-ink)]">
+                      {calibrationLevel}/5
+                    </span>
+                  </div>
+                  <div className="mt-3 h-2 w-full rounded-full bg-[color:var(--gs-ink-soft)]/40">
+                    <div
+                      className="h-full rounded-full bg-[color:var(--gs-accent)]"
+                      style={{ width: `${calibrationLevel * 20}%` }}
+                    />
+                  </div>
+                  <div className="mt-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    Pulse check resets at the top of every hour.
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            <div className="grid gap-4">
+              {pulseHighlights.map((highlight) => (
+                <article
+                  key={highlight.title}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">{highlight.tag.toUpperCase()}</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {highlight.timing}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {highlight.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {highlight.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
