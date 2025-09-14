@@ -40,3 +40,27 @@ body {
   transform: none !important;
   will-change: auto !important;
 }
+
+html[data-automation="true"] [data-animate="section"],
+html[data-automation="true"] [data-animate="stagger"],
+html[data-automation="true"] [data-stagger-item],
+html[data-automation="true"] [data-hero-line],
+html[data-automation="true"] [data-hero-nav],
+html[data-automation="true"] [data-hero-surface] {
+  opacity: 1 !important;
+  transform: none !important;
+  will-change: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-animate="section"],
+  [data-animate="stagger"],
+  [data-stagger-item],
+  [data-hero-line],
+  [data-hero-nav],
+  [data-hero-surface] {
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+}
