@@ -76,6 +76,13 @@ type ContinuityBeat = {
   timing: string;
 };
 
+type WayfindingBeat = {
+  tag: string;
+  title: string;
+  desc: string;
+  cue: string;
+};
+
 type RoomZone = {
   name: string;
   desc: string;
@@ -413,6 +420,7 @@ export function GroupScholarLanding() {
   const sectionIndex = useMemo(
     () => [
       { id: "forecast", label: "Forecast", tag: "Board" },
+      { id: "wayfinding", label: "Wayfinding", tag: "Path" },
       { id: "principles", label: "Principles", tag: "Mission" },
       { id: "programs", label: "Programs", tag: "Catalog" },
       { id: "library", label: "Library", tag: "Archive" },
@@ -433,6 +441,7 @@ export function GroupScholarLanding() {
   const signalCueMap = useMemo(
     () => ({
       forecast: "Check the board, adjust the tone.",
+      wayfinding: "Follow the path to the next cue.",
       principles: "Anchor the pact before you move.",
       programs: "Choose the track and mark it.",
       library: "Pull the right stack for the room.",
@@ -1010,6 +1019,30 @@ export function GroupScholarLanding() {
         desc: "Departures stay calm and acknowledged; the room keeps the tone intact.",
         signal: "Exit",
         timing: "Final 10 minutes",
+      },
+    ],
+    [],
+  );
+
+  const wayfindingBeats: WayfindingBeat[] = useMemo(
+    () => [
+      {
+        tag: "Arrival",
+        title: "Front desk",
+        desc: "Check in with one sentence and pick your first signal badge.",
+        cue: "2-minute sync",
+      },
+      {
+        tag: "Midpoint",
+        title: "Signal board",
+        desc: "Confirm the active cue, rotate notes, and reset the room tone.",
+        cue: "Every 20 minutes",
+      },
+      {
+        tag: "Exit",
+        title: "Soft off-ramp",
+        desc: "Leave a brief receipt so the next room stays aligned.",
+        cue: "Final 10 minutes",
       },
     ],
     [],
@@ -1765,10 +1798,9 @@ export function GroupScholarLanding() {
         (el) => {
           gsap.fromTo(
             el,
-            { y: 20, opacity: 0, immediateRender: false },
+            { y: 18, immediateRender: false },
             {
               y: 0,
-              opacity: 1,
               duration: 0.8,
               ease: "power3.out",
               scrollTrigger: {
@@ -1786,10 +1818,9 @@ export function GroupScholarLanding() {
           const kids = el.querySelectorAll("[data-stagger-item]");
           gsap.fromTo(
             kids,
-            { y: 14, opacity: 0, immediateRender: false },
+            { y: 12, immediateRender: false },
             {
               y: 0,
-              opacity: 1,
               duration: 0.62,
               stagger: 0.07,
               ease: "power3.out",
@@ -1887,6 +1918,9 @@ export function GroupScholarLanding() {
           </div>
 
           <div className="hidden items-center gap-5 text-sm font-bold text-[color:var(--gs-muted)] md:flex">
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#wayfinding">
+              Wayfinding
+            </a>
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#principles">
               Principles
             </a>
@@ -2415,6 +2449,90 @@ export function GroupScholarLanding() {
                   </article>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="wayfinding"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Wayfinding strip"
+            title="A clear path through the soft chaos."
+            subtitle="Use this checkpoint to keep the room moving together, with no one guessing what comes next."
+          />
+
+          <div className="mt-10 grid gap-6 md:grid-cols-[1.1fr_1.9fr]">
+            <div className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]">
+              <div className="text-xs font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
+                Route memo
+              </div>
+              <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                Keep the next cue visible.
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                Hosts call out the next waypoint so the room can settle into the
+                right rhythm without breaking flow.
+              </p>
+              <div className="mt-5 grid gap-3">
+                {[
+                  {
+                    label: "You are here",
+                    detail: "Forecast board",
+                    cue: "Check the active signal",
+                  },
+                  {
+                    label: "Next up",
+                    detail: "Mission hall",
+                    cue: "Anchor the shared pact",
+                  },
+                  {
+                    label: "Exit lane",
+                    detail: "Debrief lab",
+                    cue: "Leave a short receipt",
+                  },
+                ].map((stop) => (
+                  <div
+                    key={stop.label}
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/70 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]"
+                  >
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1 text-[11px] text-[color:var(--gs-ink)]">
+                      {stop.label.toUpperCase()}
+                    </span>
+                    <span>{stop.detail}</span>
+                    <span>{stop.cue}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/80 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Path status: steady. Hosts announce the next cue every 20 minutes.
+              </div>
+            </div>
+
+            <div data-animate="stagger" className="grid gap-4 md:grid-cols-3">
+              {wayfindingBeats.map((beat) => (
+                <article
+                  key={beat.tag}
+                  data-stagger-item
+                  className="group relative overflow-hidden rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-5 shadow-[0_18px_48px_-36px_rgba(28,38,40,0.85)]"
+                >
+                  <div className="absolute -right-10 -top-12 size-40 rounded-full bg-[radial-gradient(circle_at_30%_30%,rgba(243,117,78,0.22),transparent_62%)] blur-2xl transition duration-500 group-hover:scale-105" />
+                  <div className="relative text-xs font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    {beat.tag}
+                  </div>
+                  <h4 className="relative mt-3 font-[family-name:var(--font-gs-display)] text-2xl font-semibold">
+                    {beat.title}
+                  </h4>
+                  <p className="relative mt-2 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {beat.desc}
+                  </p>
+                  <div className="relative mt-4 rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-xs font-bold text-[color:var(--gs-muted)]">
+                    {beat.cue}
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
