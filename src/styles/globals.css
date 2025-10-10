@@ -52,6 +52,18 @@ html[data-automation="true"] [data-hero-surface] {
   will-change: auto !important;
 }
 
+html[data-automation="true"] {
+  scroll-behavior: auto;
+}
+
+html[data-automation="true"] .gs-snapshot-fixed {
+  position: absolute !important;
+}
+
+html[data-automation="true"] .gs-snapshot-sticky {
+  position: static !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-animate="section"],
   [data-animate="stagger"],
