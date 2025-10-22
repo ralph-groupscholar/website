@@ -56,6 +56,19 @@ html[data-automation="true"] {
   scroll-behavior: auto;
 }
 
+html[data-automation="true"] header {
+  padding-bottom: 1.5rem;
+}
+
+html[data-automation="true"] main {
+  padding-top: 2.5rem;
+  padding-bottom: 3.5rem;
+}
+
+html[data-automation="true"] [data-animate="section"] {
+  margin-top: 2.5rem !important;
+}
+
 html[data-automation="true"] .gs-snapshot-fixed {
   position: absolute !important;
 }
