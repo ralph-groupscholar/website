@@ -77,6 +77,22 @@ html[data-automation="true"] .gs-snapshot-sticky {
   position: static !important;
 }
 
+html[data-automation="true"] [data-automation-hide] {
+  display: none !important;
+}
+
+html[data-automation="true"] [data-automation-show] {
+  display: block !important;
+}
+
+html[data-automation="true"] [data-automation-show="grid"] {
+  display: grid !important;
+}
+
+html[data-automation="true"] [data-automation-show="flex"] {
+  display: flex !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-animate="section"],
   [data-animate="stagger"],
