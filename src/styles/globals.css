@@ -90,6 +90,10 @@ html[data-automation="true"] [data-automation-show="flex"] {
   display: flex !important;
 }
 
+html[data-automation="true"] [data-automation-hide] {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-animate="section"],
   [data-animate="stagger"],
