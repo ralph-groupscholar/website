@@ -1557,7 +1557,7 @@ export function GroupScholarLanding() {
       programs,
     ],
   );
-  const snapshotCompact = snapshotHighlights.slice(0, 4);
+  const snapshotCompact = snapshotHighlights.slice(0, 3);
 
   // Admissions steps clarify the application journey without breaking the satire.
   const applicationSteps: ApplicationStep[] = useMemo(
@@ -1800,11 +1800,18 @@ export function GroupScholarLanding() {
   const isAutomationFlagged =
     typeof document !== "undefined" &&
     document.documentElement.dataset.automation === "true";
+  const isSnapshotParam =
+    typeof window !== "undefined" &&
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      return params.has("snapshot") || params.has("automation");
+    })();
   const isAutomationUA =
     typeof navigator !== "undefined" &&
     (navigator.webdriver === true ||
       /HeadlessChrome|Playwright/i.test(navigator.userAgent));
-  const shouldBypassMotion = reduced || isAutomationFlagged || isAutomationUA;
+  const shouldBypassMotion =
+    reduced || isAutomationFlagged || isAutomationUA || isSnapshotParam;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -2176,13 +2183,13 @@ export function GroupScholarLanding() {
         </nav>
 
         <section
-          aria-label="Snapshot cover"
+          aria-label="Snapshot brief"
           data-automation-show="block"
-          className="mt-5 hidden"
+          className="gs-automation-brief mt-4 hidden"
         >
           <div className="rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[linear-gradient(140deg,rgba(255,255,255,0.92),rgba(249,241,227,0.86))] p-6 shadow-[0_26px_70px_-52px_rgba(28,38,40,0.9)]">
             <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-[color:var(--gs-muted)]">
-              <span>Snapshot cover</span>
+              <span>Snapshot brief</span>
               <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-[10px] font-bold tracking-[0.24em] text-[color:var(--gs-ink)]">
                 Automation view
               </span>
@@ -2193,11 +2200,11 @@ export function GroupScholarLanding() {
                   Group Scholar
                 </div>
                 <h1 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold leading-tight text-[color:var(--gs-ink)]">
-                  Study like it’s serious, stay playful.
+                  A focused view of the room.
                 </h1>
                 <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
-                  A compact capture of the rooms, signals, and outcomes so the
-                  full story stays visible without scrolling.
+                  Compact signals, outcomes, and openings in a single frame for
+                  snapshots.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[color:var(--gs-muted)]">
                   <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
@@ -2215,7 +2222,7 @@ export function GroupScholarLanding() {
                 {snapshotCompact.map((item) => (
                   <div
                     key={`snapshot-${item.key}`}
-                    className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4 shadow-[0_16px_40px_-30px_rgba(28,38,40,0.8)]"
+                    className="gs-automation-card rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4 shadow-[0_16px_40px_-30px_rgba(28,38,40,0.8)]"
                   >
                     <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
                       {item.label}
@@ -2416,7 +2423,7 @@ export function GroupScholarLanding() {
 
         <section
           aria-label="Snapshot digest"
-          data-automation-show="block"
+          data-automation-hide
           className="mt-6 md:mt-8"
         >
           <div className="rounded-[32px] border border-[color:var(--gs-ink-soft)] bg-[linear-gradient(140deg,rgba(255,255,255,0.94),rgba(249,241,227,0.86))] p-6 shadow-[0_26px_70px_-52px_rgba(28,38,40,0.9)] md:p-8">
