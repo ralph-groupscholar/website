@@ -372,3 +372,9 @@
 - Captured a Playwright full-page screenshot of groupscholar.com; the Playwright UA reports `navigator.webdriver` as false, so the automation snapshot mode did not activate and the page remained a very long scroll.
 - Sketched creative follow-ups: introduce a snapshot query override, compress automation-only cards to keep the brief within a single frame, and surface the snapshot digest for regular visitors as an on-ramp before the full syllabus.
 - Added a snapshot query override, tightened the automation brief layout, and moved the snapshot digest into the standard layout while hiding it in automation mode.
+
+2026-02-06 01:01:01 — Iteration 60
+- Reviewed the current codebase plus recent git history for context.
+- Captured a fresh Playwright full-page screenshot of groupscholar.com; the capture still shows a long-scroll layout without the automation snapshot mode, since the UA reports `navigator.webdriver` as false and the UA string is non-headless.
+- Sketched creative follow-ups: add a quick index strip to keep the syllabus visible above the fold, replace the marquee with a static department board to avoid animation artifacts, and tighten the header’s above-the-fold readout.
+- Added a quick index strip above the marquee and replaced the marquee animation with a static, wrapping department board to keep content visible without scroll.
