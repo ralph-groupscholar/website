@@ -46,6 +46,12 @@ type BulletinItem = {
   tag: string;
 };
 
+type SnapshotTile = {
+  label: string;
+  value: string;
+  detail: string;
+};
+
 type ForecastSlot = {
   label: string;
   title: string;
@@ -1516,6 +1522,33 @@ export function GroupScholarLanding() {
     ],
   );
   const snapshotCompact = snapshotHighlights.slice(0, 3);
+  const snapshotBriefTiles: SnapshotTile[] = useMemo(
+    () => [
+      {
+        label: "Focus mix",
+        value: outcomeMetrics
+          .slice(0, 2)
+          .map((metric) => `${metric.value} ${metric.label}`)
+          .join(" • "),
+        detail: "Measured per session, not per person.",
+      },
+      {
+        label: "Room match",
+        value: activeTrackPulse.window,
+        detail: activeTrackPulse.cue,
+      },
+      {
+        label: "Intake",
+        value: "Reserve with intent",
+        detail: "Short intake, reply within 48 hours.",
+      },
+    ],
+    [
+      activeTrackPulse.cue,
+      activeTrackPulse.window,
+      outcomeMetrics,
+    ],
+  );
 
   // Admissions steps clarify the application journey without breaking the satire.
   const applicationSteps: ApplicationStep[] = useMemo(
@@ -2198,6 +2231,24 @@ export function GroupScholarLanding() {
                   </div>
                 ))}
               </div>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              {snapshotBriefTiles.map((tile) => (
+                <div
+                  key={`snapshot-brief-${tile.label}`}
+                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-3 shadow-[0_14px_36px_-28px_rgba(28,38,40,0.7)]"
+                >
+                  <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    {tile.label}
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-[color:var(--gs-ink)]">
+                    {tile.value}
+                  </div>
+                  <div className="mt-1 text-[11px] leading-relaxed text-[color:var(--gs-muted)]">
+                    {tile.detail}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
