@@ -1,3 +1,14 @@
+2026-02-06 02:45:24 — Iteration 65
+- Captured a fresh Playwright viewport screenshot of groupscholar.com; the automation brief still leaves a quiet band under the panel and the right-column tiles feel heavier than the left lead.
+- Sketched creative tasks: compress the automation brief spacing, elevate a live pulse rail above the fold, and trim automation padding to keep the snapshot panel centered.
+- Tightened automation snapshot spacing, compacted rail cards, and reduced automation padding so the live pulse rail stays visible without scroll.
+
+2026-02-06 02:26:15 — Iteration 41
+- Reviewed the current code and recent git history for context.
+- Captured a Playwright viewport snapshot of groupscholar.com; the automation brief fits above the fold but leaves a large quiet band beneath the content.
+- Sketched creative follow-ups: add a live pulse rail, surface seat/ritual cues, and fill the automation snapshot with tighter status rails.
+- Added a live pulse rail beneath the snapshot brief to fill the automation view with compact, scannable signals.
+
 2026-02-06 01:46:26 — Iteration 40
 - Reviewed current codebase and recent git history for context.
 - Captured a Playwright full-page screenshot of groupscholar.com; the automation view fits above the fold but the status timing is easy to miss and the lower tiles feel card-heavy.
@@ -400,3 +411,9 @@
 - Captured a Playwright viewport screenshot of groupscholar.com; the automation snapshot still leaves a large empty band below the brief, and the right-side cards feel visually heavier than the left column.
 - Sketched creative follow-ups: add an automation-only signal strip to fill the empty lower frame, surface a compact “focus mix” readout, and add a tiny intake status tile to balance the grid.
 - Added a three-tile automation-only snapshot strip (focus mix, room match, intake) to keep the above-the-fold frame filled without introducing scroll.
+
+2026-02-06 02:37:56 — Iteration 64
+- Reviewed current codebase and recent git history for context.
+- Captured a fresh Playwright viewport screenshot of groupscholar.com; the automation snapshot overlay still dominates the hero and compresses the copy above the fold.
+- Sketched creative follow-ups: tighten the brief panel to one line per item, introduce a “snapshot rail” status badge row, and pin a compact testimonials strip to balance the right-hand weight.
+- Removed hero opacity animations so above-the-fold content stays visible in headless snapshots.
