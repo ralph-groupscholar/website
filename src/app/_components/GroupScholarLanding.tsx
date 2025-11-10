@@ -2258,11 +2258,11 @@ export function GroupScholarLanding() {
                   </span>
                 </div>
               </div>
-              <div className="grid gap-2.5 sm:grid-cols-2">
+              <div className="grid gap-2.5 sm:grid-cols-3">
                 {snapshotCompact.map((item) => (
                   <div
                     key={`snapshot-${item.key}`}
-                    className="gs-automation-card rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-2.5 shadow-[0_16px_40px_-30px_rgba(28,38,40,0.8)]"
+                    className="gs-automation-card rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-2 shadow-[0_16px_40px_-30px_rgba(28,38,40,0.8)]"
                   >
                     <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
                       {item.label}
@@ -2280,51 +2280,53 @@ export function GroupScholarLanding() {
                 ))}
               </div>
             </div>
-            <div className="mt-2 grid gap-2 sm:grid-cols-3">
-              {snapshotBriefTiles.map((tile) => (
-                <div
-                  key={`snapshot-brief-${tile.label}`}
-                  className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1.5 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
-                >
-                  <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
-                    {tile.label}
-                  </div>
-                  <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
-                    {tile.value}
-                  </div>
-                  <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
-                    {tile.detail}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-2 rounded-[22px] border border-[color:var(--gs-ink-soft)] bg-white/85 p-2 shadow-[0_18px_46px_-34px_rgba(28,38,40,0.72)]">
-              <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-bold uppercase tracking-[0.26em] text-[color:var(--gs-muted)]">
-                <span>Live pulse</span>
-                <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-[color:var(--gs-ink)]">
-                  Snapshot rails
-                </span>
-              </div>
-              <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                {snapshotPulse.map((pulse) => (
+            <div className="mt-2 grid gap-2.5 lg:grid-cols-[0.44fr_0.56fr]">
+              <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
+                {snapshotBriefTiles.map((tile) => (
                   <div
-                    key={`snapshot-pulse-${pulse.label}`}
-                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/95 px-2 py-1"
+                    key={`snapshot-brief-${tile.label}`}
+                    className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1.5 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
                   >
-                    <div className="text-[9px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
-                      {pulse.label}
+                    <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                      {tile.label}
                     </div>
                     <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
-                      {pulse.value}
+                      {tile.value}
                     </div>
                     <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
-                      {pulse.detail}
-                    </div>
-                    <div className="mt-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[color:var(--gs-muted)]">
-                      {pulse.meta}
+                      {tile.detail}
                     </div>
                   </div>
                 ))}
+              </div>
+              <div className="rounded-[22px] border border-[color:var(--gs-ink-soft)] bg-white/85 p-2 shadow-[0_18px_46px_-34px_rgba(28,38,40,0.72)]">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-bold uppercase tracking-[0.26em] text-[color:var(--gs-muted)]">
+                  <span>Live pulse</span>
+                  <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-[color:var(--gs-ink)]">
+                    Snapshot rails
+                  </span>
+                </div>
+                <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                  {snapshotPulse.map((pulse) => (
+                    <div
+                      key={`snapshot-pulse-${pulse.label}`}
+                      className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/95 px-2 py-1"
+                    >
+                      <div className="text-[9px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                        {pulse.label}
+                      </div>
+                      <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
+                        {pulse.value}
+                      </div>
+                      <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
+                        {pulse.detail}
+                      </div>
+                      <div className="mt-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[color:var(--gs-muted)]">
+                        {pulse.meta}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
