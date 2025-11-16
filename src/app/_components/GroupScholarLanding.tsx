@@ -1606,6 +1606,18 @@ export function GroupScholarLanding() {
         detail: `Reset cue ${nextResetLabel}.`,
         meta: "Board update",
       },
+      {
+        label: "Next module",
+        value: programs[0]?.title ?? "Group Dynamics",
+        detail: "Preview track before the next room opens.",
+        meta: programs[0]?.code ?? "GS-101",
+      },
+      {
+        label: "Archive sync",
+        value: "Summary compiled",
+        detail: "Scribe update within 12 hours.",
+        meta: "Post-session",
+      },
     ],
     [
       activeSignal,
@@ -1615,6 +1627,7 @@ export function GroupScholarLanding() {
       activeTrackPulse.window,
       nextResetLabel,
       outcomeMetrics,
+      programs,
     ],
   );
 
