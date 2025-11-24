@@ -1630,6 +1630,32 @@ export function GroupScholarLanding() {
       programs,
     ],
   );
+  const snapshotStrip = useMemo(
+    () => [
+      {
+        label: "Room tone",
+        value: activeSignal,
+        detail: activeSignalProfile.headline,
+      },
+      {
+        label: "Open seats",
+        value: activeTrackPulse.seats,
+        detail: activeTrackPulse.window,
+      },
+      {
+        label: "Next ritual",
+        value: "Signal reset",
+        detail: nextResetLabel,
+      },
+    ],
+    [
+      activeSignal,
+      activeSignalProfile.headline,
+      activeTrackPulse.seats,
+      activeTrackPulse.window,
+      nextResetLabel,
+    ],
+  );
   const snapshotCadence: SnapshotTile[] = useMemo(
     () => [
       {
@@ -1905,6 +1931,12 @@ export function GroupScholarLanding() {
       /Chrome\/\d+\.0\.0\.0/.test(navigator.userAgent));
   const shouldBypassMotion =
     reduced || isAutomationFlagged || isAutomationUA || isSnapshotParam;
+  const snapshotRailView = shouldBypassMotion
+    ? snapshotRail.slice(0, 4)
+    : snapshotRail;
+  const snapshotPulseView = shouldBypassMotion
+    ? snapshotPulse.slice(0, 4)
+    : snapshotPulse;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -2295,6 +2327,24 @@ export function GroupScholarLanding() {
                 Next reset {nextResetLabel}
               </span>
             </div>
+            <div className="mt-2 grid gap-2 sm:grid-cols-3">
+              {snapshotStrip.map((item) => (
+                <div
+                  key={`snapshot-strip-${item.label}`}
+                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-2 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
+                >
+                  <div className="text-[9px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    {item.label}
+                  </div>
+                  <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
+                    {item.value}
+                  </div>
+                  <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
+                    {item.detail}
+                  </div>
+                </div>
+              ))}
+            </div>
             <div className="mt-1 grid gap-2.5 md:grid-cols-[1.05fr_0.95fr]">
               <div>
                 <div className="text-xs font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
@@ -2343,7 +2393,7 @@ export function GroupScholarLanding() {
             </div>
             <div className="mt-1.5 grid gap-2 lg:grid-cols-[0.44fr_0.56fr]">
               <div className="gs-automation-rail grid gap-2 sm:grid-cols-3 lg:grid-cols-3">
-                {snapshotRail.map((tile) => (
+                {snapshotRailView.map((tile) => (
                   <div
                     key={`snapshot-brief-${tile.label}`}
                     className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1.5 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
@@ -2368,7 +2418,7 @@ export function GroupScholarLanding() {
                   </span>
                 </div>
                 <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                  {snapshotPulse.map((pulse) => (
+                  {snapshotPulseView.map((pulse) => (
                     <div
                       key={`snapshot-pulse-${pulse.label}`}
                       className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/95 px-2 py-1"
