@@ -2447,7 +2447,7 @@ export function GroupScholarLanding() {
                   Intake loop
                 </span>
               </div>
-              <div className="mt-2 grid gap-2 sm:grid-cols-3">
+              <div className="gs-automation-cadence-grid mt-2 grid gap-2 sm:grid-cols-3">
                 {snapshotCadence.map((cadence) => (
                   <div
                     key={`snapshot-cadence-${cadence.label}`}
