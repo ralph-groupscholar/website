@@ -2335,20 +2335,20 @@ export function GroupScholarLanding() {
                 </div>
               ))}
             </div>
-            <div className="mt-2 grid gap-2 sm:grid-cols-3">
+            <div className="gs-automation-ledger mt-2 flex flex-wrap gap-2">
               {snapshotBriefTiles.map((tile) => (
                 <div
                   key={`snapshot-brief-${tile.label}`}
-                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1.5 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
+                  className="gs-automation-ledger-item rounded-full border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1 shadow-[0_10px_24px_-22px_rgba(28,38,40,0.6)]"
                 >
-                  <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
-                    {tile.label}
-                  </div>
-                  <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
-                    {tile.value}
-                  </div>
-                  <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
-                    {tile.detail}
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
+                    <span className="font-bold uppercase tracking-[0.24em]">
+                      {tile.label}
+                    </span>
+                    <span className="font-semibold text-[color:var(--gs-ink)]">
+                      {tile.value}
+                    </span>
+                    <span>{tile.detail}</span>
                   </div>
                 </div>
               ))}
