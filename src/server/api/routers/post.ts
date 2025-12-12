@@ -13,6 +13,7 @@ const posts: Post[] = [
     name: "Hello World",
   },
 ];
+let nextPostId = 2;
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -27,7 +28,7 @@ export const postRouter = createTRPCRouter({
     .input(z.object({ name: z.string().min(1) }))
     .mutation(async ({ input }) => {
       const post: Post = {
-        id: posts.length + 1,
+        id: nextPostId++,
         name: input.name,
       };
       posts.push(post);
