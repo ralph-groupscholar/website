@@ -7,3 +7,4 @@
 - Expanded the Product Suite lineup with Briefing Room, Community Pulse, and Opportunity Radar and refreshed the section copy.
 
 - Added a Product Suite roadmap row that previews Eligibility Oracle, Review Queue Forecaster, and Pacing Console with status tags.
+- Deployed updates to https://groupscholar.com.
