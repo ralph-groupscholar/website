@@ -241,6 +241,12 @@ type LibraryItem = {
   href: string;
 };
 
+type RoadmapItem = {
+  title: string;
+  desc: string;
+  status: string;
+};
+
 type StudioHour = {
   day: string;
   time: string;
@@ -881,6 +887,27 @@ export function GroupScholarLanding() {
         format: "Knowledge base",
         shelf: "SUITE 09",
         href: "https://groupscholar-docs.vercel.app",
+      },
+    ],
+    [],
+  );
+
+  const roadmapItems: RoadmapItem[] = useMemo(
+    () => [
+      {
+        title: "Eligibility Oracle",
+        desc: "Instant rules engine for scholarship fit, compliance, and edge-case flags.",
+        status: "Queued build",
+      },
+      {
+        title: "Review Queue Forecaster",
+        desc: "Predictive staffing model for evaluation weeks, reviewer load, and pacing.",
+        status: "In design",
+      },
+      {
+        title: "Pacing Console",
+        desc: "Live awards pacing cockpit with guardrails for budget, cadence, and drift.",
+        status: "Prototype",
       },
     ],
     [],
@@ -2566,6 +2593,32 @@ export function GroupScholarLanding() {
                 </div>
               </div>
             </aside>
+          </div>
+
+          <div
+            data-animate="stagger"
+            className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3"
+          >
+            {roadmapItems.map((item) => (
+              <article
+                key={item.title}
+                data-stagger-item
+                className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/80 p-5 shadow-[0_18px_48px_-36px_rgba(28,38,40,0.75)]"
+              >
+                <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                  <span className="tracking-[0.24em]">ROADMAP</span>
+                  <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                    {item.status}
+                  </span>
+                </div>
+                <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-2xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  {item.desc}
+                </p>
+              </article>
+            ))}
           </div>
         </section>
 

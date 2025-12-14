@@ -5,3 +5,5 @@
 - Deployed to https://groupscholar.com.
 - Rotated the Product Suite lineup to highlight Mentor Map, Rubric Kit, and Group Scholar Docs with refreshed descriptions.
 - Expanded the Product Suite lineup with Briefing Room, Community Pulse, and Opportunity Radar and refreshed the section copy.
+
+- Added a Product Suite roadmap row that previews Eligibility Oracle, Review Queue Forecaster, and Pacing Console with status tags.
