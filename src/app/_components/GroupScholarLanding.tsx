@@ -827,38 +827,59 @@ export function GroupScholarLanding() {
         href: "https://groupscholar-impact-vault.vercel.app",
       },
       {
+        title: "Briefing Room",
+        desc: "Weekly program update microsite for sync-ready staff and partners.",
+        format: "Executive pulse board",
+        shelf: "SUITE 02",
+        href: "https://groupscholar-briefing-room.vercel.app",
+      },
+      {
+        title: "Community Pulse",
+        desc: "Feedback, sentiment, and signal tracking across cohorts and programs.",
+        format: "Sentiment signal deck",
+        shelf: "SUITE 03",
+        href: "https://groupscholar-community-pulse.vercel.app",
+      },
+      {
+        title: "Opportunity Radar",
+        desc: "Scholarship opportunity intelligence with filters for fit and timing.",
+        format: "Opportunity tracker",
+        shelf: "SUITE 04",
+        href: "https://groupscholar-opportunity-radar.vercel.app",
+      },
+      {
         title: "Outcome Atlas",
         desc: "Outcomes tracking, evidence capture, and storytelling engine for teams.",
         format: "Outcome command center",
-        shelf: "SUITE 02",
+        shelf: "SUITE 05",
         href: "https://groupscholar-outcome-atlas.vercel.app",
       },
       {
         title: "Application Funnel",
         desc: "Program pipeline visibility with stage-by-stage conversion signals.",
         format: "Admissions dashboard",
-        shelf: "SUITE 03",
+        shelf: "SUITE 06",
         href: "https://groupscholar-application-funnel.vercel.app",
       },
       {
         title: "Mentor Map",
         desc: "Mentor coverage map with availability, cohort alignment, and focus signals.",
         format: "Mentor network grid",
-        shelf: "SUITE 04",
+        shelf: "SUITE 07",
         href: "https://groupscholar-mentor-map.vercel.app",
       },
       {
         title: "Rubric Kit",
         desc: "Shared scoring rubric sprint microsite for scholarship review teams.",
         format: "Review sprint hub",
-        shelf: "SUITE 05",
+        shelf: "SUITE 08",
         href: "https://groupscholar-rubric-kit.vercel.app",
       },
       {
         title: "Group Scholar Docs",
         desc: "Company-wide documentation site for programs, operations, and decisions.",
         format: "Knowledge base",
-        shelf: "SUITE 06",
+        shelf: "SUITE 09",
         href: "https://groupscholar-docs.vercel.app",
       },
     ],
@@ -3041,7 +3062,7 @@ export function GroupScholarLanding() {
           <SectionHeading
             eyebrow="Product suite"
             title="Active tools for admissions, outcomes, and community care."
-            subtitle="Launch the right workspace for the job—briefings, pipelines, and impact storytelling in one stack."
+            subtitle="Launch the right workspace for the job—briefings, community feedback, opportunity tracking, and impact storytelling in one stack."
           />
 
           <div
