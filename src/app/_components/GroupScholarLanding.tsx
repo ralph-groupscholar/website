@@ -238,6 +238,7 @@ type LibraryItem = {
   desc: string;
   format: string;
   shelf: string;
+  href: string;
 };
 
 type StudioHour = {
@@ -393,7 +394,7 @@ export function GroupScholarLanding() {
       { id: "wayfinding", label: "Wayfinding", tag: "Path" },
       { id: "principles", label: "Principles", tag: "Mission" },
       { id: "programs", label: "Programs", tag: "Catalog" },
-      { id: "library", label: "Library", tag: "Archive" },
+      { id: "library", label: "Suite", tag: "Products" },
       { id: "outcomes", label: "Outcomes", tag: "Map" },
       { id: "relay", label: "Relay", tag: "Cue" },
       { id: "pulse", label: "Pulse", tag: "Bridge" },
@@ -415,7 +416,7 @@ export function GroupScholarLanding() {
       wayfinding: "Follow the path to the next cue.",
       principles: "Anchor the pact before you move.",
       programs: "Choose the track and mark it.",
-      library: "Pull the right stack for the room.",
+      library: "Open the tool that matches the mission.",
       outcomes: "Measure the drift and name it.",
       relay: "Pass the cue to the next chapter.",
       pulse: "Read the room pulse together.",
@@ -815,32 +816,50 @@ export function GroupScholarLanding() {
     [],
   );
 
-  // Library items are the faux-archived resources referenced across the site.
+  // Library items highlight the active Group Scholar product suite.
   const libraryItems: LibraryItem[] = useMemo(
     () => [
       {
-        title: "Peer Review Field Manual",
-        desc: "A pocket guide to giving feedback without puncturing the vibe.",
-        format: "Pocket booklet",
-        shelf: "STACK B-2",
+        title: "Impact Vault",
+        desc: "Impact intelligence library and weekly briefing builder for program ops.",
+        format: "Live intelligence hub",
+        shelf: "SUITE 01",
+        href: "https://groupscholar-impact-vault.vercel.app",
       },
       {
-        title: "Distraction Engineering Lab Notes",
-        desc: "Annotated notes from the capstone sessions, redacted for decency.",
-        format: "Spiral notebook",
-        shelf: "STACK C-7",
+        title: "Outcome Atlas",
+        desc: "Outcomes tracking, evidence capture, and storytelling engine for teams.",
+        format: "Outcome command center",
+        shelf: "SUITE 02",
+        href: "https://groupscholar-outcome-atlas.vercel.app",
       },
       {
-        title: "Boundary Badge Legend",
-        desc: "The cheat sheet that keeps signals consistent across rooms.",
-        format: "Laminated card",
-        shelf: "STACK A-1",
+        title: "Application Funnel",
+        desc: "Program pipeline visibility with stage-by-stage conversion signals.",
+        format: "Admissions dashboard",
+        shelf: "SUITE 03",
+        href: "https://groupscholar-application-funnel.vercel.app",
       },
       {
-        title: "Consent Reset Templates",
-        desc: "Reusable scripts for recalibrating the room in under 30 seconds.",
-        format: "Index set",
-        shelf: "STACK D-4",
+        title: "Mentor Map",
+        desc: "Mentor coverage map with availability, cohort alignment, and focus signals.",
+        format: "Mentor network grid",
+        shelf: "SUITE 04",
+        href: "https://groupscholar-mentor-map.vercel.app",
+      },
+      {
+        title: "Rubric Kit",
+        desc: "Shared scoring rubric sprint microsite for scholarship review teams.",
+        format: "Review sprint hub",
+        shelf: "SUITE 05",
+        href: "https://groupscholar-rubric-kit.vercel.app",
+      },
+      {
+        title: "Group Scholar Docs",
+        desc: "Company-wide documentation site for programs, operations, and decisions.",
+        format: "Knowledge base",
+        shelf: "SUITE 06",
+        href: "https://groupscholar-docs.vercel.app",
       },
     ],
     [],
@@ -3020,9 +3039,9 @@ export function GroupScholarLanding() {
           className="mt-16 scroll-mt-28 md:mt-24"
         >
           <SectionHeading
-            eyebrow="Library stacks"
-            title="Artifacts from the archive, checked out nightly."
-            subtitle="Pull a resource, skim the footnotes, and return it with the vibe intact."
+            eyebrow="Product suite"
+            title="Active tools for admissions, outcomes, and community care."
+            subtitle="Launch the right workspace for the job—briefings, pipelines, and impact storytelling in one stack."
           />
 
           <div
@@ -3037,7 +3056,7 @@ export function GroupScholarLanding() {
                   className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
                 >
                   <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
-                    <span className="tracking-[0.24em]">CATALOG</span>
+                    <span className="tracking-[0.24em]">PRODUCT</span>
                     <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
                       {item.shelf}
                     </span>
@@ -3054,6 +3073,15 @@ export function GroupScholarLanding() {
                       {item.format}
                     </span>
                   </div>
+                  <Link
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-4 inline-flex items-center justify-center rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--gs-ink)] transition hover:border-[color:var(--gs-ink)]"
+                    aria-label={`Open ${item.title}`}
+                  >
+                    Open live workspace
+                  </Link>
                 </article>
               ))}
             </div>
@@ -3064,21 +3092,21 @@ export function GroupScholarLanding() {
             >
               <div>
                 <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
-                  Checkout desk
+                  Ops desk
                 </div>
                 <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
-                  Borrow with boundaries.
+                  Launch with guardrails.
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
-                  Each artifact ships with a reminder: keep the notes gentle, keep the
-                  signals visible, and return anything that feels too charged.
+                  Each workspace keeps sensitive data protected, focuses on aggregate
+                  signals, and pairs insights with next steps for the team.
                 </p>
               </div>
               <div className="mt-6 space-y-3">
                 {[
-                  "Loan window: one session only.",
-                  "No copies, no screenshots, no gossip.",
-                  "Return items in the tone they arrived.",
+                  "Access logged with owner visibility.",
+                  "Aggregate insights only—no personal exports.",
+                  "Docs, rubrics, and maps refreshed monthly.",
                 ].map((line) => (
                   <div
                     key={line}
@@ -3089,7 +3117,7 @@ export function GroupScholarLanding() {
                 ))}
               </div>
               <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
-                Archive status: supervised access only.
+                Product status: active in live programs.
               </div>
             </aside>
           </div>
