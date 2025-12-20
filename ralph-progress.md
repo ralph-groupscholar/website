@@ -18,4 +18,12 @@
 - Ran production database seed script to create groupscholar_website tables and insert initial intake intent rows.
 
 ## 2026-02-08
+- Expanded the intake pulse with top time zone, locale, and focus note stats sourced from production data.
+- Deployed updates to https://groupscholar.com.
+
+## 2026-02-08
 - Added a new Signals Ledger section to surface live impact signals, status messaging, and latest refresh timing from the production data feed.
+- Attempted Vercel production deploy; blocked by free tier deployment limit (api-deployments-free-per-day).
+
+## 2026-02-08
+- Added a recent intake intent feed panel to the Signal window, including timestamps, region/source labels, and fallback messaging.
