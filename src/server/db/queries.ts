@@ -18,6 +18,8 @@ export type IntakePulseRecord = {
   topTrack: string | null;
   lastSubmittedAt: Date | null;
   trackMix: Array<{ track: string; count: number }>;
+  topSource: string | null;
+  sourceMix: Array<{ source: string; count: number }>;
   topTimeZone: string | null;
   topLocale: string | null;
   focusNotes: number;
@@ -90,6 +92,15 @@ export async function getIntakePulse(db: WebsiteDb): Promise<IntakePulseRecord> 
     .orderBy(desc(trackCount))
     .limit(3);
 
+  const sourceCount = sql<number>`count(*)`.as("count");
+  const sourceRows = await db
+    .select({ source: intakeIntents.source, count: sourceCount })
+    .from(intakeIntents)
+    .where(sql`submitted_at >= now() - interval '14 days'`)
+    .groupBy(intakeIntents.source)
+    .orderBy(desc(sourceCount))
+    .limit(3);
+
   const timeZoneCount = sql<number>`count(*)`.as("count");
   const timeZoneRows = await db
     .select({ zone: intakeIntents.timeZone, count: timeZoneCount })
@@ -133,6 +144,11 @@ export async function getIntakePulse(db: WebsiteDb): Promise<IntakePulseRecord> 
     lastSubmittedAt: latestRow[0]?.latest ?? null,
     trackMix: trackRows.map((row) => ({
       track: row.track,
+      count: Number(row.count ?? 0),
+    })),
+    topSource: sourceRows[0]?.source ?? null,
+    sourceMix: sourceRows.map((row) => ({
+      source: row.source,
       count: Number(row.count ?? 0),
     })),
     topTimeZone: timeZoneRows[0]?.zone ?? null,

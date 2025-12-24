@@ -15,6 +15,12 @@ const fallbackPulse = {
     { track: "Shared Draft", count: 18 },
     { track: "After Hours", count: 14 },
   ],
+  topSource: "website",
+  sourceMix: [
+    { source: "website", count: 28 },
+    { source: "apply-section", count: 21 },
+    { source: "landing", count: 15 },
+  ],
   topTimeZone: "America/New_York",
   topLocale: "en-US",
   focusNotes: 18,
