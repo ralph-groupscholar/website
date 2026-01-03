@@ -29,4 +29,7 @@
 - Added a recent intake intent feed panel to the Signal window, including timestamps, region/source labels, and fallback messaging.
 
 ## 2026-02-08
+- Added intake pulse source visibility (top source plus source mix chips) so the Signal window surfaces where incoming intents originate.
+
+## 2026-02-08
 - Extended the intake pulse to include top source + source mix and surfaced the new source breakdown in the live pulse panel.
