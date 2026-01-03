@@ -8,6 +8,10 @@ export const runtime = "nodejs";
 const fallbackPulse = {
   total: 64,
   last24h: 7,
+  last7d: 31,
+  prev7d: 28,
+  dailyAverage7d: 4.4,
+  trendPercent7d: 11,
   topTrack: "Quiet Focus",
   lastSubmittedAt: "2026-02-08T16:30:00.000Z",
   trackMix: [

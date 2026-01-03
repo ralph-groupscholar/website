@@ -170,6 +170,10 @@ type ImpactSignal = {
 type IntakePulse = {
   total: number;
   last24h: number;
+  last7d: number;
+  prev7d: number;
+  dailyAverage7d: number;
+  trendPercent7d: number;
   topTrack: string | null;
   lastSubmittedAt: string | null;
   trackMix: Array<{ track: string; count: number }>;
@@ -187,6 +191,11 @@ type IntakeFeedItem = {
   source: string;
   region: string | null;
   submittedAt: string;
+};
+
+type IntakeTimelineEntry = {
+  day: string;
+  count: number;
 };
 
 type RelayCheckpoint = {
@@ -460,6 +469,10 @@ const fallbackImpactSignals: ImpactSignal[] = [
 const fallbackIntakePulse: IntakePulse = {
   total: 64,
   last24h: 7,
+  last7d: 31,
+  prev7d: 28,
+  dailyAverage7d: 4.4,
+  trendPercent7d: 11,
   topTrack: "Quiet Focus",
   lastSubmittedAt: "2026-02-08T16:30:00.000Z",
   trackMix: [
@@ -508,6 +521,16 @@ const fallbackIntakeFeed: IntakeFeedItem[] = [
     region: "Atlanta",
     submittedAt: "2026-02-08T14:22:00.000Z",
   },
+];
+
+const fallbackIntakeTimeline: IntakeTimelineEntry[] = [
+  { day: "2026-02-02", count: 5 },
+  { day: "2026-02-03", count: 8 },
+  { day: "2026-02-04", count: 7 },
+  { day: "2026-02-05", count: 9 },
+  { day: "2026-02-06", count: 10 },
+  { day: "2026-02-07", count: 6 },
+  { day: "2026-02-08", count: 7 },
 ];
 
 const formatSourceLabel = (value: string) =>
@@ -589,6 +612,12 @@ export function GroupScholarLanding() {
   const [intakeFeedStatus, setIntakeFeedStatus] = useState<
     "idle" | "loading" | "error"
   >("idle");
+  const [intakeTimeline, setIntakeTimeline] = useState<IntakeTimelineEntry[]>(
+    fallbackIntakeTimeline,
+  );
+  const [intakeTimelineStatus, setIntakeTimelineStatus] = useState<
+    "idle" | "loading" | "error"
+  >("idle");
   const [clientMeta, setClientMeta] = useState({
     timeZone: "Unknown",
     locale: "en-US",
@@ -658,6 +687,13 @@ export function GroupScholarLanding() {
       }),
     [],
   );
+  const shortDayFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat("en-US", {
+        weekday: "short",
+      }),
+    [],
+  );
   const resetFormatter = useMemo(
     () =>
       new Intl.DateTimeFormat("en-US", {
@@ -712,6 +748,9 @@ export function GroupScholarLanding() {
     intakePulse.focusNotes > 0
       ? `${intakePulse.focusNotes} notes • avg ${intakePulse.avgFocusLength} chars`
       : "No focus notes yet";
+  const weeklyTrendSign = intakePulse.trendPercent7d > 0 ? "+" : "";
+  const weeklyTrendLabel = `${weeklyTrendSign}${intakePulse.trendPercent7d}% vs prior 7d`;
+  const weeklyAverageLabel = `${intakePulse.dailyAverage7d}/day (7d avg)`;
   const impactSignalStatusLabel =
     impactSignalStatus === "loading"
       ? "Syncing impact signals..."
@@ -751,6 +790,35 @@ export function GroupScholarLanding() {
       };
     });
   }, [intakeFeed, signalDateFormatter, timeFormatter]);
+  const intakeTimelineSummary = useMemo(() => {
+    const trimmed = intakeTimeline.slice(-7);
+    const peak = Math.max(
+      1,
+      ...trimmed.map((entry) => Number(entry.count ?? 0)),
+    );
+    const entries = trimmed.map((entry) => {
+      const day = new Date(entry.day);
+      const label = Number.isNaN(day.getTime())
+        ? "—"
+        : shortDayFormatter.format(day);
+      const count = Number(entry.count ?? 0);
+      const height = Math.max(12, Math.round((count / peak) * 100));
+      return {
+        ...entry,
+        label,
+        count,
+        height,
+      };
+    });
+    const peakEntry = entries.reduce(
+      (best, entry) => (entry.count > best.count ? entry : best),
+      entries[0] ?? { label: "—", count: 0, day: "—", height: 12 },
+    );
+    return {
+      entries,
+      peakLabel: `${peakEntry.label} · ${peakEntry.count}`,
+    };
+  }, [intakeTimeline, shortDayFormatter]);
 
   const principles: Principle[] = useMemo(
     () => [
@@ -2229,6 +2297,38 @@ export function GroupScholarLanding() {
     };
 
     loadFeed();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    const loadTimeline = async () => {
+      setIntakeTimelineStatus("loading");
+      try {
+        const response = await fetch("/api/intake-timeline");
+        if (!response.ok) {
+          throw new Error("Failed to load intake timeline.");
+        }
+        const data = (await response.json()) as {
+          timeline?: IntakeTimelineEntry[];
+        };
+        if (!active) return;
+        if (Array.isArray(data?.timeline)) {
+          setIntakeTimeline(data.timeline);
+          setIntakeTimelineStatus("idle");
+        } else {
+          setIntakeTimelineStatus("error");
+        }
+      } catch (error) {
+        if (active) {
+          setIntakeTimelineStatus("error");
+        }
+      }
+    };
+
+    loadTimeline();
     return () => {
       active = false;
     };
@@ -3901,6 +4001,12 @@ export function GroupScholarLanding() {
                     {intakePulse.total} total intents
                   </div>
                   <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                    {weeklyAverageLabel}
+                  </div>
+                  <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                    Weekly momentum: {weeklyTrendLabel}
+                  </div>
+                  <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
                     Top track: {topTrackLabel}
                   </div>
                   <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
@@ -3935,9 +4041,38 @@ export function GroupScholarLanding() {
                   <div className="mt-3 text-[11px] font-semibold text-[color:var(--gs-muted)]">
                     Focus notes: {focusNoteSummary}
                   </div>
+                  <div className="mt-3 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-3">
+                    <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                      <span>7-day cadence</span>
+                      <span className="font-mono text-[color:var(--gs-ink)]">
+                        Peak {intakeTimelineSummary.peakLabel}
+                      </span>
+                    </div>
+                    <div className="mt-3 grid h-20 grid-cols-7 items-end gap-2">
+                      {intakeTimelineSummary.entries.map((entry) => (
+                        <div
+                          key={`timeline-${entry.day}`}
+                          className="flex h-full flex-col items-center justify-end gap-2"
+                        >
+                          <div
+                            className="w-full rounded-full bg-[color:var(--gs-ink)]/70"
+                            style={{ height: `${entry.height}%` }}
+                          />
+                          <span className="text-[9px] font-semibold text-[color:var(--gs-muted)]">
+                            {entry.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                   <div className="mt-3 text-[10px] font-bold uppercase tracking-[0.22em] text-[color:var(--gs-muted)]">
                     Last signal {intakePulseLastLabel}
                   </div>
+                  {intakeTimelineStatus === "error" && (
+                    <div className="mt-2 text-[11px] font-semibold text-[color:var(--gs-accent)]">
+                      Live cadence unavailable, showing baseline.
+                    </div>
+                  )}
                   {intakePulseStatus === "error" && (
                     <div className="mt-2 text-[11px] font-semibold text-[color:var(--gs-accent)]">
                       Live pulse unavailable, showing baseline.
