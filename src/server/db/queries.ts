@@ -40,6 +40,11 @@ export type IntakeFeedRecord = {
 };
 
 export type IntakeTimelineRecord = {
+  day: string;
+  count: number;
+};
+
+export type IntakeTimelineRecord = {
   day: Date;
   count: number;
 };
@@ -202,6 +207,47 @@ export async function listRecentIntakeIntents(
     .from(intakeIntents)
     .orderBy(desc(intakeIntents.submittedAt))
     .limit(limit);
+}
+
+export async function getIntakeTimeline(
+  db: WebsiteDb,
+  days = 7,
+): Promise<IntakeTimelineRecord[]> {
+  const lookbackDays = Math.max(1, Math.floor(days));
+  const rows = await db
+    .select({
+      day: sql<string>`date_trunc('day', ${intakeIntents.submittedAt})::date`,
+      count: sql<number>`count(*)`,
+    })
+    .from(intakeIntents)
+    .where(sql`submitted_at >= now() - interval '${lookbackDays - 1} days'`)
+    .groupBy(sql`date_trunc('day', ${intakeIntents.submittedAt})`)
+    .orderBy(sql`date_trunc('day', ${intakeIntents.submittedAt})`);
+
+  const countMap = new Map<string, number>();
+  for (const row of rows) {
+    const dayValue =
+      typeof row.day === "string"
+        ? row.day
+        : row.day instanceof Date
+          ? row.day.toISOString().slice(0, 10)
+          : String(row.day);
+    countMap.set(dayValue, Number(row.count ?? 0));
+  }
+
+  const today = new Date();
+  const timeline: IntakeTimelineRecord[] = [];
+  for (let offset = lookbackDays - 1; offset >= 0; offset -= 1) {
+    const date = new Date(today);
+    date.setUTCDate(date.getUTCDate() - offset);
+    const dayKey = date.toISOString().slice(0, 10);
+    timeline.push({
+      day: dayKey,
+      count: countMap.get(dayKey) ?? 0,
+    });
+  }
+
+  return timeline;
 }
 
 export async function listIntakeTimeline(

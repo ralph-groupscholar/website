@@ -40,3 +40,6 @@
 ## 2026-02-08
 - Added a 7-day intake cadence timeline sourced from production data, plus a new API endpoint to deliver filled daily counts for the Signal window.
 - Attempted Vercel production deploy; blocked by free tier deployment limit (api-deployments-free-per-day).
+
+## 2026-02-08
+- Added the missing intake timeline API endpoint backed by Postgres and wired a fallback timeline to keep the pulse chart alive when the DB is unavailable.
