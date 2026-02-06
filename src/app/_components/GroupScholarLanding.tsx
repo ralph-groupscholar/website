@@ -25,6 +25,32 @@ type Testimonial = {
   citation: string;
 };
 
+type SessionFormat = {
+  title: string;
+  desc: string;
+  duration: string;
+  intensity: string;
+  seats: string;
+};
+
+type Ritual = {
+  badge: string;
+  title: string;
+  desc: string;
+  cue: string;
+};
+
+type StudioKitItem = {
+  title: string;
+  desc: string;
+};
+
+type StudioHour = {
+  day: string;
+  time: string;
+  note: string;
+};
+
 type FaqItem = {
   q: string;
   a: string;
@@ -238,6 +264,102 @@ export function GroupScholarLanding() {
     [],
   );
 
+  // Rituals define the cadence of a typical session flow.
+  const rituals: Ritual[] = useMemo(
+    () => [
+      {
+        badge: "Step 01",
+        title: "Arrival check-in",
+        desc: "Name your focus for the night, then immediately betray it with charm.",
+        cue: "5 minutes",
+      },
+      {
+        badge: "Step 02",
+        title: "Collaborative drift",
+        desc: "Work in loose clusters, swap notes, and decide who gets to be “the scribe.”",
+        cue: "45–90 minutes",
+      },
+      {
+        badge: "Step 03",
+        title: "Exit ritual",
+        desc: "Confirm boundaries, close the loop, and commit to at least one task tomorrow.",
+        cue: "10 minutes",
+      },
+    ],
+    [],
+  );
+
+  // Studio kit items highlight what we provide to keep sessions intentional.
+  const studioKit: StudioKitItem[] = useMemo(
+    () => [
+      {
+        title: "Syllabus cards",
+        desc: "Prompt decks that turn “study” into structured flirtation with focus.",
+      },
+      {
+        title: "Boundary badges",
+        desc: "Wearable cues for “chat,” “quiet,” or “please don’t interrupt.”",
+      },
+      {
+        title: "Note relay",
+        desc: "Shared notebooks so everyone leaves with receipts, not just vibes.",
+      },
+      {
+        title: "Soft timer",
+        desc: "Non-judgmental bells that nudge without killing the mood.",
+      },
+    ],
+    [],
+  );
+
+  const sessionFormats: SessionFormat[] = useMemo(
+    () => [
+      {
+        title: "Whisper Lab",
+        desc: "Low volume, high tension. Ideal for micro-deadlines and macro daydreaming.",
+        duration: "45 min",
+        intensity: "Soft focus",
+        seats: "6 seats",
+      },
+      {
+        title: "Studio Critique",
+        desc: "Your work, their feedback, everyone’s eyebrow expressions.",
+        duration: "90 min",
+        intensity: "Peer pressure",
+        seats: "8 seats",
+      },
+      {
+        title: "After Hours Salon",
+        desc: "Late-night co-working with a permissive attitude toward tangents.",
+        duration: "2 hours",
+        intensity: "Suggestive",
+        seats: "10 seats",
+      },
+    ],
+    [],
+  );
+
+  const studioHours: StudioHour[] = useMemo(
+    () => [
+      {
+        day: "Monday",
+        time: "7:00–9:00 PM",
+        note: "Warm-up circle + soft critique.",
+      },
+      {
+        day: "Wednesday",
+        time: "6:30–8:00 PM",
+        note: "Focus optional. Boundaries enforced.",
+      },
+      {
+        day: "Friday",
+        time: "8:00–10:30 PM",
+        note: "Distraction engineering practicum.",
+      },
+    ],
+    [],
+  );
+
   const faq: FaqItem[] = useMemo(
     () => [
       {
@@ -365,11 +487,20 @@ export function GroupScholarLanding() {
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#programs">
               Programs
             </a>
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#rituals">
+              Rituals
+            </a>
             <a
               className="transition hover:text-[color:var(--gs-ink)]"
               href="#testimonials"
             >
               Citations
+            </a>
+            <a
+              className="transition hover:text-[color:var(--gs-ink)]"
+              href="#sessions"
+            >
+              Sessions
             </a>
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#faq">
               Conduct
@@ -513,6 +644,7 @@ export function GroupScholarLanding() {
               "Focus: Optional",
               "Chemistry: Off-Syllabus",
               "Peer Review: Personal",
+              "Session Rituals",
               "Boundaries: Clear",
             ]}
           />
@@ -648,6 +780,164 @@ export function GroupScholarLanding() {
           </div>
         </section>
 
+        <section
+          id="rituals"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Session flow"
+            title="Rituals that keep the chemistry kind."
+            subtitle="Every session follows a shared cadence so the vibe stays playful and the boundaries stay crisp."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.2fr_0.8fr]"
+          >
+            <div className="space-y-4">
+              {rituals.map((ritual) => (
+                <article
+                  key={ritual.title}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">{ritual.badge}</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {ritual.cue}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {ritual.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {ritual.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Studio kit
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Everything you need to keep it respectful.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  We supply the prompts, signals, and gentle structure that keep
+                  the room collaborative instead of chaotic.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {studioKit.map((item) => (
+                  <div
+                    key={item.title}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4"
+                  >
+                    <div className="text-sm font-bold text-[color:var(--gs-ink)]">
+                      {item.title}
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {item.desc}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section
+          id="sessions"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Studio hours"
+            title="Sessions that look like study and feel like chemistry."
+            subtitle="Choose a format that matches your focus tolerance, then pick a night to test it."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3"
+          >
+            {sessionFormats.map((session) => (
+              <article
+                key={session.title}
+                data-stagger-item
+                className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+              >
+                <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                  Format
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  {session.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  {session.desc}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                  <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                    {session.duration}
+                  </span>
+                  <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                    {session.intensity}
+                  </span>
+                  <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                    {session.seats}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div
+            data-animate="stagger"
+            className="mt-8 grid grid-cols-1 gap-4 rounded-[32px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_18px_60px_-40px_rgba(28,38,40,0.75)] md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div data-stagger-item className="space-y-4">
+              <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                Weekly roster
+              </div>
+              <h3 className="font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                Studio hours (local time)
+              </h3>
+              <p className="text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                Sessions are capped, lightly moderated, and closed to spectators.
+                Bring a notebook; leave your assumptions.
+              </p>
+            </div>
+            <div
+              data-stagger-item
+              className="grid gap-3 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-4"
+            >
+              {studioHours.map((slot) => (
+                <div
+                  key={slot.day}
+                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white px-4 py-3 shadow-sm"
+                >
+                  <div className="flex items-center justify-between text-sm font-bold text-[color:var(--gs-ink)]">
+                    <span>{slot.day}</span>
+                    <span className="text-xs text-[color:var(--gs-muted)]">
+                      {slot.time}
+                    </span>
+                  </div>
+                  <div className="mt-2 text-xs font-bold tracking-wide text-[color:var(--gs-muted)]">
+                    {slot.note}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section id="faq" data-animate="section" className="mt-16 scroll-mt-28 md:mt-24">
           <SectionHeading
             eyebrow="Code of conduct"
@@ -693,6 +983,21 @@ export function GroupScholarLanding() {
                 We’ll never promise productivity. We will promise a room full of
                 smart people pretending to focus together.
               </p>
+
+              <div className="mx-auto mt-6 grid max-w-2xl gap-3 text-left sm:grid-cols-3">
+                {[
+                  "Consent is explicit, not assumed.",
+                  "Boundaries are honored without debate.",
+                  "Exit any moment without explanation.",
+                ].map((line) => (
+                  <div
+                    key={line}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/85 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]"
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
 
               <form
                 className="mx-auto mt-8 flex max-w-xl flex-col gap-3 sm:flex-row"
