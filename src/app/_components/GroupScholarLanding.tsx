@@ -406,6 +406,25 @@ export function GroupScholarLanding() {
     ],
     [],
   );
+  const signalCueMap = useMemo(
+    () => ({
+      forecast: "Check the board, adjust the tone.",
+      principles: "Anchor the pact before you move.",
+      programs: "Choose the track and mark it.",
+      library: "Pull the right stack for the room.",
+      outcomes: "Measure the drift and name it.",
+      pulse: "Read the room pulse together.",
+      rituals: "Follow the ritual loop.",
+      sessions: "Set the session rhythm.",
+      rooms: "Pick a zone that fits.",
+      matching: "Lock the pairing with care.",
+      decoder: "Decode the signals fast.",
+      studio: "Run the studio cue.",
+      admissions: "Open the gate, set the tone.",
+      apply: "Reserve the seat while it holds.",
+    }),
+    [],
+  );
   const [email, setEmail] = useState("");
   const [track, setTrack] = useState("Any track");
   const [focusNote, setFocusNote] = useState("");
@@ -441,9 +460,13 @@ export function GroupScholarLanding() {
     sectionIndex.findIndex((item) => item.id === activeSection),
   );
   const activeLabel = sectionIndex[activeIndex]?.label ?? "Forecast";
+  const activeTag = sectionIndex[activeIndex]?.tag ?? "Board";
   const progressPercent = sectionIndex.length
     ? Math.round(((activeIndex + 1) / sectionIndex.length) * 100)
     : 0;
+  const activeCue =
+    signalCueMap[activeSection as keyof typeof signalCueMap] ??
+    "Hold the thread.";
 
   const principles: Principle[] = useMemo(
     () => [
@@ -4119,6 +4142,35 @@ export function GroupScholarLanding() {
           </div>
         </section>
       </main>
+
+      <div className="pointer-events-none fixed bottom-6 left-1/2 z-30 hidden -translate-x-1/2 xl:block">
+        <div className="pointer-events-auto flex items-center gap-4 rounded-full border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/95 px-5 py-3 shadow-[0_20px_50px_-30px_rgba(28,38,40,0.85)] backdrop-blur">
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[color:var(--gs-muted)]">
+              Live section
+            </span>
+            <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-xs font-semibold text-[color:var(--gs-ink)]">
+              {activeLabel}
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--gs-muted)]">
+              {activeTag}
+            </span>
+          </div>
+          <div className="h-5 w-px bg-[color:var(--gs-ink-soft)]" />
+          <div className="text-xs font-semibold text-[color:var(--gs-ink)]">
+            {activeCue}
+          </div>
+          <div className="ml-1 rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2 py-1 text-[11px] font-bold text-[color:var(--gs-muted)]">
+            {progressPercent}% complete
+          </div>
+          <Link
+            href="#apply"
+            className="ml-1 rounded-full bg-[color:var(--gs-accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-white shadow-[0_12px_24px_-16px_rgba(201,81,49,0.9)] transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gs-accent)]/40"
+          >
+            Reserve
+          </Link>
+        </div>
+      </div>
 
       <footer className="relative z-10 border-t border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/60">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-center md:flex-row md:px-8 md:text-left">
