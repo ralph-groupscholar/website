@@ -239,3 +239,8 @@
 - Add a continuity ribbon between sections that shows a threaded story beat and anchors the Field Guide to the visible region.
 - Prototype a "Signal Studio" interlude with rotating badges and a brief host script to break up the long scroll.
 - Build a render-stability guard that disables scroll reveals and forces all sections to `opacity: 1` when in headless or `prefers-reduced-motion`.
+2026-02-05 21:33:01 — Iteration 39
+- Reviewed current codebase plus recent git history for context.
+- Captured a fresh Playwright full-page screenshot of groupscholar.com; the headless render still shows a massive blank gap with the hero repeating near the bottom.
+- Sketched creative follow-ups: add a continuity ribbon between sections, introduce a live “Signal Studio” interlude, and harden headless/reduced-motion rendering so sections always paint.
+- Implemented a Signal Studio section with rehearsal cues + host scripts, added a nav entry, and wired a headless/reduced-motion guard to force animated elements visible.
