@@ -1,3 +1,13 @@
+2026-02-05 19:45:30 — Iteration 8
+- Added a Library section with archive artifacts and a checkout desk sidebar to deepen the world-building.
+- Built a Signal Decoder section with interactive badge toggles and host response details.
+- Updated the hero navigation and marquee to link the new sections.
+
+2026-02-05 19:42:36 — Iteration 7
+- Added a track preview card in the apply form to explain tone, capacity, and signals before submitting.
+- Enforced simple email validation, focus-note length limits, and a live character counter.
+- Added a post-submit reset control so users can log another intent without refreshing.
+
 2026-02-05 19:19:40 — Iteration 6
 - Added a Field Notes section with session logs and an archive shelf to highlight real-ish moments and artifacts.
 - Expanded the intake form with track preferences and optional focus notes for clearer matching context.

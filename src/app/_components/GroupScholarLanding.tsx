@@ -67,6 +67,13 @@ type StudioKitItem = {
   desc: string;
 };
 
+type LibraryItem = {
+  title: string;
+  desc: string;
+  format: string;
+  shelf: string;
+};
+
 type StudioHour = {
   day: string;
   time: string;
@@ -92,6 +99,14 @@ type FieldNote = {
 type ArchiveItem = {
   title: string;
   desc: string;
+};
+
+type SignalProfile = {
+  code: string;
+  headline: string;
+  desc: string;
+  hostMove: string;
+  response: string;
 };
 
 type FaqItem = {
@@ -221,7 +236,10 @@ export function GroupScholarLanding() {
   const [track, setTrack] = useState("Any track");
   const [focusNote, setFocusNote] = useState("");
   const [formStatus, setFormStatus] = useState<"idle" | "error" | "sent">("idle");
+  const [activeSignal, setActiveSignal] = useState("Silent");
+  const maxFocusLength = 160;
   const formattedTrack = track === "Any track" ? "any track" : track;
+  const focusCount = focusNote.length;
   const helperMessage =
     "We only use this to match you with a room. No mailing lists.";
   const statusMessage =
@@ -234,8 +252,10 @@ export function GroupScholarLanding() {
     formStatus === "error"
       ? "text-[color:var(--gs-accent)]"
       : formStatus === "sent"
-        ? "text-[color:var(--gs-ink)]"
-        : "text-[color:var(--gs-muted)]";
+      ? "text-[color:var(--gs-ink)]"
+      : "text-[color:var(--gs-muted)]";
+  const trackPreviewId = useId();
+  const focusCountId = useId();
 
   const principles: Principle[] = useMemo(
     () => [
@@ -428,6 +448,37 @@ export function GroupScholarLanding() {
     [],
   );
 
+  // Library items are the faux-archived resources referenced across the site.
+  const libraryItems: LibraryItem[] = useMemo(
+    () => [
+      {
+        title: "Peer Review Field Manual",
+        desc: "A pocket guide to giving feedback without puncturing the vibe.",
+        format: "Pocket booklet",
+        shelf: "STACK B-2",
+      },
+      {
+        title: "Distraction Engineering Lab Notes",
+        desc: "Annotated notes from the capstone sessions, redacted for decency.",
+        format: "Spiral notebook",
+        shelf: "STACK C-7",
+      },
+      {
+        title: "Boundary Badge Legend",
+        desc: "The cheat sheet that keeps signals consistent across rooms.",
+        format: "Laminated card",
+        shelf: "STACK A-1",
+      },
+      {
+        title: "Consent Reset Templates",
+        desc: "Reusable scripts for recalibrating the room in under 30 seconds.",
+        format: "Index set",
+        shelf: "STACK D-4",
+      },
+    ],
+    [],
+  );
+
   const sessionFormats: SessionFormat[] = useMemo(
     () => [
       {
@@ -482,12 +533,67 @@ export function GroupScholarLanding() {
     ],
     [],
   );
+  const trackPreview =
+    track === "Any track"
+      ? {
+          name: "Any track",
+          tone: "We will match you to the first opening across all rooms.",
+          capacity: "Next open seat",
+          rule: "Boundaries are confirmed when we send your invite.",
+          signal: "Signal badge assigned after intake.",
+        }
+      : vibeTracks.find((entry) => entry.name === track);
 
   // Signal codes make the room expectations explicit before anyone arrives.
   const signalCodes = useMemo(
     () => ["Silent", "Check-in", "Open", "Pause", "Exit"],
     [],
   );
+
+  const signalProfiles: SignalProfile[] = useMemo(
+    () => [
+      {
+        code: "Silent",
+        headline: "Keep it quiet and focused.",
+        desc: "Minimal chatter, minimal eye contact. Think library rules with softer lighting.",
+        hostMove: "Host lowers the room volume and tags a scribe.",
+        response: "Everyone agrees to whisper-only mode for 20 minutes.",
+      },
+      {
+        code: "Check-in",
+        headline: "Light collaboration allowed.",
+        desc: "Questions are welcome, but you ask before you interrupt.",
+        hostMove: "Host opens a two-minute sync and resets the task list.",
+        response: "Pairs do quick status swaps, then return to work.",
+      },
+      {
+        code: "Open",
+        headline: "Playful, permissive energy.",
+        desc: "Conversation can roam as long as boundaries stay explicit.",
+        hostMove: "Host confirms exit options and re-states the consent rules.",
+        response: "The room relaxes; jokes stay respectful.",
+      },
+      {
+        code: "Pause",
+        headline: "We need to recalibrate.",
+        desc: "Someone needs space, silence, or a vibe check.",
+        hostMove: "Host stops the flow and asks for a reset signal.",
+        response: "All devices down. One-minute quiet reset.",
+      },
+      {
+        code: "Exit",
+        headline: "Step out with zero friction.",
+        desc: "Leaving is never a disruption; it is part of the protocol.",
+        hostMove: "Host offers a quick nod and clears the path.",
+        response: "No questions asked. The room continues calmly.",
+      },
+    ],
+    [],
+  );
+
+  const activeSignalProfile =
+    signalProfiles.find((profile) => profile.code === activeSignal) ??
+    signalProfiles[0];
 
   // Admissions steps clarify the application journey without breaking the satire.
   const applicationSteps: ApplicationStep[] = useMemo(
@@ -697,6 +803,9 @@ export function GroupScholarLanding() {
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#programs">
               Programs
             </a>
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#library">
+              Library
+            </a>
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#rituals">
               Rituals
             </a>
@@ -717,6 +826,9 @@ export function GroupScholarLanding() {
               href="#matching"
             >
               Matching
+            </a>
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#decoder">
+              Decoder
             </a>
             <a
               className="transition hover:text-[color:var(--gs-ink)]"
@@ -871,6 +983,8 @@ export function GroupScholarLanding() {
               "Peer Review: Personal",
               "Session Rituals",
               "Boundaries: Clear",
+              "Library Stacks",
+              "Signal Decoder",
             ]}
           />
         </section>
@@ -967,6 +1081,87 @@ export function GroupScholarLanding() {
                 </div>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section
+          id="library"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Library stacks"
+            title="Artifacts from the archive, checked out nightly."
+            subtitle="Pull a resource, skim the footnotes, and return it with the vibe intact."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.15fr_0.85fr]"
+          >
+            <div className="grid gap-4">
+              {libraryItems.map((item) => (
+                <article
+                  key={item.title}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">CATALOG</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {item.shelf}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {item.desc}
+                  </p>
+                  <div className="mt-4 text-xs font-bold uppercase tracking-wide text-[color:var(--gs-muted)]">
+                    Format:{" "}
+                    <span className="normal-case text-[color:var(--gs-ink)]">
+                      {item.format}
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Checkout desk
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Borrow with boundaries.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  Each artifact ships with a reminder: keep the notes gentle, keep the
+                  signals visible, and return anything that feels too charged.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {[
+                  "Loan window: one session only.",
+                  "No copies, no screenshots, no gossip.",
+                  "Return items in the tone they arrived.",
+                ].map((line) => (
+                  <div
+                    key={line}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]"
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Archive status: supervised access only.
+              </div>
+            </aside>
           </div>
         </section>
 
@@ -1334,6 +1529,93 @@ export function GroupScholarLanding() {
           </div>
         </section>
 
+        <section
+          id="decoder"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Signal decoder"
+            title="Read the room. Respond with care."
+            subtitle="Every signal has a shared meaning so no one has to improvise boundaries."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[0.9fr_1.1fr]"
+          >
+            <div
+              data-stagger-item
+              className="rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                Signals
+              </div>
+              <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                Tap a badge to decode it.
+              </h3>
+              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {signalProfiles.map((profile) => {
+                  const isActive = profile.code === activeSignal;
+                  return (
+                    <button
+                      key={profile.code}
+                      type="button"
+                      onClick={() => setActiveSignal(profile.code)}
+                      aria-pressed={isActive}
+                      className={`rounded-2xl border px-4 py-3 text-xs font-bold uppercase tracking-[0.26em] transition ${
+                        isActive
+                          ? "border-[color:var(--gs-ink)] bg-white text-[color:var(--gs-ink)] shadow-sm"
+                          : "border-[color:var(--gs-ink-soft)] bg-white/80 text-[color:var(--gs-muted)] hover:text-[color:var(--gs-ink)]"
+                      }`}
+                    >
+                      {profile.code}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Hosts surface the active signal every 20 minutes so the room stays in sync.
+              </div>
+            </div>
+
+            <article
+              data-stagger-item
+              className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+            >
+              <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                <span className="tracking-[0.24em]">ACTIVE SIGNAL</span>
+                <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                  {activeSignalProfile?.code ?? "Silent"}
+                </span>
+              </div>
+              <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                {activeSignalProfile?.headline ?? "Keep it quiet and focused."}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                {activeSignalProfile?.desc ??
+                  "Minimal chatter, minimal eye contact. Think library rules with softer lighting."}
+              </p>
+              <div className="mt-5 grid gap-3 text-xs font-bold text-[color:var(--gs-muted)] sm:grid-cols-2">
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/80 px-4 py-3">
+                  <div className="text-[10px] uppercase tracking-[0.28em]">Host move</div>
+                  <div className="mt-2 text-sm font-semibold text-[color:var(--gs-ink)]">
+                    {activeSignalProfile?.hostMove ??
+                      "Host lowers the room volume and tags a scribe."}
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/80 px-4 py-3">
+                  <div className="text-[10px] uppercase tracking-[0.28em]">Room response</div>
+                  <div className="mt-2 text-sm font-semibold text-[color:var(--gs-ink)]">
+                    {activeSignalProfile?.response ??
+                      "Everyone agrees to whisper-only mode for 20 minutes."}
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
         {/* Admissions section maps the application timeline to a clear three-step flow. */}
         <section
           id="admissions"
@@ -1559,12 +1841,18 @@ export function GroupScholarLanding() {
                 className="mx-auto mt-8 grid max-w-xl gap-3 sm:grid-cols-2"
                 onSubmit={(event) => {
                   event.preventDefault();
-                  if (!email.trim()) {
+                  const normalizedEmail = email.trim();
+                  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                    normalizedEmail,
+                  );
+                  if (!normalizedEmail || !isValidEmail) {
                     setFormStatus("error");
                     return;
                   }
                   setFormStatus("sent");
                   setEmail("");
+                  setFocusNote("");
+                  setTrack("Any track");
                 }}
               >
                 <label className="sr-only" htmlFor="email">
@@ -1593,7 +1881,7 @@ export function GroupScholarLanding() {
                 <select
                   id="track"
                   value={track}
-                  aria-describedby={preferenceId}
+                  aria-describedby={`${preferenceId} ${trackPreviewId}`}
                   onChange={(event) => {
                     setTrack(event.target.value);
                     if (formStatus !== "idle") {
@@ -1610,6 +1898,29 @@ export function GroupScholarLanding() {
                     ),
                   )}
                 </select>
+                <div
+                  id={trackPreviewId}
+                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/85 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)] sm:col-span-2"
+                >
+                  <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--gs-muted)]">
+                    {trackPreview?.name ?? "Any track"}
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-[color:var(--gs-ink)]">
+                    {trackPreview?.tone ??
+                      "We will match you with the first opening."}
+                  </div>
+                  <div className="mt-2 grid gap-1 text-[color:var(--gs-muted)] sm:grid-cols-2">
+                    <span>
+                      Capacity: {trackPreview?.capacity ?? "Next open seat"}
+                    </span>
+                    <span>
+                      Signal: {trackPreview?.signal ?? "Assigned after intake"}
+                    </span>
+                    <span className="sm:col-span-2">
+                      Rule: {trackPreview?.rule ?? "Boundaries confirmed on invite."}
+                    </span>
+                  </div>
+                </div>
                 <label className="sr-only" htmlFor="focus-note">
                   Focus note
                 </label>
@@ -1617,7 +1928,8 @@ export function GroupScholarLanding() {
                   id="focus-note"
                   rows={3}
                   value={focusNote}
-                  aria-describedby={focusId}
+                  maxLength={maxFocusLength}
+                  aria-describedby={`${focusId} ${focusCountId}`}
                   placeholder="Optional: name one focus goal or boundary for tonight."
                   onChange={(event) => {
                     setFocusNote(event.target.value);
@@ -1640,11 +1952,18 @@ export function GroupScholarLanding() {
                 >
                   Focus notes are optional and only shared with your host.
                 </p>
+                <p
+                  id={focusCountId}
+                  className="text-xs font-bold tracking-wide text-[color:var(--gs-muted)] sm:col-span-2"
+                >
+                  {focusCount}/{maxFocusLength} characters used.
+                </p>
                 <button
                   type="submit"
+                  disabled={formStatus === "sent"}
                   className="h-12 rounded-full bg-[color:var(--gs-ink)] px-6 text-sm font-bold text-white shadow-[0_16px_30px_-20px_rgba(28,38,40,0.9)] transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40 sm:col-span-2"
                 >
-                  Apply
+                  {formStatus === "sent" ? "Intent logged" : "Apply"}
                 </button>
               </form>
 
@@ -1660,6 +1979,20 @@ export function GroupScholarLanding() {
                 >
                   {statusMessage}
                 </p>
+                {formStatus === "sent" ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormStatus("idle");
+                      setEmail("");
+                      setFocusNote("");
+                      setTrack("Any track");
+                    }}
+                    className="inline-flex items-center justify-center rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)] transition hover:text-[color:var(--gs-ink)]"
+                  >
+                    Log another intent
+                  </button>
+                ) : null}
               </div>
 
               <p className="mt-4 text-xs font-bold tracking-wide text-[color:var(--gs-muted)]">
