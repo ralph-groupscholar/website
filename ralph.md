@@ -366,3 +366,9 @@
 - Captured a Playwright full-page screenshot of groupscholar.com; the headless capture still shows oversized blank bands with repeated hero slices and missing mid-page content.
 - Sketched creative follow-ups: enforce a true automation-hide rule for long sections, keep an automation-ready snapshot digest above the fold, and streamline the floating field guide for headless runs.
 - Added an automation-only hide rule for long sections, kept the snapshot digest visible in automation, and removed the floating field guide from automation captures.
+
+2026-02-06 00:54:41 — Iteration 59
+- Reviewed current codebase plus recent git history for context.
+- Captured a Playwright full-page screenshot of groupscholar.com; the Playwright UA reports `navigator.webdriver` as false, so the automation snapshot mode did not activate and the page remained a very long scroll.
+- Sketched creative follow-ups: introduce a snapshot query override, compress automation-only cards to keep the brief within a single frame, and surface the snapshot digest for regular visitors as an on-ramp before the full syllabus.
+- Added a snapshot query override, tightened the automation brief layout, and moved the snapshot digest into the standard layout while hiding it in automation mode.

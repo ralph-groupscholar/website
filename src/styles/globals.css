@@ -57,13 +57,25 @@ html[data-automation="true"] {
 }
 
 html[data-automation="true"] header {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 1.25rem;
 }
 
 html[data-automation="true"] main {
   padding-top: 2.5rem;
   padding-bottom: 3.5rem;
+}
+
+html[data-automation="true"] .gs-automation-brief {
+  margin-top: 0.75rem !important;
+}
+
+html[data-automation="true"] .gs-automation-brief h1 {
+  font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+}
+
+html[data-automation="true"] .gs-automation-card {
+  padding: 0.75rem;
 }
 
 html[data-automation="true"] [data-animate="section"] {

@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang="en" className={`${fraunces.variable} ${spaceGrotesk.variable}`}>
       <body>
         <Script id="gs-automation-detect" strategy="beforeInteractive">
-          {`(function(){try{var ua=navigator.userAgent||"";var isAuto=!!navigator.webdriver||/HeadlessChrome|Playwright/i.test(ua);if(isAuto){var root=document.documentElement;root.dataset.automation="true";root.classList.add("gs-bypass-motion");}}catch(e){}})();`}
+          {`(function(){try{var ua=navigator.userAgent||"";var params=new URLSearchParams(window.location.search||"");var isSnapshot=params.has("snapshot")||params.has("automation");var isAuto=isSnapshot||!!navigator.webdriver||/HeadlessChrome|Playwright/i.test(ua);if(isAuto){var root=document.documentElement;root.dataset.automation="true";if(isSnapshot){root.dataset.snapshot="true";}root.classList.add("gs-bypass-motion");}}catch(e){}})();`}
         </Script>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
