@@ -60,6 +60,14 @@ type ForecastNote = {
   desc: string;
 };
 
+type ForecastRadar = {
+  day: string;
+  window: string;
+  host: string;
+  signal: string;
+  seats: string;
+};
+
 type ContinuityBeat = {
   badge: string;
   title: string;
@@ -150,6 +158,13 @@ type VibeTrack = {
   capacity: string;
   rule: string;
   signal: string;
+};
+
+type TrackPulse = {
+  window: string;
+  host: string;
+  seats: string;
+  cue: string;
 };
 
 type ApplicationStep = {
@@ -434,9 +449,15 @@ export function GroupScholarLanding() {
   const [activeSection, setActiveSection] = useState(
     sectionIndex[0]?.id ?? "forecast",
   );
+  const [localTime, setLocalTime] = useState(() => new Date());
   const maxFocusLength = 160;
   const formattedTrack = track === "Any track" ? "any track" : track;
   const focusCount = focusNote.length;
+  const focusPercent = Math.min(
+    100,
+    Math.round((focusCount / maxFocusLength) * 100),
+  );
+  const focusWarning = focusCount >= maxFocusLength - 20;
   const helperMessage =
     "We only use this to match you with a room. No mailing lists.";
   const statusMessage =
@@ -467,6 +488,44 @@ export function GroupScholarLanding() {
   const activeCue =
     signalCueMap[activeSection as keyof typeof signalCueMap] ??
     "Hold the thread.";
+  const timeFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+      }),
+    [],
+  );
+  const dayFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+      }),
+    [],
+  );
+  const resetFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+        hour: "numeric",
+        minute: "2-digit",
+      }),
+    [],
+  );
+  const localTimeLabel = timeFormatter.format(localTime);
+  const localDayLabel = dayFormatter.format(localTime);
+  const nextReset = useMemo(() => {
+    const next = new Date(localTime);
+    next.setHours(9, 0, 0, 0);
+    const day = localTime.getDay();
+    const daysToMonday = (1 - day + 7) % 7;
+    const useSameDay = daysToMonday === 0 && localTime < next;
+    if (!useSameDay) {
+      next.setDate(localTime.getDate() + (daysToMonday === 0 ? 7 : daysToMonday));
+    }
+    return next;
+  }, [localTime]);
+  const nextResetLabel = resetFormatter.format(nextReset);
 
   const principles: Principle[] = useMemo(
     () => [
@@ -858,6 +917,40 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const forecastRadar: ForecastRadar[] = useMemo(
+    () => [
+      {
+        day: "Mon",
+        window: "9:00 PM",
+        host: "Mira",
+        signal: "Silent",
+        seats: "2 seats",
+      },
+      {
+        day: "Wed",
+        window: "7:30 PM",
+        host: "Alex",
+        signal: "Check-in",
+        seats: "3 seats",
+      },
+      {
+        day: "Fri",
+        window: "10:30 PM",
+        host: "Jun",
+        signal: "Open",
+        seats: "4 seats",
+      },
+      {
+        day: "Sat",
+        window: "4:00 PM",
+        host: "Mira + Alex",
+        signal: "Check-in",
+        seats: "2 seats",
+      },
+    ],
+    [],
+  );
+
   const continuityBeats: ContinuityBeat[] = useMemo(
     () => [
       {
@@ -1017,6 +1110,36 @@ export function GroupScholarLanding() {
           signal: "Signal badge assigned after intake.",
         }
       : vibeTracks.find((entry) => entry.name === track);
+  const trackPulseMap: Record<string, TrackPulse> = useMemo(
+    () => ({
+      "Any track": {
+        window: "Rolling intake",
+        host: "Lead host on call",
+        seats: "2–4 seats opening",
+        cue: "We place you in the first open room.",
+      },
+      "Quiet Focus": {
+        window: "Tonight 8:30 PM",
+        host: "Mira + Jun",
+        seats: "2 seats left",
+        cue: "Silent badge confirmed at check-in.",
+      },
+      "Shared Draft": {
+        window: "Saturday 4:00 PM",
+        host: "Alex",
+        seats: "3 seats left",
+        cue: "Bring one draft + one question.",
+      },
+      "After Hours": {
+        window: "Friday 10:30 PM",
+        host: "Jun",
+        seats: "4 seats left",
+        cue: "Open badge if everyone opts in.",
+      },
+    }),
+    [],
+  );
+  const activeTrackPulse = trackPulseMap[track] ?? trackPulseMap["Any track"];
 
   // Signal codes make the room expectations explicit before anyone arrives.
   const signalCodes = useMemo(
@@ -1509,6 +1632,14 @@ export function GroupScholarLanding() {
     ],
     [],
   );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const timer = window.setInterval(() => {
+      setLocalTime(new Date());
+    }, 60_000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   const isAutomation =
     typeof navigator !== "undefined" &&
@@ -2142,6 +2273,18 @@ export function GroupScholarLanding() {
                 Forecasts keep expectations soft and exits clear. Hosts can
                 shift tracks if the room asks for it.
               </p>
+              <div className="mt-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-4">
+                <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--gs-muted)]">
+                  Local time
+                </div>
+                <div className="mt-2 flex items-center justify-between text-sm font-semibold text-[color:var(--gs-ink)]">
+                  <span>{localDayLabel}</span>
+                  <span>{localTimeLabel}</span>
+                </div>
+                <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                  Next reset: {nextResetLabel}
+                </div>
+              </div>
               <div className="mt-5 grid gap-3">
                 {forecastNotes.map((note) => (
                   <div
@@ -2156,6 +2299,27 @@ export function GroupScholarLanding() {
                     </p>
                   </div>
                 ))}
+              </div>
+              <div className="mt-5">
+                <div className="text-xs font-bold tracking-[0.26em] text-[color:var(--gs-muted)]">
+                  SIGNAL RADAR
+                </div>
+                <div className="mt-3 grid gap-2">
+                  {forecastRadar.map((entry) => (
+                    <div
+                      key={`${entry.day}-${entry.window}`}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-2 text-xs font-bold text-[color:var(--gs-muted)]"
+                    >
+                      <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/80 px-2.5 py-1 text-[11px] text-[color:var(--gs-ink)]">
+                        {entry.day}
+                      </span>
+                      <span>{entry.window}</span>
+                      <span>{entry.host}</span>
+                      <span>{entry.signal}</span>
+                      <span>{entry.seats}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="mt-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-3 text-xs font-bold text-[color:var(--gs-muted)]">
                 Board status: steady. Next recalibration on Monday at 9:00 AM.
@@ -4059,6 +4223,14 @@ export function GroupScholarLanding() {
                       Rule: {trackPreview?.rule ?? "Boundaries confirmed on invite."}
                     </span>
                   </div>
+                  <div className="mt-3 grid gap-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[color:var(--gs-muted)] sm:grid-cols-2">
+                    <span>Window: {activeTrackPulse.window}</span>
+                    <span>Host: {activeTrackPulse.host}</span>
+                    <span className="sm:col-span-2">
+                      Seats: {activeTrackPulse.seats}
+                    </span>
+                    <span className="sm:col-span-2">Cue: {activeTrackPulse.cue}</span>
+                  </div>
                 </div>
                 <label className="sr-only" htmlFor="focus-note">
                   Focus note
@@ -4097,6 +4269,29 @@ export function GroupScholarLanding() {
                 >
                   {focusCount}/{maxFocusLength} characters used.
                 </p>
+                <div className="sm:col-span-2">
+                  <div className="h-2 w-full rounded-full bg-[color:var(--gs-ink-soft)]/60">
+                    <div
+                      className={`h-full rounded-full transition ${
+                        focusWarning
+                          ? "bg-[color:var(--gs-accent)]"
+                          : "bg-[color:var(--gs-ink)]/70"
+                      }`}
+                      style={{ width: `${focusPercent}%` }}
+                    />
+                  </div>
+                  <p
+                    className={`mt-2 text-[11px] font-bold uppercase tracking-[0.28em] ${
+                      focusWarning
+                        ? "text-[color:var(--gs-accent)]"
+                        : "text-[color:var(--gs-muted)]"
+                    }`}
+                  >
+                    {focusWarning
+                      ? "Keep it under 160 for a fast read."
+                      : "Short notes help hosts respond fast."}
+                  </p>
+                </div>
                 <button
                   type="submit"
                   disabled={formStatus === "sent"}
