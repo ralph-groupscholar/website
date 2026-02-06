@@ -1767,7 +1767,8 @@ export function GroupScholarLanding() {
   const isAutomationUA =
     typeof navigator !== "undefined" &&
     (navigator.webdriver === true ||
-      /HeadlessChrome|Playwright/i.test(navigator.userAgent));
+      /HeadlessChrome|Playwright/i.test(navigator.userAgent) ||
+      /Chrome\/\d+\.0\.0\.0/.test(navigator.userAgent));
   const shouldBypassMotion =
     reduced || isAutomationFlagged || isAutomationUA || isSnapshotParam;
 

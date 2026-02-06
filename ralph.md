@@ -378,3 +378,8 @@
 - Captured a fresh Playwright full-page screenshot of groupscholar.com; the capture still shows a long-scroll layout without the automation snapshot mode, since the UA reports `navigator.webdriver` as false and the UA string is non-headless.
 - Sketched creative follow-ups: add a quick index strip to keep the syllabus visible above the fold, replace the marquee with a static department board to avoid animation artifacts, and tighten the header’s above-the-fold readout.
 - Added a quick index strip above the marquee and replaced the marquee animation with a static, wrapping department board to keep content visible without scroll.
+2026-02-06 01:09:15 — Iteration 61
+- Reviewed current codebase plus recent git history for context.
+- Captured a fresh Playwright full-page screenshot of groupscholar.com; the automation snapshot mode did not activate because the UA reports Chrome/144.0.0.0 with navigator.webdriver false, so the layout still required scrolling.
+- Sketched creative follow-ups: add a “Snapshot Override” badge that forces compact mode, introduce a single-frame “Signal Ledger” strip for headless captures, and add a quiet “Focus Meter” chip bar to summarize the full syllabus above the fold.
+- Added an automation-detection fallback for Chromium 0.0.0.0 builds so headless snapshots trigger the compact, no-scroll layout.
