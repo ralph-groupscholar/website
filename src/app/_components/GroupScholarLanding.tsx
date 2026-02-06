@@ -102,6 +102,19 @@ type InviteMemo = {
   timing: string;
 };
 
+type ReadinessModule = {
+  badge: string;
+  title: string;
+  desc: string;
+  cue: string;
+};
+
+type ReadinessBrief = {
+  title: string;
+  desc: string;
+  timing: string;
+};
+
 type Ritual = {
   badge: string;
   title: string;
@@ -902,6 +915,51 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const readinessModules: ReadinessModule[] = useMemo(
+    () => [
+      {
+        badge: "Module 01",
+        title: "Focus primer",
+        desc: "Bring one specific task and one playful stretch goal so the room can pace you.",
+        cue: "2-minute share",
+      },
+      {
+        badge: "Module 02",
+        title: "Boundary card",
+        desc: "Choose a color band (green/yellow/red) so partners read your comfort instantly.",
+        cue: "Visible all session",
+      },
+      {
+        badge: "Module 03",
+        title: "Signal rehearsal",
+        desc: "Practice the pause and pivot signals before the room warms up.",
+        cue: "30-second drill",
+      },
+    ],
+    [],
+  );
+
+  const readinessBriefs: ReadinessBrief[] = useMemo(
+    () => [
+      {
+        title: "Host walkthrough",
+        desc: "The host restates the active signal and checks for consent alignment.",
+        timing: "At check-in",
+      },
+      {
+        title: "Desk reset",
+        desc: "Hydrate, stretch, and swap notebooks to keep energy honest.",
+        timing: "Mid-session",
+      },
+      {
+        title: "Exit handoff",
+        desc: "Leave a short note for the next room so expectations stay clear.",
+        timing: "Post-session",
+      },
+    ],
+    [],
+  );
+
   const studioHours: StudioHour[] = useMemo(
     () => [
       {
@@ -1176,6 +1234,12 @@ export function GroupScholarLanding() {
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#packet">
               Invite packet
             </a>
+            <a
+              className="transition hover:text-[color:var(--gs-ink)]"
+              href="#readiness"
+            >
+              Readiness
+            </a>
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#hosts">
               Hosts
             </a>
@@ -1336,6 +1400,7 @@ export function GroupScholarLanding() {
               "Focus Ledger",
               "Debrief Lab",
               "Invite Packet",
+              "Readiness Lab",
             ]}
           />
         </section>
@@ -2425,6 +2490,85 @@ export function GroupScholarLanding() {
               </div>
               <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
                 The packet refreshes weekly to keep signals consistent.
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section
+          id="readiness"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Readiness lab"
+            title="Arrive aligned before the first joke lands."
+            subtitle="A quick briefing keeps consent clear, focus honest, and transitions smooth."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div className="grid gap-4">
+              {readinessModules.map((module) => (
+                <article
+                  key={module.title}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">{module.badge}</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {module.cue}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {module.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {module.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Readiness briefing
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  A steady hand before the room warms up.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  We reset desks, re-state signals, and get everyone aligned on
+                  the exit plan.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {readinessBriefs.map((brief) => (
+                  <div
+                    key={brief.title}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3"
+                  >
+                    <div className="text-sm font-bold text-[color:var(--gs-ink)]">
+                      {brief.title}
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {brief.desc}
+                    </div>
+                    <div className="mt-2 text-[11px] font-bold uppercase tracking-wide text-[color:var(--gs-muted)]">
+                      {brief.timing}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Readiness notes are archived after 24 hours.
               </div>
             </aside>
           </div>
