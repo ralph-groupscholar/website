@@ -1,29 +1,50 @@
-# Create T3 App
+# Group Scholar
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+The Institute of Collaborative Distraction. A single‑page, animated landing experience for the fictional Group Scholar institution.
 
-## What's next? How do I make an app with this?
+## Highlights
+- App Router Next.js 15 + React 19 setup
+- GSAP + ScrollTrigger motion with reduced‑motion and automation fallbacks
+- Tailwind CSS v4 styling with custom typography tokens
+- tRPC client/provider wiring ready for expansion
+- Snapshot/automation mode to disable heavy motion for visual tests
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Getting started
+```bash
+npm install
+npm run dev
+```
+Then open `http://localhost:3000`.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Scripts
+```bash
+npm run dev        # start dev server (turbopack)
+npm run build      # production build
+npm run start      # run production server
+npm run preview    # build + start
+npm run lint       # lint
+npm run lint:fix   # lint + fix
+npm run typecheck  # TS typecheck
+npm run check      # lint + typecheck
+npm run format:check
+npm run format:write
+```
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Project structure
+- `src/app/page.tsx` — entry point for the landing page
+- `src/app/_components/GroupScholarLanding.tsx` — main page content and GSAP animation hooks
+- `src/app/layout.tsx` — metadata, fonts, and automation detection script
+- `src/styles/globals.css` — theme tokens and motion bypass rules
+- `src/env.js` — env schema (no required app‑specific vars)
 
-## Learn More
+## Automation / snapshot mode
+The page detects automation and disables motion to keep snapshots stable.
+- Triggered automatically for headless/Playwright.
+- You can also add `?snapshot` or `?automation` to the URL.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Environment
+No required environment variables. Optional:
+- `SKIP_ENV_VALIDATION=1` to bypass env checks.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Deployment
+Standard Next.js build output. Use `npm run build` and `npm run start` on your host.
