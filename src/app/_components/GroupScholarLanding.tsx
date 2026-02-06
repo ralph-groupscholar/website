@@ -1480,6 +1480,75 @@ export function GroupScholarLanding() {
   const activeCalibration =
     calibrationProfiles.find((profile) => profile.level === calibrationLevel) ??
     fallbackCalibration;
+  const snapshotHighlights = useMemo(
+    () => [
+      {
+        key: "forecast",
+        label: "Forecast",
+        title: "Board reset window",
+        desc: `Next reset ${nextResetLabel}.`,
+        meta: `${localDayLabel} • ${localTimeLabel}`,
+      },
+      {
+        key: "signal",
+        label: "Active signal",
+        title: activeSignal,
+        desc: activeSignalProfile.headline,
+        meta: activeSignalProfile.hostMove,
+      },
+      {
+        key: "programs",
+        label: "Programs",
+        title: "Catalog picks",
+        desc: programs
+          .slice(0, 2)
+          .map((program) => program.title)
+          .join(" • "),
+        meta: programs
+          .slice(0, 2)
+          .map((program) => program.code)
+          .join(" · "),
+      },
+      {
+        key: "outcomes",
+        label: "Outcomes",
+        title: "Room rhythm",
+        desc: outcomeMetrics
+          .slice(0, 2)
+          .map((metric) => `${metric.value} ${metric.label}`)
+          .join(" • "),
+        meta: "Measured per session, not per person.",
+      },
+      {
+        key: "matching",
+        label: "Matching",
+        title: activeTrackPulse.window,
+        desc: activeTrackPulse.cue,
+        meta: `${activeTrackPulse.host} • ${activeTrackPulse.seats}`,
+      },
+      {
+        key: "apply",
+        label: "Intake",
+        title: "Reserve with intent",
+        desc: "Short intake, fast response, clear boundaries.",
+        meta: "Typical confirmation within 48 hours.",
+      },
+    ],
+    [
+      activeSignal,
+      activeSignalProfile.headline,
+      activeSignalProfile.hostMove,
+      activeTrackPulse.cue,
+      activeTrackPulse.host,
+      activeTrackPulse.seats,
+      activeTrackPulse.window,
+      localDayLabel,
+      localTimeLabel,
+      nextResetLabel,
+      outcomeMetrics,
+      programs,
+    ],
+  );
 
   // Admissions steps clarify the application journey without breaking the satire.
   const applicationSteps: ApplicationStep[] = useMemo(
@@ -2263,10 +2332,51 @@ export function GroupScholarLanding() {
             disableMotion={shouldBypassMotion}
           />
         </section>
+
+        <section
+          aria-label="Snapshot digest"
+          data-automation-show="block"
+          className="mt-6 hidden md:mt-8"
+        >
+          <div className="rounded-[32px] border border-[color:var(--gs-ink-soft)] bg-[linear-gradient(140deg,rgba(255,255,255,0.94),rgba(249,241,227,0.86))] p-6 shadow-[0_26px_70px_-52px_rgba(28,38,40,0.9)] md:p-8">
+            <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-[color:var(--gs-muted)]">
+              <span>Snapshot digest</span>
+              <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-[10px] font-bold tracking-[0.24em] text-[color:var(--gs-ink)]">
+                Automation view
+              </span>
+            </div>
+            <div className="mt-4 text-pretty text-sm font-semibold text-[color:var(--gs-muted)]">
+              A compact readout so the entire story stays visible in a single
+              capture.
+            </div>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {snapshotHighlights.map((item) => (
+                <article
+                  key={item.key}
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-5 shadow-[0_18px_48px_-36px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="text-xs font-bold uppercase tracking-[0.26em] text-[color:var(--gs-muted)]">
+                    {item.label}
+                  </div>
+                  <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-2xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {item.desc}
+                  </p>
+                  <div className="mt-4 rounded-full border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    {item.meta}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
       </header>
 
       <main
         id="main-content"
+        data-automation-hide
         className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-10 md:px-8 md:pt-14"
       >
         <div className="gs-snapshot-sticky sticky top-24 z-20 mb-10 md:hidden">
@@ -4596,7 +4706,10 @@ export function GroupScholarLanding() {
         </section>
       </main>
 
-      <div className="gs-snapshot-fixed pointer-events-none fixed bottom-6 left-1/2 z-30 hidden -translate-x-1/2 xl:block">
+      <div
+        data-automation-hide
+        className="gs-snapshot-fixed pointer-events-none fixed bottom-6 left-1/2 z-30 hidden -translate-x-1/2 xl:block"
+      >
         <div className="pointer-events-auto flex items-center gap-4 rounded-full border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/95 px-5 py-3 shadow-[0_20px_50px_-30px_rgba(28,38,40,0.85)] backdrop-blur">
           <div className="flex items-center gap-3">
             <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[color:var(--gs-muted)]">
@@ -4625,7 +4738,10 @@ export function GroupScholarLanding() {
         </div>
       </div>
 
-      <footer className="relative z-10 border-t border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/60">
+      <footer
+        data-automation-hide
+        className="relative z-10 border-t border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/60"
+      >
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-center md:flex-row md:px-8 md:text-left">
           <div className="text-sm font-bold text-[color:var(--gs-muted)]">
             © {new Date().getFullYear()} Group Scholar. All jokes reserved.
