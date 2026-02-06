@@ -1549,6 +1549,30 @@ export function GroupScholarLanding() {
       outcomeMetrics,
     ],
   );
+  const snapshotRunway: SnapshotTile[] = useMemo(
+    () => [
+      {
+        label: "Host cue",
+        value: activeSignalProfile.headline,
+        detail: activeSignalProfile.hostMove,
+      },
+      {
+        label: "Next module",
+        value: programs[0]?.title ?? "Group Dynamics",
+        detail: programs[0]?.code ?? "GS-101",
+      },
+      {
+        label: "Archive sync",
+        value: "Summary compiled",
+        detail: "Within 12 hours",
+      },
+    ],
+    [
+      activeSignalProfile.headline,
+      activeSignalProfile.hostMove,
+      programs,
+    ],
+  );
   const snapshotPulse = useMemo(
     () => [
       {
@@ -2234,7 +2258,7 @@ export function GroupScholarLanding() {
                 Next reset {nextResetLabel}
               </span>
             </div>
-            <div className="mt-1.5 grid gap-3 md:grid-cols-[1.05fr_0.95fr]">
+            <div className="mt-1 grid gap-2.5 md:grid-cols-[1.05fr_0.95fr]">
               <div>
                 <div className="text-xs font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
                   Group Scholar
@@ -2280,7 +2304,7 @@ export function GroupScholarLanding() {
                 ))}
               </div>
             </div>
-            <div className="mt-2 grid gap-2.5 lg:grid-cols-[0.44fr_0.56fr]">
+            <div className="mt-1.5 grid gap-2 lg:grid-cols-[0.44fr_0.56fr]">
               <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
                 {snapshotBriefTiles.map((tile) => (
                   <div
@@ -2328,6 +2352,24 @@ export function GroupScholarLanding() {
                   ))}
                 </div>
               </div>
+            </div>
+            <div className="mt-2 grid gap-2 sm:grid-cols-3">
+              {snapshotRunway.map((item) => (
+                <div
+                  key={`snapshot-runway-${item.label}`}
+                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-2 shadow-[0_14px_34px_-28px_rgba(28,38,40,0.7)]"
+                >
+                  <div className="text-[9px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    {item.label}
+                  </div>
+                  <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
+                    {item.value}
+                  </div>
+                  <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
+                    {item.detail}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
