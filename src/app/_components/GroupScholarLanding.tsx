@@ -1580,6 +1580,64 @@ export function GroupScholarLanding() {
       sessionFormats,
     ],
   );
+  const snapshotFooterTiles: SnapshotTile[] = useMemo(
+    () => [
+      {
+        label: "Signal ledger",
+        value: `${activeSignal} mode`,
+        detail: activeSignalProfile.headline,
+      },
+      {
+        label: "Host cue",
+        value: "Quiet steward",
+        detail: activeSignalProfile.hostMove,
+      },
+      {
+        label: "Seat window",
+        value: activeTrackPulse.seats,
+        detail: activeTrackPulse.window,
+      },
+      {
+        label: "Intake SLA",
+        value: "48 hours",
+        detail: "Typical confirmation loop.",
+      },
+    ],
+    [
+      activeSignal,
+      activeSignalProfile.headline,
+      activeSignalProfile.hostMove,
+      activeTrackPulse.seats,
+      activeTrackPulse.window,
+    ],
+  );
+  const snapshotTickerTiles: SnapshotTile[] = useMemo(
+    () => [
+      {
+        label: "Host roster",
+        value: activeTrackPulse.host,
+        detail: activeTrackPulse.cue,
+      },
+      {
+        label: "Calibration",
+        value: activeCalibration.label,
+        detail: activeCalibration.duration,
+      },
+      {
+        label: "Signal script",
+        value: activeSignalProfile.code,
+        detail: activeSignalProfile.response,
+      },
+    ],
+    [
+      activeCalibration.duration,
+      activeCalibration.label,
+      activeSignalProfile.code,
+      activeSignalProfile.response,
+      activeTrackPulse.cue,
+      activeTrackPulse.host,
+    ],
+  );
   const snapshotStrip = useMemo(
     () => [
       {
@@ -2337,6 +2395,42 @@ export function GroupScholarLanding() {
                 <div
                   key={`snapshot-cadence-${tile.label}`}
                   className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1.5 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
+                >
+                  <div className="text-[9px] font-bold uppercase tracking-[0.26em] text-[color:var(--gs-muted)]">
+                    {tile.label}
+                  </div>
+                  <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
+                    {tile.value}
+                  </div>
+                  <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
+                    {tile.detail}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="gs-automation-footer mt-2 grid gap-2 sm:grid-cols-4">
+              {snapshotFooterTiles.map((tile) => (
+                <div
+                  key={`snapshot-footer-${tile.label}`}
+                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
+                >
+                  <div className="text-[9px] font-bold uppercase tracking-[0.26em] text-[color:var(--gs-muted)]">
+                    {tile.label}
+                  </div>
+                  <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
+                    {tile.value}
+                  </div>
+                  <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
+                    {tile.detail}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="gs-automation-ticker mt-2 grid gap-2 sm:grid-cols-3">
+              {snapshotTickerTiles.map((tile) => (
+                <div
+                  key={`snapshot-ticker-${tile.label}`}
+                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
                 >
                   <div className="text-[9px] font-bold uppercase tracking-[0.26em] text-[color:var(--gs-muted)]">
                     {tile.label}

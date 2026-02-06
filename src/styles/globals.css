@@ -63,7 +63,7 @@ html[data-automation="true"] header {
 
 html[data-automation="true"] main {
   padding-top: 1.4rem;
-  padding-bottom: 1.6rem;
+  padding-bottom: 1.2rem;
 }
 
 html[data-automation="true"] .gs-automation-brief {
@@ -107,6 +107,24 @@ html[data-automation="true"] .gs-automation-cadence-grid {
 
 html[data-automation="true"] .gs-automation-cadence-grid > div {
   flex: 1 1 0;
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+html[data-automation="true"] .gs-automation-footer {
+  margin-top: 0.35rem !important;
+}
+
+html[data-automation="true"] .gs-automation-footer > div {
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+html[data-automation="true"] .gs-automation-ticker {
+  margin-top: 0.35rem !important;
+}
+
+html[data-automation="true"] .gs-automation-ticker > div {
   padding-top: 0.35rem;
   padding-bottom: 0.35rem;
 }
