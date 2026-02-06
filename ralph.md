@@ -197,3 +197,8 @@
 - Captured fresh Playwright full-page snapshots of groupscholar.com and confirmed a large blank mid-page band in the render.
 - Hardened automation detection to skip scroll-triggered animations in headless runs, keeping all sections visible for snapshots.
 - Logged follow-up ideas to polish scroll continuity and capture-ready rendering.
+
+2026-02-06 21:19:03 — Iteration 31
+- Captured a fresh Playwright full-page snapshot of groupscholar.com for the current live render baseline.
+- Noted a large blank vertical band mid-page in the live render, suggesting content is collapsing or not painting in headless capture.
+- Drafted next-step ideas to tighten scroll continuity, add visual continuity cues, and reinforce key navigation affordances.
