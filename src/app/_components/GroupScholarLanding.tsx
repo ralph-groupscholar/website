@@ -2179,19 +2179,27 @@ export function GroupScholarLanding() {
           data-automation-show="block"
           className="gs-automation-brief mt-4 hidden"
         >
-          <div className="rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[linear-gradient(140deg,rgba(255,255,255,0.92),rgba(249,241,227,0.86))] p-6 shadow-[0_26px_70px_-52px_rgba(28,38,40,0.9)]">
+          <div className="rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[linear-gradient(140deg,rgba(255,255,255,0.92),rgba(249,241,227,0.86))] p-5 shadow-[0_26px_70px_-52px_rgba(28,38,40,0.9)] md:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-[color:var(--gs-muted)]">
               <span>Snapshot brief</span>
               <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-[10px] font-bold tracking-[0.24em] text-[color:var(--gs-ink)]">
                 Automation view
               </span>
             </div>
-            <div className="mt-4 grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-[color:var(--gs-muted)]">
+              <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                Live {localDayLabel} • {localTimeLabel}
+              </span>
+              <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                Next reset {nextResetLabel}
+              </span>
+            </div>
+            <div className="mt-3 grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
               <div>
                 <div className="text-xs font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
                   Group Scholar
                 </div>
-                <h1 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold leading-tight text-[color:var(--gs-ink)]">
+                <h1 className="mt-3 font-[family-name:var(--font-gs-display)] text-2xl font-semibold leading-tight text-[color:var(--gs-ink)] md:text-3xl">
                   A focused view of the room.
                 </h1>
                 <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
@@ -2232,19 +2240,19 @@ export function GroupScholarLanding() {
                 ))}
               </div>
             </div>
-            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="mt-4 grid gap-2 sm:grid-cols-3">
               {snapshotBriefTiles.map((tile) => (
                 <div
                   key={`snapshot-brief-${tile.label}`}
-                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-3 shadow-[0_14px_36px_-28px_rgba(28,38,40,0.7)]"
+                  className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-2 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
                 >
                   <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
                     {tile.label}
                   </div>
-                  <div className="mt-2 text-sm font-semibold text-[color:var(--gs-ink)]">
+                  <div className="mt-1 text-xs font-semibold text-[color:var(--gs-ink)]">
                     {tile.value}
                   </div>
-                  <div className="mt-1 text-[11px] leading-relaxed text-[color:var(--gs-muted)]">
+                  <div className="mt-1 text-[10px] leading-relaxed text-[color:var(--gs-muted)]">
                     {tile.detail}
                   </div>
                 </div>
