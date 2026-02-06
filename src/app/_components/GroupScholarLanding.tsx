@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -31,6 +38,13 @@ type SessionFormat = {
   duration: string;
   intensity: string;
   seats: string;
+};
+
+type ApplicationStep = {
+  badge: string;
+  title: string;
+  desc: string;
+  timing: string;
 };
 
 type Ritual = {
@@ -178,6 +192,24 @@ function Marquee({ items }: { items: string[] }) {
 export function GroupScholarLanding() {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const reduced = usePrefersReducedMotion();
+  const helperId = useId();
+  const statusId = useId();
+  const [email, setEmail] = useState("");
+  const [formStatus, setFormStatus] = useState<"idle" | "error" | "sent">("idle");
+  const helperMessage =
+    "We only use this to match you with a room. No mailing lists.";
+  const statusMessage =
+    formStatus === "sent"
+      ? "Intent logged. Expect a response within 48 hours."
+      : formStatus === "error"
+        ? "Please enter a valid email to reserve a seat."
+        : "Ready when you are — share an email to start.";
+  const statusTone =
+    formStatus === "error"
+      ? "text-[color:var(--gs-accent)]"
+      : formStatus === "sent"
+        ? "text-[color:var(--gs-ink)]"
+        : "text-[color:var(--gs-muted)]";
 
   const principles: Principle[] = useMemo(
     () => [
@@ -342,6 +374,31 @@ export function GroupScholarLanding() {
         duration: "2 hours",
         intensity: "Suggestive",
         seats: "10 seats",
+      },
+    ],
+    [],
+  );
+
+  // Admissions steps clarify the application journey without breaking the satire.
+  const applicationSteps: ApplicationStep[] = useMemo(
+    () => [
+      {
+        badge: "Step 01",
+        title: "Signal intent",
+        desc: "Share your email and preferred session vibe. No long essays.",
+        timing: "Same day",
+      },
+      {
+        badge: "Step 02",
+        title: "Boundary fit",
+        desc: "We match you with a room that respects your focus tolerance.",
+        timing: "24–48 hours",
+      },
+      {
+        badge: "Step 03",
+        title: "Confirmation",
+        desc: "You get a code, a host, and a reminder to bring a notebook.",
+        timing: "By Friday",
       },
     ],
     [],
@@ -544,6 +601,12 @@ export function GroupScholarLanding() {
               href="#sessions"
             >
               Sessions
+            </a>
+            <a
+              className="transition hover:text-[color:var(--gs-ink)]"
+              href="#admissions"
+            >
+              Admissions
             </a>
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#hosts">
               Hosts
@@ -987,6 +1050,87 @@ export function GroupScholarLanding() {
           </div>
         </section>
 
+        {/* Admissions section maps the application timeline to a clear three-step flow. */}
+        <section
+          id="admissions"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Admissions"
+            title="Apply once. We calibrate the room."
+            subtitle="A short, respectful intake keeps the vibe aligned and the boundaries explicit."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.15fr_0.85fr]"
+          >
+            <div className="space-y-4">
+              {applicationSteps.map((step) => (
+                <article
+                  key={step.title}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">{step.badge}</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {step.timing}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {step.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Readiness checklist
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Know your boundaries before you arrive.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  We only accept guests who are comfortable naming limits, respecting
+                  silence, and asking before they interrupt the flow.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {[
+                  "Bring one focus goal and one flexible task.",
+                  "Decide your preferred noise level ahead of time.",
+                  "Plan a graceful exit if the vibe shifts.",
+                ].map((line) => (
+                  <div
+                    key={line}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]"
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6">
+                <a
+                  className="inline-flex items-center justify-center rounded-full bg-[color:var(--gs-ink)] px-5 py-2 text-sm font-bold text-white shadow-[0_16px_30px_-20px_rgba(28,38,40,0.9)] transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40"
+                  href="#apply"
+                >
+                  Start the intake
+                </a>
+              </div>
+            </aside>
+          </div>
+        </section>
+
         <section
           id="hosts"
           data-animate="section"
@@ -1129,7 +1273,15 @@ export function GroupScholarLanding() {
 
               <form
                 className="mx-auto mt-8 flex max-w-xl flex-col gap-3 sm:flex-row"
-                onSubmit={(e) => e.preventDefault()}
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  if (!email.trim()) {
+                    setFormStatus("error");
+                    return;
+                  }
+                  setFormStatus("sent");
+                  setEmail("");
+                }}
               >
                 <label className="sr-only" htmlFor="email">
                   Email
@@ -1140,6 +1292,15 @@ export function GroupScholarLanding() {
                   inputMode="email"
                   autoComplete="email"
                   placeholder="you@university.edu"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    if (formStatus !== "idle") {
+                      setFormStatus("idle");
+                    }
+                  }}
+                  aria-invalid={formStatus === "error"}
+                  aria-describedby={`${helperId} ${statusId}`}
                   className="h-12 w-full rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-5 text-sm font-bold text-[color:var(--gs-ink)] shadow-sm outline-none placeholder:text-[color:var(--gs-muted)]/60 focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40"
                 />
                 <button
@@ -1149,6 +1310,20 @@ export function GroupScholarLanding() {
                   Apply
                 </button>
               </form>
+
+              <div className="mt-4 space-y-2 text-left text-xs font-bold tracking-wide">
+                <p id={helperId} className="text-[color:var(--gs-muted)]">
+                  {helperMessage}
+                </p>
+                <p
+                  id={statusId}
+                  role={formStatus === "error" ? "alert" : "status"}
+                  aria-live="polite"
+                  className={statusTone}
+                >
+                  {statusMessage}
+                </p>
+              </div>
 
               <p className="mt-4 text-xs font-bold tracking-wide text-[color:var(--gs-muted)]">
                 By applying, you agree to the Honor Code: respect first, jokes
