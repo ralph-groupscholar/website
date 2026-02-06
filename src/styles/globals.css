@@ -57,17 +57,21 @@ html[data-automation="true"] {
 }
 
 html[data-automation="true"] header {
-  padding-top: 0.75rem;
-  padding-bottom: 1.1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.7rem;
 }
 
 html[data-automation="true"] main {
-  padding-top: 2.1rem;
-  padding-bottom: 2.6rem;
+  padding-top: 1.4rem;
+  padding-bottom: 1.6rem;
 }
 
 html[data-automation="true"] .gs-automation-brief {
-  margin-top: 0.6rem !important;
+  margin-top: 0.4rem !important;
+}
+
+html[data-automation="true"] .gs-automation-brief > div {
+  padding: 0.65rem !important;
 }
 
 html[data-automation="true"] .gs-automation-brief h1 {
@@ -75,7 +79,20 @@ html[data-automation="true"] .gs-automation-brief h1 {
 }
 
 html[data-automation="true"] .gs-automation-card {
-  padding: 0.75rem;
+  padding: 0.55rem;
+}
+
+html[data-automation="true"] .gs-automation-rail {
+  gap: 0.5rem;
+}
+
+html[data-automation="true"] .gs-automation-rail > div {
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+}
+
+html[data-automation="true"] .gs-automation-pulse {
+  padding: 0.6rem;
 }
 
 html[data-automation="true"] [data-animate="section"] {

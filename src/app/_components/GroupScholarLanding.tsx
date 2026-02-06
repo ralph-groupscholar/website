@@ -1573,6 +1573,10 @@ export function GroupScholarLanding() {
       programs,
     ],
   );
+  const snapshotRail = useMemo(
+    () => [...snapshotBriefTiles, ...snapshotRunway],
+    [snapshotBriefTiles, snapshotRunway],
+  );
   const snapshotPulse = useMemo(
     () => [
       {
@@ -2305,11 +2309,11 @@ export function GroupScholarLanding() {
               </div>
             </div>
             <div className="mt-1.5 grid gap-2 lg:grid-cols-[0.44fr_0.56fr]">
-              <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
-                {snapshotBriefTiles.map((tile) => (
+              <div className="gs-automation-rail grid gap-2 sm:grid-cols-3 lg:grid-cols-3">
+                {snapshotRail.map((tile) => (
                   <div
                     key={`snapshot-brief-${tile.label}`}
-                    className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1.5 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1.5 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
                   >
                     <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
                       {tile.label}
@@ -2323,7 +2327,7 @@ export function GroupScholarLanding() {
                   </div>
                 ))}
               </div>
-              <div className="rounded-[22px] border border-[color:var(--gs-ink-soft)] bg-white/85 p-2 shadow-[0_18px_46px_-34px_rgba(28,38,40,0.72)]">
+              <div className="gs-automation-pulse rounded-[22px] border border-[color:var(--gs-ink-soft)] bg-white/85 p-2 shadow-[0_18px_46px_-34px_rgba(28,38,40,0.72)]">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-bold uppercase tracking-[0.26em] text-[color:var(--gs-muted)]">
                   <span>Live pulse</span>
                   <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-[color:var(--gs-ink)]">
@@ -2352,24 +2356,6 @@ export function GroupScholarLanding() {
                   ))}
                 </div>
               </div>
-            </div>
-            <div className="mt-2 grid gap-2 sm:grid-cols-3">
-              {snapshotRunway.map((item) => (
-                <div
-                  key={`snapshot-runway-${item.label}`}
-                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-2 shadow-[0_14px_34px_-28px_rgba(28,38,40,0.7)]"
-                >
-                  <div className="text-[9px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
-                    {item.label}
-                  </div>
-                  <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
-                    {item.value}
-                  </div>
-                  <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
-                    {item.detail}
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
