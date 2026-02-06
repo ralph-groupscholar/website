@@ -353,12 +353,32 @@ export function GroupScholarLanding() {
   const statusId = useId();
   const preferenceId = useId();
   const focusId = useId();
+  const sectionIndex = useMemo(
+    () => [
+      { id: "forecast", label: "Forecast", tag: "Board" },
+      { id: "principles", label: "Principles", tag: "Mission" },
+      { id: "programs", label: "Programs", tag: "Catalog" },
+      { id: "library", label: "Library", tag: "Archive" },
+      { id: "outcomes", label: "Outcomes", tag: "Map" },
+      { id: "rituals", label: "Rituals", tag: "Flow" },
+      { id: "sessions", label: "Sessions", tag: "Rhythm" },
+      { id: "rooms", label: "Rooms", tag: "Zones" },
+      { id: "matching", label: "Matching", tag: "Fit" },
+      { id: "decoder", label: "Decoder", tag: "Signals" },
+      { id: "admissions", label: "Admissions", tag: "Intake" },
+      { id: "apply", label: "Apply", tag: "Seat" },
+    ],
+    [],
+  );
   const [email, setEmail] = useState("");
   const [track, setTrack] = useState("Any track");
   const [focusNote, setFocusNote] = useState("");
   const [formStatus, setFormStatus] = useState<"idle" | "error" | "sent">("idle");
   const [activeSignal, setActiveSignal] = useState("Silent");
   const [calibrationLevel, setCalibrationLevel] = useState(3);
+  const [activeSection, setActiveSection] = useState(
+    sectionIndex[0]?.id ?? "forecast",
+  );
   const maxFocusLength = 160;
   const formattedTrack = track === "Any track" ? "any track" : track;
   const focusCount = focusNote.length;
@@ -380,6 +400,14 @@ export function GroupScholarLanding() {
   const focusCountId = useId();
   const calibrationHelpId = useId();
   const calibrationValueId = useId();
+  const activeIndex = Math.max(
+    0,
+    sectionIndex.findIndex((item) => item.id === activeSection),
+  );
+  const activeLabel = sectionIndex[activeIndex]?.label ?? "Forecast";
+  const progressPercent = sectionIndex.length
+    ? Math.round(((activeIndex + 1) / sectionIndex.length) * 100)
+    : 0;
 
   const principles: Principle[] = useMemo(
     () => [
@@ -1309,6 +1337,32 @@ export function GroupScholarLanding() {
   const isAutomation =
     typeof navigator !== "undefined" && navigator.webdriver === true;
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const targets = sectionIndex
+      .map((section) => document.getElementById(section.id))
+      .filter((el): el is HTMLElement => Boolean(el));
+    if (!targets.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible?.target instanceof HTMLElement) {
+          setActiveSection(visible.target.id);
+        }
+      },
+      {
+        rootMargin: "-45% 0px -45% 0px",
+        threshold: [0.1, 0.25, 0.5, 0.75],
+      },
+    );
+
+    targets.forEach((target) => observer.observe(target));
+    return () => observer.disconnect();
+  }, [sectionIndex]);
+
   useLayoutEffect(() => {
     if (reduced || isAutomation) return;
     if (!rootRef.current) return;
@@ -1391,6 +1445,51 @@ export function GroupScholarLanding() {
     >
       <div className="pointer-events-none fixed inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,rgba(28,38,40,0.14)_1px,transparent_1px),linear-gradient(to_bottom,rgba(28,38,40,0.14)_1px,transparent_1px)] [background-size:42px_42px]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_12%,rgba(255,255,255,0.45),transparent_38%)]" />
+
+      <aside className="pointer-events-none fixed bottom-6 right-6 z-20 hidden xl:block">
+        <div className="pointer-events-auto w-64 rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-4 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)] backdrop-blur">
+          <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
+            <span>Field guide</span>
+            <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2 py-1 text-[10px] tracking-[0.2em] text-[color:var(--gs-ink)]">
+              {activeIndex + 1}/{sectionIndex.length}
+            </span>
+          </div>
+          <div className="mt-3 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-2 text-xs font-semibold text-[color:var(--gs-ink)]">
+            Active: {activeLabel}
+          </div>
+          <div className="mt-3 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+            <span>Progress</span>
+            <span className="font-mono text-[color:var(--gs-ink)]">{progressPercent}%</span>
+          </div>
+          <div className="mt-2 h-1.5 w-full rounded-full bg-[color:var(--gs-ink-soft)]/40">
+            <div
+              className="h-full rounded-full bg-[color:var(--gs-accent)]"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+          <div className="mt-4 grid gap-2">
+            {sectionIndex.map((section) => {
+              const isActive = section.id === activeSection;
+              return (
+                <a
+                  key={section.id}
+                  href={`#${section.id}`}
+                  className={`flex items-center justify-between rounded-full border px-3 py-2 text-xs font-semibold transition ${
+                    isActive
+                      ? "border-[color:var(--gs-accent)] bg-[color:var(--gs-accent)]/15 text-[color:var(--gs-ink)]"
+                      : "border-transparent text-[color:var(--gs-muted)] hover:border-[color:var(--gs-ink-soft)] hover:bg-white"
+                  }`}
+                >
+                  <span>{section.label}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    {section.tag}
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </aside>
 
       <a
         href="#main-content"

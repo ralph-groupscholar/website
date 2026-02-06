@@ -1,3 +1,8 @@
+2026-02-06 21:09:18 — Iteration 35
+- Added a fixed Field Guide navigator with active-section tracking and progress for long-scroll orientation.
+- Wired an IntersectionObserver to keep the Field Guide in sync with the visible section.
+- Captured a fresh Playwright screenshot; the automation render still appears mostly empty between the hero and footer.
+
 2026-02-06 21:07:19 — Iteration 34
 - Reviewed current codebase and recent git history for context.
 - Captured a Playwright full-page screenshot of groupscholar.com; the automation render still shows a large mid-page blank gap with the hero repeated near the bottom.
