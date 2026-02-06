@@ -57,8 +57,8 @@ html[data-automation="true"] {
 }
 
 html[data-automation="true"] header {
-  padding-top: 0.5rem;
-  padding-bottom: 0.7rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.6rem;
 }
 
 html[data-automation="true"] main {
@@ -67,7 +67,7 @@ html[data-automation="true"] main {
 }
 
 html[data-automation="true"] .gs-automation-brief {
-  margin-top: 0.4rem !important;
+  margin-top: 0.35rem !important;
 }
 
 html[data-automation="true"] .gs-automation-brief > div {
@@ -96,7 +96,19 @@ html[data-automation="true"] .gs-automation-pulse {
 }
 
 html[data-automation="true"] .gs-automation-cadence {
-  padding: 0.45rem;
+  margin-top: 0.35rem !important;
+  padding: 0.4rem;
+}
+
+html[data-automation="true"] .gs-automation-cadence-grid {
+  display: flex;
+  gap: 0.45rem;
+}
+
+html[data-automation="true"] .gs-automation-cadence-grid > div {
+  flex: 1 1 0;
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
 }
 
 html[data-automation="true"] [data-animate="section"] {
