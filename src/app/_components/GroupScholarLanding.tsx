@@ -74,6 +74,18 @@ type LedgerProtocol = {
   desc: string;
 };
 
+type OutcomeMetric = {
+  tag: string;
+  value: string;
+  label: string;
+  desc: string;
+};
+
+type OutcomeNote = {
+  title: string;
+  desc: string;
+};
+
 type VibeTrack = {
   name: string;
   tone: string;
@@ -420,6 +432,54 @@ export function GroupScholarLanding() {
         name: "R. Chair",
         affiliation: "Office of Institutional Mischief",
         citation: "doi:10.0000/gs.oim.2025.004",
+      },
+    ],
+    [],
+  );
+
+  const outcomeMetrics: OutcomeMetric[] = useMemo(
+    () => [
+      {
+        tag: "Retention",
+        value: "92%",
+        label: "Intent kept",
+        desc: "Participants who report staying on-task for the majority of the session.",
+      },
+      {
+        tag: "Cadence",
+        value: "3.4",
+        label: "Signal resets",
+        desc: "Median boundary resets per session, logged by the host.",
+      },
+      {
+        tag: "Debrief",
+        value: "48 hrs",
+        label: "Follow-up window",
+        desc: "Average time to schedule a debrief after shared work.",
+      },
+      {
+        tag: "Care",
+        value: "11 min",
+        label: "Warm exits",
+        desc: "Average time hosts spend guiding soft exits and quick check-ins.",
+      },
+    ],
+    [],
+  );
+
+  const outcomeNotes: OutcomeNote[] = useMemo(
+    () => [
+      {
+        title: "We count the room, not the people.",
+        desc: "Only aggregate data is kept. No names, no screenshots, no replay.",
+      },
+      {
+        title: "Every metric has a host response.",
+        desc: "If the room spikes, the host pauses, resets, and re-reads the board.",
+      },
+      {
+        title: "Weekly reviews keep it honest.",
+        desc: "Hosts share a Monday recap with adjustments for the next cycle.",
       },
     ],
     [],
@@ -1198,6 +1258,9 @@ export function GroupScholarLanding() {
             >
               Citations
             </a>
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#outcomes">
+              Outcomes
+            </a>
             <a
               className="transition hover:text-[color:var(--gs-ink)]"
               href="#sessions"
@@ -1395,6 +1458,7 @@ export function GroupScholarLanding() {
               "Room Map",
               "Boundaries: Clear",
               "Library Stacks",
+              "Outcome Map",
               "Signal Decoder",
               "Calibration Studio",
               "Focus Ledger",
@@ -1616,6 +1680,82 @@ export function GroupScholarLanding() {
                 </figcaption>
               </figure>
             ))}
+          </div>
+        </section>
+
+        <section
+          id="outcomes"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Outcome map"
+            title="Proof of play, not promises."
+            subtitle="We track group rhythm and follow-up care so the room feels safer every week."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.05fr_0.95fr]"
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              {outcomeMetrics.map((metric) => (
+                <article
+                  key={metric.label}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    {metric.tag}
+                  </div>
+                  <div className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {metric.value}
+                  </div>
+                  <div className="mt-2 text-sm font-bold text-[color:var(--gs-ink)]">
+                    {metric.label}
+                  </div>
+                  <div className="mt-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/85 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    {metric.desc}
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Outcome brief
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  What we report back to the room.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  Metrics are used to tune sessions, not to score participants.
+                  Hosts read the pulse, then adjust the next ritual.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {outcomeNotes.map((note) => (
+                  <div
+                    key={note.title}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3"
+                  >
+                    <div className="text-sm font-bold text-[color:var(--gs-ink)]">
+                      {note.title}
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {note.desc}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Next review: Monday at 9:00 AM, local time.
+              </div>
+            </aside>
           </div>
         </section>
 

@@ -28,6 +28,11 @@
 - Built a signal board sidebar to explain the live cadence of room resets.
 - Updated navigation and marquee highlights to include the new Rooms anchor.
 
+2026-02-05 20:11:08 — Iteration 9
+- Added an Outcome Map section with metrics and a brief to frame the weekly review loop.
+- Wired the Outcomes anchor into the hero navigation and marquee for faster discovery.
+- Introduced outcome data models to keep the new section consistent with existing data-driven blocks.
+
 2026-02-05 19:45:30 — Iteration 8
 - Added a Library section with archive artifacts and a checkout desk sidebar to deepen the world-building.
 - Built a Signal Decoder section with interactive badge toggles and host response details.
