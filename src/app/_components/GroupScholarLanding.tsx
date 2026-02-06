@@ -353,13 +353,20 @@ function SectionHeading(props: {
   );
 }
 
-function Marquee({ items }: { items: string[] }) {
+function Marquee({
+  items,
+  disableMotion = false,
+}: {
+  items: string[];
+  disableMotion?: boolean;
+}) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
   const reduced = usePrefersReducedMotion();
+  const shouldDisableMotion = reduced || disableMotion;
 
   useLayoutEffect(() => {
-    if (reduced) return;
+    if (shouldDisableMotion) return;
     if (!rootRef.current || !innerRef.current) return;
 
     const onResize = () => ScrollTrigger.refresh();
@@ -383,7 +390,7 @@ function Marquee({ items }: { items: string[] }) {
       window.removeEventListener("resize", onResize);
       ctx.revert();
     };
-  }, [reduced]);
+  }, [shouldDisableMotion]);
 
   const doubled = useMemo(() => [...items, ...items], [items]);
 
@@ -1845,10 +1852,10 @@ export function GroupScholarLanding() {
         shouldBypassMotion ? "gs-bypass-motion" : ""
       }`}
     >
-      <div className="pointer-events-none fixed inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,rgba(28,38,40,0.14)_1px,transparent_1px),linear-gradient(to_bottom,rgba(28,38,40,0.14)_1px,transparent_1px)] [background-size:42px_42px]" />
+      <div className="gs-snapshot-fixed pointer-events-none fixed inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,rgba(28,38,40,0.14)_1px,transparent_1px),linear-gradient(to_bottom,rgba(28,38,40,0.14)_1px,transparent_1px)] [background-size:42px_42px]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_12%,rgba(255,255,255,0.45),transparent_38%)]" />
 
-      <aside className="pointer-events-none fixed bottom-6 right-6 z-20 hidden xl:block">
+      <aside className="gs-snapshot-fixed pointer-events-none fixed bottom-6 right-6 z-20 hidden xl:block">
         <div className="pointer-events-auto w-64 rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-4 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)] backdrop-blur">
           <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
             <span>Field guide</span>
@@ -1903,7 +1910,7 @@ export function GroupScholarLanding() {
       <header className="relative z-10 mx-auto max-w-7xl px-4 pb-8 pt-6 md:px-8 md:pt-8">
         <nav
           data-hero-nav
-          className="sticky top-4 z-20 flex items-center justify-between gap-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/85 px-4 py-3 backdrop-blur md:px-5"
+          className="gs-snapshot-sticky sticky top-4 z-20 flex items-center justify-between gap-4 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/85 px-4 py-3 backdrop-blur md:px-5"
         >
           <div className="flex items-center gap-3">
             <div className="grid size-10 place-items-center rounded-lg border border-[color:var(--gs-ink-soft)] bg-white shadow-sm">
@@ -2253,6 +2260,7 @@ export function GroupScholarLanding() {
               "Invite Packet",
               "Readiness Lab",
             ]}
+            disableMotion={shouldBypassMotion}
           />
         </section>
       </header>
@@ -2261,7 +2269,7 @@ export function GroupScholarLanding() {
         id="main-content"
         className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-10 md:px-8 md:pt-14"
       >
-        <div className="sticky top-24 z-20 mb-10 md:hidden">
+        <div className="gs-snapshot-sticky sticky top-24 z-20 mb-10 md:hidden">
           <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/95 px-4 py-3 shadow-[0_18px_45px_-30px_rgba(28,38,40,0.85)] backdrop-blur">
             <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
               <span>Field guide</span>
@@ -4588,7 +4596,7 @@ export function GroupScholarLanding() {
         </section>
       </main>
 
-      <div className="pointer-events-none fixed bottom-6 left-1/2 z-30 hidden -translate-x-1/2 xl:block">
+      <div className="gs-snapshot-fixed pointer-events-none fixed bottom-6 left-1/2 z-30 hidden -translate-x-1/2 xl:block">
         <div className="pointer-events-auto flex items-center gap-4 rounded-full border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/95 px-5 py-3 shadow-[0_20px_50px_-30px_rgba(28,38,40,0.85)] backdrop-blur">
           <div className="flex items-center gap-3">
             <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[color:var(--gs-muted)]">
