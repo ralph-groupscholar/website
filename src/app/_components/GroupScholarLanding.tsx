@@ -436,6 +436,7 @@ export function GroupScholarLanding() {
   const [formStatus, setFormStatus] = useState<"idle" | "error" | "sent">("idle");
   const [activeSignal, setActiveSignal] = useState("Silent");
   const [calibrationLevel, setCalibrationLevel] = useState(3);
+  const [automationMode, setAutomationMode] = useState(false);
   const [activeSection, setActiveSection] = useState(
     sectionIndex[0]?.id ?? "forecast",
   );
@@ -1915,26 +1916,25 @@ export function GroupScholarLanding() {
     return () => window.clearInterval(timer);
   }, []);
 
-  const isAutomationFlagged =
-    typeof document !== "undefined" &&
-    document.documentElement.dataset.automation === "true";
-  const isSnapshotParam =
-    typeof window !== "undefined" &&
-    (() => {
-      const params = new URLSearchParams(window.location.search);
-      return params.has("snapshot") || params.has("automation");
-    })();
-  const isAutomationUA =
-    typeof navigator !== "undefined" &&
-    (navigator.webdriver === true ||
-      /HeadlessChrome|Playwright/i.test(navigator.userAgent) ||
-      /Chrome\/\d+\.0\.0\.0/.test(navigator.userAgent));
-  const shouldBypassMotion =
-    reduced || isAutomationFlagged || isAutomationUA || isSnapshotParam;
-  const snapshotRailView = shouldBypassMotion
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const snapshotParam = params.has("snapshot") || params.has("automation");
+    const ua = navigator.userAgent;
+    const uaAutomation =
+      navigator.webdriver === true ||
+      /HeadlessChrome|Playwright/i.test(ua) ||
+      /Chrome\/\d+\.0\.0\.0/.test(ua);
+    const flagged = document.documentElement.dataset.automation === "true";
+    setAutomationMode(snapshotParam || uaAutomation || flagged);
+  }, []);
+
+  const shouldBypassMotion = reduced || automationMode;
+  const shouldEnableAutomationLayout = automationMode;
+  const snapshotRailView = shouldEnableAutomationLayout
     ? snapshotRail.slice(0, 4)
     : snapshotRail;
-  const snapshotPulseView = shouldBypassMotion
+  const snapshotPulseView = shouldEnableAutomationLayout
     ? snapshotPulse.slice(0, 4)
     : snapshotPulse;
 
@@ -1965,14 +1965,14 @@ export function GroupScholarLanding() {
   }, [sectionIndex]);
 
   useLayoutEffect(() => {
-    if (!shouldBypassMotion || typeof document === "undefined") return;
+    if (!shouldEnableAutomationLayout || typeof document === "undefined") return;
     document.documentElement.dataset.automation = "true";
     return () => {
       if (document.documentElement.dataset.automation === "true") {
         delete document.documentElement.dataset.automation;
       }
     };
-  }, [shouldBypassMotion]);
+  }, [shouldEnableAutomationLayout]);
 
   useLayoutEffect(() => {
     if (!shouldBypassMotion || !rootRef.current) return;
