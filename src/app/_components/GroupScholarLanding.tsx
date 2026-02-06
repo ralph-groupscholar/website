@@ -89,6 +89,19 @@ type ApplicationStep = {
   timing: string;
 };
 
+type InvitePacketItem = {
+  badge: string;
+  title: string;
+  desc: string;
+  meta: string;
+};
+
+type InviteMemo = {
+  title: string;
+  desc: string;
+  timing: string;
+};
+
 type Ritual = {
   badge: string;
   title: string;
@@ -844,6 +857,51 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const invitePacketItems: InvitePacketItem[] = useMemo(
+    () => [
+      {
+        badge: "Item 01",
+        title: "Seat confirmation",
+        desc: "A short note with your host, room zone, and the first active signal.",
+        meta: "Delivered within 48 hours",
+      },
+      {
+        badge: "Item 02",
+        title: "Signal badge",
+        desc: "A visible cue for your track so the room reads your boundaries instantly.",
+        meta: "Collected at check-in",
+      },
+      {
+        badge: "Item 03",
+        title: "Note relay kit",
+        desc: "Shared notebook and soft timer for respectful collaboration.",
+        meta: "Issued on arrival",
+      },
+    ],
+    [],
+  );
+
+  const inviteMemos: InviteMemo[] = useMemo(
+    () => [
+      {
+        title: "Pre-session prep",
+        desc: "Pick one focus goal and one flexible task. We’ll help you keep both honest.",
+        timing: "Before doors open",
+      },
+      {
+        title: "Arrival briefing",
+        desc: "Hosts restate the active signal and confirm consent expectations.",
+        timing: "First 5 minutes",
+      },
+      {
+        title: "Exit receipt",
+        desc: "Leave with a calm summary so your next session starts aligned.",
+        timing: "Within 12 hours",
+      },
+    ],
+    [],
+  );
+
   const studioHours: StudioHour[] = useMemo(
     () => [
       {
@@ -1115,6 +1173,9 @@ export function GroupScholarLanding() {
             >
               Admissions
             </a>
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#packet">
+              Invite packet
+            </a>
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#hosts">
               Hosts
             </a>
@@ -1274,6 +1335,7 @@ export function GroupScholarLanding() {
               "Calibration Studio",
               "Focus Ledger",
               "Debrief Lab",
+              "Invite Packet",
             ]}
           />
         </section>
@@ -2284,6 +2346,85 @@ export function GroupScholarLanding() {
                 >
                   Start the intake
                 </a>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section
+          id="packet"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Invite packet"
+            title="Everything you receive before the door opens."
+            subtitle="A tight, respectful bundle of details so the room feels intentional from the first minute."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div className="grid gap-4">
+              {invitePacketItems.map((item) => (
+                <article
+                  key={item.title}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">{item.badge}</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {item.meta}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {item.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Arrival memo
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Know the rhythm before you step in.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  The packet is meant to remove guesswork and keep consent
+                  visible. You’ll know the pace, the signals, and how to exit.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {inviteMemos.map((memo) => (
+                  <div
+                    key={memo.title}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3"
+                  >
+                    <div className="text-sm font-bold text-[color:var(--gs-ink)]">
+                      {memo.title}
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {memo.desc}
+                    </div>
+                    <div className="mt-2 text-[11px] font-bold uppercase tracking-wide text-[color:var(--gs-muted)]">
+                      {memo.timing}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                The packet refreshes weekly to keep signals consistent.
               </div>
             </aside>
           </div>
