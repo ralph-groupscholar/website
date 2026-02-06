@@ -1523,6 +1523,7 @@ export function GroupScholarLanding() {
     ],
   );
   const snapshotCompact = snapshotHighlights.slice(0, 2);
+  const snapshotRail = snapshotHighlights.slice(2, 5);
   const snapshotBriefTiles: SnapshotTile[] = useMemo(
     () => [
       {
@@ -2315,6 +2316,25 @@ export function GroupScholarLanding() {
                 ))}
               </div>
             </div>
+            <div className="gs-automation-rail mt-2 grid gap-2 sm:grid-cols-3">
+              {snapshotRail.map((item) => (
+                <div
+                  key={`snapshot-rail-${item.key}`}
+                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/80 px-3 py-2 text-[color:var(--gs-ink)] shadow-[0_10px_26px_-22px_rgba(28,38,40,0.6)]"
+                >
+                  <div className="text-[9px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    {item.label}
+                  </div>
+                  <div className="mt-1 text-[11px] font-semibold">{item.title}</div>
+                  <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
+                    {item.desc}
+                  </div>
+                  <div className="mt-1 text-[9px] font-bold uppercase tracking-[0.22em] text-[color:var(--gs-muted)]">
+                    {item.meta}
+                  </div>
+                </div>
+              ))}
+            </div>
             <div className="mt-2 grid gap-2 sm:grid-cols-3">
               {snapshotBriefTiles.map((tile) => (
                 <div
@@ -2333,23 +2353,28 @@ export function GroupScholarLanding() {
                 </div>
               ))}
             </div>
-            <div className="gs-automation-pulse mt-2 grid gap-2 sm:grid-cols-4">
-              {snapshotPulseTiles.map((tile) => (
-                <div
-                  key={`snapshot-pulse-${tile.label}`}
-                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[linear-gradient(140deg,rgba(255,255,255,0.92),rgba(248,241,230,0.88))] px-3 py-1.5 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
-                >
-                  <div className="text-[9px] font-bold uppercase tracking-[0.26em] text-[color:var(--gs-muted)]">
-                    {tile.label}
+            <div className="gs-automation-cadence mt-2 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/85 px-3 py-2 shadow-[0_14px_34px_-26px_rgba(28,38,40,0.7)]">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                <span>Cadence pulse</span>
+                <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 px-3 py-1 text-[9px] tracking-[0.22em] text-[color:var(--gs-ink)]">
+                  Reply within 48 hours
+                </span>
+              </div>
+              <div className="gs-automation-cadence-grid mt-2 grid gap-2 sm:grid-cols-4">
+                {snapshotPulseTiles.map((tile) => (
+                  <div key={`snapshot-pulse-${tile.label}`} className="min-w-0 px-1">
+                    <div className="text-[9px] font-bold uppercase tracking-[0.26em] text-[color:var(--gs-muted)]">
+                      {tile.label}
+                    </div>
+                    <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
+                      {tile.value}
+                    </div>
+                    <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
+                      {tile.detail}
+                    </div>
                   </div>
-                  <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
-                    {tile.value}
-                  </div>
-                  <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
-                    {tile.detail}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </section>
