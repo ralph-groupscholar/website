@@ -1,3 +1,8 @@
+2026-02-06 20:22:15 — Iteration 17
+- Tweaked GSAP scroll-triggered reveals to avoid hiding below-fold sections in full-page captures.
+- Locked scroll animations to run once per section to keep the long-form page stable.
+- Verified Bun bundler smoke build with the local entrypoint.
+
 2026-02-05 20:19:56 — Iteration 16
 - Captured the live site snapshot and noted rendering gaps to guide next visual refinements.
 - Outlined a fresh batch of creative improvements to deepen narrative and page rhythm.
