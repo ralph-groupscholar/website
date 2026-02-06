@@ -57,7 +57,8 @@ html[data-automation="true"] {
 }
 
 html[data-automation="true"] header {
-  padding-bottom: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 html[data-automation="true"] main {
@@ -75,10 +76,6 @@ html[data-automation="true"] .gs-snapshot-fixed {
 
 html[data-automation="true"] .gs-snapshot-sticky {
   position: static !important;
-}
-
-html[data-automation="true"] [data-automation-hide] {
-  display: none !important;
 }
 
 html[data-automation="true"] [data-automation-show] {
