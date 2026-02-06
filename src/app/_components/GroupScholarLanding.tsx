@@ -1519,7 +1519,17 @@ export function GroupScholarLanding() {
     return () => observer.disconnect();
   }, [sectionIndex]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (!shouldBypassMotion || typeof document === "undefined") return;
+    document.documentElement.dataset.automation = "true";
+    return () => {
+      if (document.documentElement.dataset.automation === "true") {
+        delete document.documentElement.dataset.automation;
+      }
+    };
+  }, [shouldBypassMotion]);
+
+  useLayoutEffect(() => {
     if (!shouldBypassMotion || !rootRef.current) return;
     const nodes = rootRef.current.querySelectorAll<HTMLElement>(
       "[data-animate='section'], [data-animate='stagger'], [data-hero-line], [data-hero-nav], [data-hero-surface]",
