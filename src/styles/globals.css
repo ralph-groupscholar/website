@@ -95,6 +95,10 @@ html[data-automation="true"] .gs-automation-pulse {
   padding: 0.6rem;
 }
 
+html[data-automation="true"] .gs-automation-cadence {
+  padding: 0.55rem;
+}
+
 html[data-automation="true"] [data-animate="section"] {
   margin-top: 2.5rem !important;
 }

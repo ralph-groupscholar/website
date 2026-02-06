@@ -1630,6 +1630,26 @@ export function GroupScholarLanding() {
       programs,
     ],
   );
+  const snapshotCadence: SnapshotTile[] = useMemo(
+    () => [
+      {
+        label: "Cadence",
+        value: `Live ${localDayLabel}`,
+        detail: `Next reset ${nextResetLabel}`,
+      },
+      {
+        label: "Session",
+        value: activeCalibration.duration,
+        detail: activeCalibration.signal,
+      },
+      {
+        label: "Response",
+        value: "48h loop",
+        detail: "Hosts reply within 48 hours.",
+      },
+    ],
+    [activeCalibration.duration, activeCalibration.signal, localDayLabel, nextResetLabel],
+  );
 
   // Admissions steps clarify the application journey without breaking the satire.
   const applicationSteps: ApplicationStep[] = useMemo(
@@ -2368,6 +2388,32 @@ export function GroupScholarLanding() {
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+            <div className="gs-automation-cadence mt-2 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/80 px-3 py-2 shadow-[0_14px_36px_-30px_rgba(28,38,40,0.7)]">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
+                <span>Snapshot cadence</span>
+                <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2 py-1 text-[9px] font-bold tracking-[0.22em] text-[color:var(--gs-ink)]">
+                  Intake loop
+                </span>
+              </div>
+              <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                {snapshotCadence.map((cadence) => (
+                  <div
+                    key={`snapshot-cadence-${cadence.label}`}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/95 px-2 py-1.5"
+                  >
+                    <div className="text-[9px] font-bold uppercase tracking-[0.22em] text-[color:var(--gs-muted)]">
+                      {cadence.label}
+                    </div>
+                    <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
+                      {cadence.value}
+                    </div>
+                    <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
+                      {cadence.detail}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
