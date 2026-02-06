@@ -1,3 +1,8 @@
+2026-02-05 20:30:55 — Iteration 18
+- Added a Studio Bulletin card in the hero stack to surface live-ish session signals and host coverage.
+- Reframed the hero aside into a three-panel rhythm (seal, bulletin, stats) for faster narrative onboarding.
+- Captured build-ready copy for the bulletin board to match the weekly reset cadence.
+
 2026-02-06 20:22:15 — Iteration 17
 - Tweaked GSAP scroll-triggered reveals to avoid hiding below-fold sections in full-page captures.
 - Locked scroll animations to run once per section to keep the long-form page stable.

@@ -40,6 +40,12 @@ type SessionFormat = {
   seats: string;
 };
 
+type BulletinItem = {
+  label: string;
+  detail: string;
+  tag: string;
+};
+
 type RoomZone = {
   name: string;
   desc: string;
@@ -653,6 +659,27 @@ export function GroupScholarLanding() {
         duration: "2 hours",
         intensity: "Suggestive",
         seats: "10 seats",
+      },
+    ],
+    [],
+  );
+
+  const bulletinItems: BulletinItem[] = useMemo(
+    () => [
+      {
+        label: "Open desk",
+        detail: "Lab B, 8:30 PM check-in",
+        tag: "Quiet Focus",
+      },
+      {
+        label: "Signal up",
+        detail: "Silent badge active for first 20 minutes",
+        tag: "Low chatter",
+      },
+      {
+        label: "Host shift",
+        detail: "Mira + Jun on duty",
+        tag: "Reset window open",
       },
     ],
     [],
@@ -1502,6 +1529,36 @@ export function GroupScholarLanding() {
                     Syllabus: suggestive, not descriptive. Lab partner matching:
                     no guarantees.
                   </div>
+                </div>
+              </div>
+
+              <div className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-5 shadow-[0_20px_46px_-32px_rgba(28,38,40,0.82)]">
+                <div className="flex items-center justify-between gap-3 text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                  <span>STUDIO BULLETIN</span>
+                  <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-[11px] font-bold tracking-normal text-[color:var(--gs-muted)]">
+                    Updated weekly
+                  </span>
+                </div>
+                <div className="mt-4 grid gap-3">
+                  {bulletinItems.map((item) => (
+                    <div
+                      key={item.label}
+                      className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-4"
+                    >
+                      <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                        <span className="tracking-[0.24em]">{item.label.toUpperCase()}</span>
+                        <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1 text-[11px] font-bold text-[color:var(--gs-ink)]">
+                          {item.tag}
+                        </span>
+                      </div>
+                      <div className="mt-2 text-sm font-semibold text-[color:var(--gs-ink)]">
+                        {item.detail}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-[color:var(--gs-muted)]">
+                  Board resets Monday 9:00 AM
                 </div>
               </div>
 
