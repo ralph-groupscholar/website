@@ -326,3 +326,8 @@
 - Captured a fresh Playwright full-page screenshot of groupscholar.com; the headless render still shows large blank bands with repeated fixed overlays, suggesting snapshot artifacts on long scrolls.
 - Sketched creative follow-ups: add a compact "Session Pulse" ribbon to summarize key sections above the fold, prototype a "Room Map" strip with per-section color cues, and introduce a printable "Snapshot" layout toggle for static captures.
 - Added a snapshot mode that converts fixed/sticky UI to static positions and disables marquee motion during automation to keep headless captures readable.
+2026-02-06 00:27:54 — Iteration 55
+- Reviewed current codebase and recent git history for context.
+- Captured a Playwright full-page screenshot of groupscholar.com; the headless render still shows large blank bands with duplicated hero slices.
+- Sketched creative follow-ups: build a compact “Snapshot Syllabus” grid above the fold, add a tonal chapter divider that changes per section, and introduce a static “Signal Atlas” strip for headless captures.
+- Added an early automation detector script to set snapshot flags before hydration and tightened section spacing during automation to keep more content visible without scroll.

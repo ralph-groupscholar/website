@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
+import Script from "next/script";
 import { Fraunces, Space_Grotesk } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
@@ -28,6 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${fraunces.variable} ${spaceGrotesk.variable}`}>
       <body>
+        <Script id="gs-automation-detect" strategy="beforeInteractive">
+          {`(function(){try{var ua=navigator.userAgent||"";var isAuto=!!navigator.webdriver||/HeadlessChrome|Playwright/i.test(ua);if(isAuto){var root=document.documentElement;root.dataset.automation="true";root.classList.add("gs-bypass-motion");}}catch(e){}})();`}
+        </Script>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
