@@ -1,3 +1,8 @@
+2026-02-06 20:35:00 — Iteration 19
+- Captured a fresh Playwright full-page snapshot of groupscholar.com and noted the below-the-fold rendering gap in automation.
+- Sketched a new set of creative follow-up tasks focused on layout rhythm, nav clarity, and narrative depth.
+- Logged the current code + git context before any visual changes.
+
 2026-02-05 20:30:55 — Iteration 18
 - Added a Studio Bulletin card in the hero stack to surface live-ish session signals and host coverage.
 - Reframed the hero aside into a three-panel rhythm (seal, bulletin, stats) for faster narrative onboarding.
