@@ -1515,7 +1515,9 @@ export function GroupScholarLanding() {
   return (
     <div
       ref={rootRef}
-      className="relative min-h-screen overflow-x-clip bg-[radial-gradient(1200px_500px_at_0%_0%,rgba(243,117,78,0.15),transparent_62%),radial-gradient(900px_420px_at_90%_8%,rgba(14,116,144,0.14),transparent_58%),linear-gradient(180deg,#f8f2e8_0%,#fbf8f2_46%,#f4efe3_100%)] text-[color:var(--gs-ink)]"
+      className={`relative min-h-screen overflow-x-clip bg-[radial-gradient(1200px_500px_at_0%_0%,rgba(243,117,78,0.15),transparent_62%),radial-gradient(900px_420px_at_90%_8%,rgba(14,116,144,0.14),transparent_58%),linear-gradient(180deg,#f8f2e8_0%,#fbf8f2_46%,#f4efe3_100%)] text-[color:var(--gs-ink)] ${
+        shouldBypassMotion ? "gs-bypass-motion" : ""
+      }`}
     >
       <div className="pointer-events-none fixed inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,rgba(28,38,40,0.14)_1px,transparent_1px),linear-gradient(to_bottom,rgba(28,38,40,0.14)_1px,transparent_1px)] [background-size:42px_42px]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_12%,rgba(255,255,255,0.45),transparent_38%)]" />
