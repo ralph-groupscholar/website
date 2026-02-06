@@ -145,6 +145,14 @@ type OutcomeNote = {
   desc: string;
 };
 
+type RelayCheckpoint = {
+  label: string;
+  title: string;
+  desc: string;
+  cue: string;
+  signal: string;
+};
+
 type PulseHighlight = {
   tag: string;
   title: string;
@@ -409,6 +417,7 @@ export function GroupScholarLanding() {
       { id: "programs", label: "Programs", tag: "Catalog" },
       { id: "library", label: "Library", tag: "Archive" },
       { id: "outcomes", label: "Outcomes", tag: "Map" },
+      { id: "relay", label: "Relay", tag: "Cue" },
       { id: "pulse", label: "Pulse", tag: "Bridge" },
       { id: "rituals", label: "Rituals", tag: "Flow" },
       { id: "sessions", label: "Sessions", tag: "Rhythm" },
@@ -428,6 +437,7 @@ export function GroupScholarLanding() {
       programs: "Choose the track and mark it.",
       library: "Pull the right stack for the room.",
       outcomes: "Measure the drift and name it.",
+      relay: "Pass the cue to the next chapter.",
       pulse: "Read the room pulse together.",
       rituals: "Follow the ritual loop.",
       sessions: "Set the session rhythm.",
@@ -663,6 +673,33 @@ export function GroupScholarLanding() {
       {
         title: "Weekly reviews keep it honest.",
         desc: "Hosts share a Monday recap with adjustments for the next cycle.",
+      },
+    ],
+    [],
+  );
+
+  const relayCheckpoints: RelayCheckpoint[] = useMemo(
+    () => [
+      {
+        label: "Next up",
+        title: "Ritual loop",
+        desc: "Restate the arrival, drift, and exit beats before anyone opens a notebook.",
+        cue: "2 minutes",
+        signal: "Check-in",
+      },
+      {
+        label: "Then",
+        title: "Session rhythm",
+        desc: "Pick a cadence that matches the room, not the calendar invite.",
+        cue: "Before seating",
+        signal: "Silent",
+      },
+      {
+        label: "After",
+        title: "Room zones",
+        desc: "Match your badge to the lighting and choose an exit lane early.",
+        cue: "On entry",
+        signal: "Open",
       },
     ],
     [],
@@ -2666,6 +2703,101 @@ export function GroupScholarLanding() {
               </div>
               <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
                 Next review: Monday at 9:00 AM, local time.
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section
+          id="relay"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Signal relay"
+            title="Pass the cue forward."
+            subtitle="A short handoff so the next chapters land without jolting the room."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid gap-4 md:grid-cols-[1.05fr_0.95fr]"
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              {relayCheckpoints.map((checkpoint) => (
+                <article
+                  key={checkpoint.title}
+                  data-stagger-item
+                  className="relative overflow-hidden rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="absolute -right-10 -top-12 size-36 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(243,117,78,0.18),transparent_62%)] blur-2xl" />
+                  <div className="absolute -bottom-12 -left-12 size-36 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(14,116,144,0.18),transparent_62%)] blur-2xl" />
+                  <div className="relative flex items-center justify-between text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    <span>{checkpoint.label.toUpperCase()}</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1 text-[11px] font-bold tracking-normal text-[color:var(--gs-ink)]">
+                      {checkpoint.signal}
+                    </span>
+                  </div>
+                  <h3 className="relative mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                    {checkpoint.title}
+                  </h3>
+                  <p className="relative mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {checkpoint.desc}
+                  </p>
+                  <div className="relative mt-5 flex flex-wrap gap-2">
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-xs font-bold text-[color:var(--gs-muted)]">
+                      {checkpoint.cue}
+                    </span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-xs font-bold text-[color:var(--gs-muted)]">
+                      Cue: {checkpoint.signal}
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="relative flex h-full flex-col justify-between overflow-hidden rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/92 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div className="absolute -right-12 -top-14 size-60 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(243,117,78,0.16),transparent_66%)] blur-2xl" />
+              <div className="absolute -bottom-16 -left-12 size-60 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(14,116,144,0.18),transparent_64%)] blur-2xl" />
+              <div className="relative">
+                <div className="text-xs font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Relay memo
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Keep the chapter handoff gentle.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  We restate the cue, confirm the badge, and move forward with one
+                  shared sentence.
+                </p>
+              </div>
+
+              <div className="relative mt-6 grid gap-3">
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4">
+                  <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    Active cue
+                  </div>
+                  <div className="mt-2 text-sm font-bold text-[color:var(--gs-ink)]">
+                    {activeCue}
+                  </div>
+                  <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                    Signal badge: {activeSignal}
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4">
+                  <div className="text-xs font-bold tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    Local check
+                  </div>
+                  <div className="mt-2 text-sm font-bold text-[color:var(--gs-ink)]">
+                    {localDayLabel}, {localTimeLabel}
+                  </div>
+                  <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                    Hosts re-state the cue every 20 minutes.
+                  </div>
+                </div>
               </div>
             </aside>
           </div>
