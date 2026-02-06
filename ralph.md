@@ -112,3 +112,8 @@
 - Added a new Sessions section with format cards and weekly studio hours to expand the landing narrative.
 - Updated the hero nav to include the Sessions anchor for faster scanning.
 - Introduced a consent-forward pledge block in the apply section to reinforce tone and boundaries.
+
+2026-02-05 20:40:49 — Iteration 22
+- Added a Studio Forecast section with weekly slots, signals, and an advisory memo.
+- Styled forecast cards with tone badges, time/room chips, and ambient glows to match the hero.
+- Documented the board rules + recalibration cadence for world-building continuity.
