@@ -1522,7 +1522,7 @@ export function GroupScholarLanding() {
       programs,
     ],
   );
-  const snapshotCompact = snapshotHighlights.slice(0, 3);
+  const snapshotCompact = snapshotHighlights.slice(0, 2);
   const snapshotBriefTiles: SnapshotTile[] = useMemo(
     () => [
       {
@@ -1550,87 +1550,6 @@ export function GroupScholarLanding() {
       outcomeMetrics,
     ],
   );
-  const snapshotRunway: SnapshotTile[] = useMemo(
-    () => [
-      {
-        label: "Host cue",
-        value: activeSignalProfile.headline,
-        detail: activeSignalProfile.hostMove,
-      },
-      {
-        label: "Next module",
-        value: programs[0]?.title ?? "Group Dynamics",
-        detail: programs[0]?.code ?? "GS-101",
-      },
-      {
-        label: "Archive sync",
-        value: "Summary compiled",
-        detail: "Within 12 hours",
-      },
-    ],
-    [
-      activeSignalProfile.headline,
-      activeSignalProfile.hostMove,
-      programs,
-    ],
-  );
-  const snapshotRail = useMemo(
-    () => [...snapshotBriefTiles, ...snapshotRunway],
-    [snapshotBriefTiles, snapshotRunway],
-  );
-  const snapshotPulse = useMemo(
-    () => [
-      {
-        label: "Room tone",
-        value: activeSignal,
-        detail: activeSignalProfile.headline,
-        meta: "Now",
-      },
-      {
-        label: "Open seats",
-        value: activeTrackPulse.seats,
-        detail: activeTrackPulse.cue,
-        meta: activeTrackPulse.window,
-      },
-      {
-        label: "Focus ratio",
-        value: outcomeMetrics
-          .slice(0, 1)
-          .map((metric) => `${metric.value} ${metric.label}`)
-          .join(" "),
-        detail: "Rolling 6-session readout.",
-        meta: "Updated today",
-      },
-      {
-        label: "Next ritual",
-        value: "Signal reset",
-        detail: `Reset cue ${nextResetLabel}.`,
-        meta: "Board update",
-      },
-      {
-        label: "Next module",
-        value: programs[0]?.title ?? "Group Dynamics",
-        detail: "Preview track before the next room opens.",
-        meta: programs[0]?.code ?? "GS-101",
-      },
-      {
-        label: "Archive sync",
-        value: "Summary compiled",
-        detail: "Scribe update within 12 hours.",
-        meta: "Post-session",
-      },
-    ],
-    [
-      activeSignal,
-      activeSignalProfile.headline,
-      activeTrackPulse.cue,
-      activeTrackPulse.seats,
-      activeTrackPulse.window,
-      nextResetLabel,
-      outcomeMetrics,
-      programs,
-    ],
-  );
   const snapshotStrip = useMemo(
     () => [
       {
@@ -1656,26 +1575,6 @@ export function GroupScholarLanding() {
       activeTrackPulse.window,
       nextResetLabel,
     ],
-  );
-  const snapshotCadence: SnapshotTile[] = useMemo(
-    () => [
-      {
-        label: "Cadence",
-        value: `Live ${localDayLabel}`,
-        detail: `Next reset ${nextResetLabel}`,
-      },
-      {
-        label: "Session",
-        value: activeCalibration.duration,
-        detail: activeCalibration.signal,
-      },
-      {
-        label: "Response",
-        value: "48h loop",
-        detail: "Hosts reply within 48 hours.",
-      },
-    ],
-    [activeCalibration.duration, activeCalibration.signal, localDayLabel, nextResetLabel],
   );
 
   // Admissions steps clarify the application journey without breaking the satire.
@@ -1931,12 +1830,6 @@ export function GroupScholarLanding() {
 
   const shouldBypassMotion = reduced || automationMode;
   const shouldEnableAutomationLayout = automationMode;
-  const snapshotRailView = shouldEnableAutomationLayout
-    ? snapshotRail.slice(0, 4)
-    : snapshotRail;
-  const snapshotPulseView = shouldEnableAutomationLayout
-    ? snapshotPulse.slice(0, 4)
-    : snapshotPulse;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -2345,7 +2238,7 @@ export function GroupScholarLanding() {
                 </div>
               ))}
             </div>
-            <div className="mt-1 grid gap-2.5 md:grid-cols-[1.05fr_0.95fr]">
+            <div className="mt-2 grid gap-2.5 md:grid-cols-[1.15fr_0.85fr]">
               <div>
                 <div className="text-xs font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
                   Group Scholar
@@ -2369,7 +2262,7 @@ export function GroupScholarLanding() {
                   </span>
                 </div>
               </div>
-              <div className="grid gap-2.5 sm:grid-cols-3">
+              <div className="grid gap-2.5 sm:grid-cols-2">
                 {snapshotCompact.map((item) => (
                   <div
                     key={`snapshot-${item.key}`}
@@ -2391,80 +2284,23 @@ export function GroupScholarLanding() {
                 ))}
               </div>
             </div>
-            <div className="mt-1.5 grid gap-2 lg:grid-cols-[0.44fr_0.56fr]">
-              <div className="gs-automation-rail grid gap-2 sm:grid-cols-3 lg:grid-cols-3">
-                {snapshotRailView.map((tile) => (
-                  <div
-                    key={`snapshot-brief-${tile.label}`}
-                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1.5 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
-                  >
-                    <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
-                      {tile.label}
-                    </div>
-                    <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
-                      {tile.value}
-                    </div>
-                    <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
-                      {tile.detail}
-                    </div>
+            <div className="mt-2 grid gap-2 sm:grid-cols-3">
+              {snapshotBriefTiles.map((tile) => (
+                <div
+                  key={`snapshot-brief-${tile.label}`}
+                  className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-3 py-1.5 shadow-[0_12px_30px_-26px_rgba(28,38,40,0.7)]"
+                >
+                  <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    {tile.label}
                   </div>
-                ))}
-              </div>
-              <div className="gs-automation-pulse rounded-[22px] border border-[color:var(--gs-ink-soft)] bg-white/85 p-2 shadow-[0_18px_46px_-34px_rgba(28,38,40,0.72)]">
-                <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-bold uppercase tracking-[0.26em] text-[color:var(--gs-muted)]">
-                  <span>Live pulse</span>
-                  <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-[color:var(--gs-ink)]">
-                    Snapshot rails
-                  </span>
-                </div>
-                <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                  {snapshotPulseView.map((pulse) => (
-                    <div
-                      key={`snapshot-pulse-${pulse.label}`}
-                      className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/95 px-2 py-1"
-                    >
-                      <div className="text-[9px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
-                        {pulse.label}
-                      </div>
-                      <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
-                        {pulse.value}
-                      </div>
-                      <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
-                        {pulse.detail}
-                      </div>
-                      <div className="mt-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[color:var(--gs-muted)]">
-                        {pulse.meta}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="gs-automation-cadence mt-2 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/80 px-3 py-2 shadow-[0_14px_36px_-30px_rgba(28,38,40,0.7)]">
-              <div className="flex flex-wrap items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
-                <span>Snapshot cadence</span>
-                <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2 py-1 text-[9px] font-bold tracking-[0.22em] text-[color:var(--gs-ink)]">
-                  Intake loop
-                </span>
-              </div>
-              <div className="gs-automation-cadence-grid mt-2 grid gap-2 sm:grid-cols-3">
-                {snapshotCadence.map((cadence) => (
-                  <div
-                    key={`snapshot-cadence-${cadence.label}`}
-                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/95 px-2 py-1.5"
-                  >
-                    <div className="text-[9px] font-bold uppercase tracking-[0.22em] text-[color:var(--gs-muted)]">
-                      {cadence.label}
-                    </div>
-                    <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
-                      {cadence.value}
-                    </div>
-                    <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
-                      {cadence.detail}
-                    </div>
+                  <div className="mt-1 text-[11px] font-semibold text-[color:var(--gs-ink)]">
+                    {tile.value}
                   </div>
-                ))}
-              </div>
+                  <div className="mt-1 text-[9px] leading-relaxed text-[color:var(--gs-muted)]">
+                    {tile.detail}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
