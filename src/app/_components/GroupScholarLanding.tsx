@@ -135,6 +135,18 @@ type ArchiveItem = {
   desc: string;
 };
 
+type DebriefPrompt = {
+  title: string;
+  desc: string;
+  cue: string;
+};
+
+type DebriefFollowUp = {
+  title: string;
+  detail: string;
+  timeframe: string;
+};
+
 type SignalProfile = {
   code: string;
   headline: string;
@@ -903,6 +915,49 @@ export function GroupScholarLanding() {
     [],
   );
 
+  // Debrief prompts help teams close sessions with clarity and care.
+  const debriefPrompts: DebriefPrompt[] = useMemo(
+    () => [
+      {
+        title: "Boundary recap",
+        desc: "Name one moment you felt supported and one moment you want adjusted.",
+        cue: "2 minutes",
+      },
+      {
+        title: "Focus receipt",
+        desc: "List the work that moved forward, even if it was tiny.",
+        cue: "3 minutes",
+      },
+      {
+        title: "Future signal",
+        desc: "Decide which badge you want to start with next time.",
+        cue: "1 minute",
+      },
+    ],
+    [],
+  );
+
+  const debriefFollowUps: DebriefFollowUp[] = useMemo(
+    () => [
+      {
+        title: "Next-day check-in",
+        detail: "Hosts send a short pulse asking how the focus held overnight.",
+        timeframe: "Next morning",
+      },
+      {
+        title: "Note relay summary",
+        detail: "Scribes compile a clean summary so no one has to remember everything.",
+        timeframe: "Within 12 hours",
+      },
+      {
+        title: "Boundary refresh",
+        detail: "Room-level adjustments are logged before the next session opens.",
+        timeframe: "Before doors open",
+      },
+    ],
+    [],
+  );
+
   useLayoutEffect(() => {
     if (reduced) return;
     if (!rootRef.current) return;
@@ -1066,6 +1121,12 @@ export function GroupScholarLanding() {
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#faq">
               Conduct
             </a>
+            <a
+              className="transition hover:text-[color:var(--gs-ink)]"
+              href="#debrief"
+            >
+              Debrief
+            </a>
           </div>
 
           <Link
@@ -1212,6 +1273,7 @@ export function GroupScholarLanding() {
               "Signal Decoder",
               "Calibration Studio",
               "Focus Ledger",
+              "Debrief Lab",
             ]}
           />
         </section>
@@ -2332,6 +2394,85 @@ export function GroupScholarLanding() {
                 </p>
               </details>
             ))}
+          </div>
+        </section>
+
+        <section
+          id="debrief"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Debrief lab"
+            title="Close the loop without killing the vibe."
+            subtitle="A short, respectful debrief keeps the work documented and the boundaries clear."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div className="grid gap-4">
+              {debriefPrompts.map((prompt) => (
+                <article
+                  key={prompt.title}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">PROMPT</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {prompt.cue}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {prompt.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {prompt.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Follow-up cadence
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Notes that travel with you.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  Debrief notes are shared back to the room so no one has to guess
+                  what mattered.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {debriefFollowUps.map((item) => (
+                  <div
+                    key={item.title}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3"
+                  >
+                    <div className="text-sm font-bold text-[color:var(--gs-ink)]">
+                      {item.title}
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {item.detail}
+                    </div>
+                    <div className="mt-2 text-[11px] font-bold uppercase tracking-wide text-[color:var(--gs-muted)]">
+                      {item.timeframe}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Debrief logs are anonymized and cleared every two weeks.
+              </div>
+            </aside>
           </div>
         </section>
 

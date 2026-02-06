@@ -1,3 +1,8 @@
+2026-02-05 20:00:51 — Iteration 12
+- Added a Debrief Lab section with structured prompts and timing cues for closing sessions.
+- Built a follow-up cadence sidebar to show how notes, check-ins, and boundary refreshes travel.
+- Updated the hero navigation and marquee highlights to surface the new Debrief anchor.
+
 2026-02-05 19:56:27 — Iteration 11
 - Added the Focus Ledger section with metric cards, protocols, and weekly pulse callouts.
 - Introduced ledger data arrays to keep the new content structured and reusable.
