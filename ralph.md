@@ -1,3 +1,8 @@
+2026-02-05 19:17:12 — Iteration 5
+- Added a Vibe Matching section with track cards and signal codes to clarify room placement.
+- Expanded the hero navigation with a Matching anchor for faster wayfinding.
+- Documented new matching data models and signals for future edits.
+
 2026-02-06 19:15:01 — Iteration 4
 - Added an Admissions section that turns the application steps into a visible three-stage timeline.
 - Built a readiness checklist sidebar with a direct CTA to the intake form.
