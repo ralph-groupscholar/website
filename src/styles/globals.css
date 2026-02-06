@@ -57,13 +57,13 @@ html[data-automation="true"] {
 }
 
 html[data-automation="true"] header {
-  padding-top: 0.4rem;
-  padding-bottom: 0.6rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.5rem;
 }
 
 html[data-automation="true"] main {
-  padding-top: 1.4rem;
-  padding-bottom: 1.2rem;
+  padding-top: 1.2rem;
+  padding-bottom: 1rem;
 }
 
 html[data-automation="true"] .gs-automation-brief {
@@ -92,7 +92,7 @@ html[data-automation="true"] .gs-automation-rail > div {
 }
 
 html[data-automation="true"] .gs-automation-pulse {
-  padding: 0.5rem;
+  margin-top: 0.35rem !important;
 }
 
 html[data-automation="true"] .gs-automation-cadence {
@@ -111,11 +111,7 @@ html[data-automation="true"] .gs-automation-cadence-grid > div {
   padding-bottom: 0.35rem;
 }
 
-html[data-automation="true"] .gs-automation-signal {
-  margin-top: 0.35rem !important;
-}
-
-html[data-automation="true"] .gs-automation-signal > div {
+html[data-automation="true"] .gs-automation-pulse > div {
   padding-top: 0.35rem;
   padding-bottom: 0.35rem;
 }
