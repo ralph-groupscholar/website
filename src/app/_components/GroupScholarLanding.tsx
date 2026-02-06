@@ -475,7 +475,7 @@ export function GroupScholarLanding() {
   const [activeSection, setActiveSection] = useState(
     sectionIndex[0]?.id ?? "forecast",
   );
-  const [localTime, setLocalTime] = useState(() => new Date());
+  const [localTime, setLocalTime] = useState<Date | null>(null);
   const maxFocusLength = 160;
   const formattedTrack = track === "Any track" ? "any track" : track;
   const focusCount = focusNote.length;
@@ -538,20 +538,27 @@ export function GroupScholarLanding() {
       }),
     [],
   );
-  const localTimeLabel = timeFormatter.format(localTime);
-  const localDayLabel = dayFormatter.format(localTime);
+  const resolvedTime = localTime ?? new Date(0);
+  const localTimeLabel = localTime
+    ? timeFormatter.format(localTime)
+    : "—";
+  const localDayLabel = localTime ? dayFormatter.format(localTime) : "—";
   const nextReset = useMemo(() => {
-    const next = new Date(localTime);
+    const next = new Date(resolvedTime);
     next.setHours(9, 0, 0, 0);
-    const day = localTime.getDay();
+    const day = resolvedTime.getDay();
     const daysToMonday = (1 - day + 7) % 7;
-    const useSameDay = daysToMonday === 0 && localTime < next;
+    const useSameDay = daysToMonday === 0 && resolvedTime < next;
     if (!useSameDay) {
-      next.setDate(localTime.getDate() + (daysToMonday === 0 ? 7 : daysToMonday));
+      next.setDate(
+        resolvedTime.getDate() + (daysToMonday === 0 ? 7 : daysToMonday),
+      );
     }
     return next;
-  }, [localTime]);
-  const nextResetLabel = resetFormatter.format(nextReset);
+  }, [resolvedTime]);
+  const nextResetLabel = localTime
+    ? resetFormatter.format(nextReset)
+    : "—";
 
   const principles: Principle[] = useMemo(
     () => [
@@ -1216,7 +1223,8 @@ export function GroupScholarLanding() {
     }),
     [],
   );
-  const activeTrackPulse = trackPulseMap[track] ?? trackPulseMap["Any track"];
+  const activeTrackPulse =
+    trackPulseMap[track] ?? trackPulseMap["Any track"]!;
 
   // Signal codes make the room expectations explicit before anyone arrives.
   const signalCodes = useMemo(
@@ -1476,7 +1484,7 @@ export function GroupScholarLanding() {
 
   const activeSignalProfile =
     signalProfiles.find((profile) => profile.code === activeSignal) ??
-    signalProfiles[0];
+    signalProfiles[0]!;
   const activeCalibration =
     calibrationProfiles.find((profile) => profile.level === calibrationLevel) ??
     fallbackCalibration;
@@ -1549,6 +1557,7 @@ export function GroupScholarLanding() {
       programs,
     ],
   );
+  const snapshotCompact = snapshotHighlights.slice(0, 4);
 
   // Admissions steps clarify the application journey without breaking the satire.
   const applicationSteps: ApplicationStep[] = useMemo(
@@ -1781,17 +1790,21 @@ export function GroupScholarLanding() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    setLocalTime(new Date());
     const timer = window.setInterval(() => {
       setLocalTime(new Date());
     }, 60_000);
     return () => window.clearInterval(timer);
   }, []);
 
-  const isAutomation =
+  const isAutomationFlagged =
+    typeof document !== "undefined" &&
+    document.documentElement.dataset.automation === "true";
+  const isAutomationUA =
     typeof navigator !== "undefined" &&
     (navigator.webdriver === true ||
       /HeadlessChrome|Playwright/i.test(navigator.userAgent));
-  const shouldBypassMotion = reduced || isAutomation;
+  const shouldBypassMotion = reduced || isAutomationFlagged || isAutomationUA;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -1924,7 +1937,10 @@ export function GroupScholarLanding() {
       <div className="gs-snapshot-fixed pointer-events-none fixed inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,rgba(28,38,40,0.14)_1px,transparent_1px),linear-gradient(to_bottom,rgba(28,38,40,0.14)_1px,transparent_1px)] [background-size:42px_42px]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_12%,rgba(255,255,255,0.45),transparent_38%)]" />
 
-      <aside className="gs-snapshot-fixed pointer-events-none fixed bottom-6 right-6 z-20 hidden xl:block">
+      <aside
+        data-automation-hide
+        className="gs-snapshot-fixed pointer-events-none fixed bottom-6 right-6 z-20 hidden xl:block"
+      >
         <div className="pointer-events-auto w-64 rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-4 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)] backdrop-blur">
           <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
             <span>Field guide</span>
@@ -1993,7 +2009,10 @@ export function GroupScholarLanding() {
             </div>
           </div>
 
-          <div className="hidden items-center gap-5 text-sm font-bold text-[color:var(--gs-muted)] md:flex">
+          <div
+            data-automation-hide
+            className="hidden items-center gap-5 text-sm font-bold text-[color:var(--gs-muted)] md:flex"
+          >
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#wayfinding">
               Wayfinding
             </a>
@@ -2157,7 +2176,69 @@ export function GroupScholarLanding() {
         </nav>
 
         <section
+          aria-label="Snapshot cover"
+          data-automation-show="block"
+          className="mt-5 hidden"
+        >
+          <div className="rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[linear-gradient(140deg,rgba(255,255,255,0.92),rgba(249,241,227,0.86))] p-6 shadow-[0_26px_70px_-52px_rgba(28,38,40,0.9)]">
+            <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-[color:var(--gs-muted)]">
+              <span>Snapshot cover</span>
+              <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-[10px] font-bold tracking-[0.24em] text-[color:var(--gs-ink)]">
+                Automation view
+              </span>
+            </div>
+            <div className="mt-4 grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
+              <div>
+                <div className="text-xs font-bold uppercase tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Group Scholar
+                </div>
+                <h1 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold leading-tight text-[color:var(--gs-ink)]">
+                  Study like it’s serious, stay playful.
+                </h1>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  A compact capture of the rooms, signals, and outcomes so the
+                  full story stays visible without scrolling.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[color:var(--gs-muted)]">
+                  <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                    6 principles
+                  </span>
+                  <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                    4 programs
+                  </span>
+                  <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                    Consent-forward
+                  </span>
+                </div>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {snapshotCompact.map((item) => (
+                  <div
+                    key={`snapshot-${item.key}`}
+                    className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4 shadow-[0_16px_40px_-30px_rgba(28,38,40,0.8)]"
+                  >
+                    <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                      {item.label}
+                    </div>
+                    <div className="mt-2 text-base font-semibold text-[color:var(--gs-ink)]">
+                      {item.title}
+                    </div>
+                    <div className="mt-2 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {item.desc}
+                    </div>
+                    <div className="mt-3 text-[10px] font-bold uppercase tracking-[0.22em] text-[color:var(--gs-muted)]">
+                      {item.meta}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
           data-hero-surface
+          data-automation-hide
           className="relative mt-8 overflow-hidden rounded-[32px] border border-[color:var(--gs-ink-soft)] bg-[linear-gradient(150deg,rgba(255,255,255,0.9),rgba(249,241,227,0.82))] p-6 shadow-[0_34px_85px_-56px_rgba(28,38,40,0.95)] md:mt-10 md:p-10"
         >
           <div className="absolute -right-14 -top-12 size-60 rounded-full bg-[radial-gradient(circle_at_30%_35%,rgba(243,117,78,0.3),transparent_62%)] blur-2xl" />
@@ -2305,7 +2386,7 @@ export function GroupScholarLanding() {
           </div>
         </section>
 
-        <section className="mt-6 md:mt-8">
+        <section data-automation-hide className="mt-6 md:mt-8">
           <Marquee
             items={[
               "Department of Applied Distraction",
@@ -2336,18 +2417,18 @@ export function GroupScholarLanding() {
         <section
           aria-label="Snapshot digest"
           data-automation-show="block"
-          className="mt-6 hidden md:mt-8"
+          className="mt-6 md:mt-8"
         >
           <div className="rounded-[32px] border border-[color:var(--gs-ink-soft)] bg-[linear-gradient(140deg,rgba(255,255,255,0.94),rgba(249,241,227,0.86))] p-6 shadow-[0_26px_70px_-52px_rgba(28,38,40,0.9)] md:p-8">
             <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-[color:var(--gs-muted)]">
               <span>Snapshot digest</span>
               <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1 text-[10px] font-bold tracking-[0.24em] text-[color:var(--gs-ink)]">
-                Automation view
+                Live report
               </span>
             </div>
             <div className="mt-4 text-pretty text-sm font-semibold text-[color:var(--gs-muted)]">
-              A compact readout so the entire story stays visible in a single
-              capture.
+              A compact readout of the board, signals, and outcomes before you
+              scroll the full syllabus.
             </div>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
               {snapshotHighlights.map((item) => (

@@ -354,3 +354,9 @@
 - Captured a fresh Playwright full-page screenshot of groupscholar.com; the headless capture still shows oversized blank bands with repeated hero slices, so long-scroll content is not reliably visible.
 - Sketched creative follow-ups: add an automation-only snapshot cover, keep the hero digest visible for normal users, and tighten the nav/hero footprint for headless captures.
 - Added a compact automation snapshot cover, hid the oversized hero + marquee in automation mode, and kept the snapshot digest visible in the standard layout while improving automation detection.
+
+2026-02-06 00:47:30 — Iteration 58
+- Reviewed current codebase and recent git history for context.
+- Captured a Playwright full-page screenshot of groupscholar.com; the headless capture still shows oversized blank bands with repeated hero slices and missing mid-page content.
+- Sketched creative follow-ups: enforce a true automation-hide rule for long sections, keep an automation-ready snapshot digest above the fold, and streamline the floating field guide for headless runs.
+- Added an automation-only hide rule for long sections, kept the snapshot digest visible in automation, and removed the floating field guide from automation captures.
