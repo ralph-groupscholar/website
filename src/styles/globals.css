@@ -111,20 +111,11 @@ html[data-automation="true"] .gs-automation-cadence-grid > div {
   padding-bottom: 0.35rem;
 }
 
-html[data-automation="true"] .gs-automation-footer {
+html[data-automation="true"] .gs-automation-signal {
   margin-top: 0.35rem !important;
 }
 
-html[data-automation="true"] .gs-automation-footer > div {
-  padding-top: 0.35rem;
-  padding-bottom: 0.35rem;
-}
-
-html[data-automation="true"] .gs-automation-ticker {
-  margin-top: 0.35rem !important;
-}
-
-html[data-automation="true"] .gs-automation-ticker > div {
+html[data-automation="true"] .gs-automation-signal > div {
   padding-top: 0.35rem;
   padding-bottom: 0.35rem;
 }
