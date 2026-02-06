@@ -63,6 +63,18 @@ type CalibrationProfile = {
   duration: string;
 };
 
+type ResetStep = {
+  badge: string;
+  title: string;
+  desc: string;
+  cue: string;
+};
+
+type ResetTool = {
+  title: string;
+  desc: string;
+};
+
 type LedgerMetric = {
   label: string;
   value: string;
@@ -833,6 +845,54 @@ export function GroupScholarLanding() {
     [],
   );
 
+  const resetSteps: ResetStep[] = useMemo(
+    () => [
+      {
+        badge: "Reset 01",
+        title: "Raise the Pause badge",
+        desc: "Anyone can trigger a reset. The host pauses the room and gets every screen face-down.",
+        cue: "30 seconds",
+      },
+      {
+        badge: "Reset 02",
+        title: "Re-state the boundary",
+        desc: "We name the active signal, the noise level, and any new limits. Opt-in only.",
+        cue: "2 minutes",
+      },
+      {
+        badge: "Reset 03",
+        title: "Commit or exit",
+        desc: "Each person chooses: rejoin, shift tracks, or take a graceful exit.",
+        cue: "5 minutes",
+      },
+      {
+        badge: "Reset 04",
+        title: "Log the shift",
+        desc: "Hosts mark the reset so the next session learns from the moment.",
+        cue: "1 minute",
+      },
+    ],
+    [],
+  );
+
+  const resetTools: ResetTool[] = useMemo(
+    () => [
+      {
+        title: "Signal script cards",
+        desc: "Short phrases the host reads so nobody has to improvise consent language.",
+      },
+      {
+        title: "Seat shuffle tokens",
+        desc: "Move to a new table without explanation when the energy changes.",
+      },
+      {
+        title: "Exit slips",
+        desc: "A quiet way to leave without interrupting the room.",
+      },
+    ],
+    [],
+  );
+
   const ledgerMetrics: LedgerMetric[] = useMemo(
     () => [
       {
@@ -1282,6 +1342,9 @@ export function GroupScholarLanding() {
             >
               Calibration
             </a>
+            <a className="transition hover:text-[color:var(--gs-ink)]" href="#reset">
+              Reset
+            </a>
             <a className="transition hover:text-[color:var(--gs-ink)]" href="#ledger">
               Ledger
             </a>
@@ -1461,6 +1524,7 @@ export function GroupScholarLanding() {
               "Outcome Map",
               "Signal Decoder",
               "Calibration Studio",
+              "Reset Protocol",
               "Focus Ledger",
               "Debrief Lab",
               "Invite Packet",
@@ -2297,6 +2361,83 @@ export function GroupScholarLanding() {
                 recalibrate in under two minutes.
               </div>
             </article>
+          </div>
+        </section>
+
+        <section
+          id="reset"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Reset protocol"
+            title="When focus slips, we reset the room."
+            subtitle="A shared script that keeps consent clear, energy calm, and exits gentle."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div className="grid gap-4">
+              {resetSteps.map((step) => (
+                <article
+                  key={step.title}
+                  data-stagger-item
+                  className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                >
+                  <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                    <span className="tracking-[0.24em]">{step.badge}</span>
+                    <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                      {step.cue}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                    {step.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Reset kit
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Tools that keep the moment kind.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  Resets are gentle, fast, and opt-in. The goal is clarity, not
+                  control.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {resetTools.map((tool) => (
+                  <div
+                    key={tool.title}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4"
+                  >
+                    <div className="text-sm font-bold text-[color:var(--gs-ink)]">
+                      {tool.title}
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-[color:var(--gs-muted)]">
+                      {tool.desc}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-4 text-xs font-bold text-[color:var(--gs-muted)]">
+                Host line: &quot;Pause badge is up. We reset now. Opt in when
+                you&apos;re ready.&quot;
+              </div>
+            </aside>
           </div>
         </section>
 
