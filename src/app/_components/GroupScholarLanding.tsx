@@ -3904,10 +3904,10 @@ export function GroupScholarLanding() {
                     Top track: {topTrackLabel}
                   </div>
                   <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
-                    Top time zone: {topTimeZoneLabel}
+                    Top source: {topSourceLabel}
                   </div>
                   <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
-                    Top source: {topSourceLabel}
+                    Top time zone: {topTimeZoneLabel}
                   </div>
                   <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
                     Locale pulse: {topLocaleLabel}
