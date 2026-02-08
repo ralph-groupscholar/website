@@ -33,3 +33,6 @@
 
 ## 2026-02-08
 - Extended the intake pulse to include top source + source mix and surfaced the new source breakdown in the live pulse panel.
+
+## 2026-02-08
+- Added 7-day intake momentum metrics (daily average + trend) to the intake pulse feed and surfaced them in the Studio pulse panel.

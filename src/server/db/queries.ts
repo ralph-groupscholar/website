@@ -15,6 +15,10 @@ export type ImpactSignalRecord = {
 export type IntakePulseRecord = {
   total: number;
   last24h: number;
+  last7d: number;
+  prev7d: number;
+  dailyAverage7d: number;
+  trendPercent7d: number;
   topTrack: string | null;
   lastSubmittedAt: Date | null;
   trackMix: Array<{ track: string; count: number }>;
@@ -33,6 +37,11 @@ export type IntakeFeedRecord = {
   submittedAt: Date;
   timeZone: string | null;
   locale: string | null;
+};
+
+export type IntakeTimelineRecord = {
+  day: Date;
+  count: number;
 };
 
 export async function listImpactSignals(
@@ -77,6 +86,16 @@ export async function getIntakePulse(db: WebsiteDb): Promise<IntakePulseRecord> 
     .select({ count: sql<number>`count(*)` })
     .from(intakeIntents)
     .where(sql`submitted_at >= now() - interval '24 hours'`);
+  const last7dRow = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(intakeIntents)
+    .where(sql`submitted_at >= now() - interval '7 days'`);
+  const prev7dRow = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(intakeIntents)
+    .where(
+      sql`submitted_at >= now() - interval '14 days' and submitted_at < now() - interval '7 days'`,
+    );
   const latestRow = await db
     .select({
       latest: sql<Date | null>`max(${intakeIntents.submittedAt})`,
@@ -137,9 +156,18 @@ export async function getIntakePulse(db: WebsiteDb): Promise<IntakePulseRecord> 
     .from(intakeIntents)
     .where(focusFilter);
 
+  const last7d = Number(last7dRow[0]?.count ?? 0);
+  const prev7d = Number(prev7dRow[0]?.count ?? 0);
+  const trendBase = prev7d === 0 ? Math.max(last7d, 1) : prev7d;
+  const trendPercent = Math.round(((last7d - prev7d) / trendBase) * 100);
+
   return {
     total: Number(totalRow[0]?.count ?? 0),
     last24h: Number(last24hRow[0]?.count ?? 0),
+    last7d,
+    prev7d,
+    dailyAverage7d: Math.round((last7d / 7) * 10) / 10,
+    trendPercent7d: trendPercent,
     topTrack: trackRows[0]?.track ?? null,
     lastSubmittedAt: latestRow[0]?.latest ?? null,
     trackMix: trackRows.map((row) => ({
@@ -174,4 +202,27 @@ export async function listRecentIntakeIntents(
     .from(intakeIntents)
     .orderBy(desc(intakeIntents.submittedAt))
     .limit(limit);
+}
+
+export async function listIntakeTimeline(
+  db: WebsiteDb,
+  days = 7,
+): Promise<IntakeTimelineRecord[]> {
+  const windowDays = Math.max(1, Math.floor(days));
+  const rows = await db
+    .select({
+      day: sql<Date>`date_trunc('day', ${intakeIntents.submittedAt})`,
+      count: sql<number>`count(*)`,
+    })
+    .from(intakeIntents)
+    .where(
+      sql`${intakeIntents.submittedAt} >= now() - (${windowDays - 1}) * interval '1 day'`,
+    )
+    .groupBy(sql`date_trunc('day', ${intakeIntents.submittedAt})`)
+    .orderBy(sql`date_trunc('day', ${intakeIntents.submittedAt})`);
+
+  return rows.map((row) => ({
+    day: row.day,
+    count: Number(row.count ?? 0),
+  }));
 }
