@@ -173,6 +173,18 @@ type IntakePulse = {
   topTrack: string | null;
   lastSubmittedAt: string | null;
   trackMix: Array<{ track: string; count: number }>;
+  topTimeZone: string | null;
+  topLocale: string | null;
+  focusNotes: number;
+  avgFocusLength: number;
+};
+
+type IntakeFeedItem = {
+  id: number | string;
+  track: string;
+  source: string;
+  region: string | null;
+  submittedAt: string;
 };
 
 type RelayCheckpoint = {
@@ -453,7 +465,47 @@ const fallbackIntakePulse: IntakePulse = {
     { track: "Shared Draft", count: 18 },
     { track: "After Hours", count: 14 },
   ],
+  topTimeZone: "America/New_York",
+  topLocale: "en-US",
+  focusNotes: 18,
+  avgFocusLength: 64,
 };
+
+const fallbackIntakeFeed: IntakeFeedItem[] = [
+  {
+    id: "feed-1",
+    track: "Quiet Focus",
+    source: "website",
+    region: "Brooklyn",
+    submittedAt: "2026-02-08T16:12:00.000Z",
+  },
+  {
+    id: "feed-2",
+    track: "Shared Draft",
+    source: "apply-section",
+    region: "Oakland",
+    submittedAt: "2026-02-08T15:46:00.000Z",
+  },
+  {
+    id: "feed-3",
+    track: "After Hours",
+    source: "website",
+    region: "Chicago",
+    submittedAt: "2026-02-08T14:58:00.000Z",
+  },
+  {
+    id: "feed-4",
+    track: "Quiet Focus",
+    source: "landing",
+    region: "Atlanta",
+    submittedAt: "2026-02-08T14:22:00.000Z",
+  },
+];
+
+const formatSourceLabel = (value: string) =>
+  value
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 
 export function GroupScholarLanding() {
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -522,6 +574,11 @@ export function GroupScholarLanding() {
   const [intakePulse, setIntakePulse] =
     useState<IntakePulse>(fallbackIntakePulse);
   const [intakePulseStatus, setIntakePulseStatus] = useState<
+    "idle" | "loading" | "error"
+  >("idle");
+  const [intakeFeed, setIntakeFeed] =
+    useState<IntakeFeedItem[]>(fallbackIntakeFeed);
+  const [intakeFeedStatus, setIntakeFeedStatus] = useState<
     "idle" | "loading" | "error"
   >("idle");
   const [clientMeta, setClientMeta] = useState({
@@ -638,6 +695,12 @@ export function GroupScholarLanding() {
     ? `${signalDateFormatter.format(intakePulseLastSubmitted)} • ${timeFormatter.format(intakePulseLastSubmitted)}`
     : "—";
   const topTrackLabel = intakePulse.topTrack ?? "Quiet Focus";
+  const topTimeZoneLabel = intakePulse.topTimeZone ?? "America/New_York";
+  const topLocaleLabel = intakePulse.topLocale ?? "en-US";
+  const focusNoteSummary =
+    intakePulse.focusNotes > 0
+      ? `${intakePulse.focusNotes} notes • avg ${intakePulse.avgFocusLength} chars`
+      : "No focus notes yet";
   const impactSignalStatusLabel =
     impactSignalStatus === "loading"
       ? "Syncing impact signals..."
@@ -664,6 +727,19 @@ export function GroupScholarLanding() {
         new Date(latestImpactSignal.reportedAt),
       )}`
     : "—";
+  const intakeFeedEntries = useMemo(() => {
+    return intakeFeed.slice(0, 4).map((entry) => {
+      const submittedAt = new Date(entry.submittedAt);
+      const timestamp = Number.isNaN(submittedAt.getTime())
+        ? "—"
+        : `${signalDateFormatter.format(submittedAt)} • ${timeFormatter.format(submittedAt)}`;
+      return {
+        ...entry,
+        timestamp,
+        regionLabel: entry.region ?? "Remote",
+      };
+    });
+  }, [intakeFeed, signalDateFormatter, timeFormatter]);
 
   const principles: Principle[] = useMemo(
     () => [
@@ -2109,6 +2185,38 @@ export function GroupScholarLanding() {
     };
 
     loadPulse();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    const loadFeed = async () => {
+      setIntakeFeedStatus("loading");
+      try {
+        const response = await fetch("/api/intake-feed");
+        if (!response.ok) {
+          throw new Error("Failed to load intake feed.");
+        }
+        const data = (await response.json()) as {
+          feed?: IntakeFeedItem[];
+        };
+        if (!active) return;
+        if (Array.isArray(data?.feed)) {
+          setIntakeFeed(data.feed);
+          setIntakeFeedStatus("idle");
+        } else {
+          setIntakeFeedStatus("error");
+        }
+      } catch (error) {
+        if (active) {
+          setIntakeFeedStatus("error");
+        }
+      }
+    };
+
+    loadFeed();
     return () => {
       active = false;
     };
@@ -3783,6 +3891,12 @@ export function GroupScholarLanding() {
                   <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
                     Top track: {topTrackLabel}
                   </div>
+                  <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                    Top time zone: {topTimeZoneLabel}
+                  </div>
+                  <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                    Locale pulse: {topLocaleLabel}
+                  </div>
                   <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-semibold text-[color:var(--gs-muted)]">
                     {intakePulse.trackMix.slice(0, 3).map((entry) => (
                       <span
@@ -3793,12 +3907,54 @@ export function GroupScholarLanding() {
                       </span>
                     ))}
                   </div>
+                  <div className="mt-3 text-[11px] font-semibold text-[color:var(--gs-muted)]">
+                    Focus notes: {focusNoteSummary}
+                  </div>
                   <div className="mt-3 text-[10px] font-bold uppercase tracking-[0.22em] text-[color:var(--gs-muted)]">
                     Last signal {intakePulseLastLabel}
                   </div>
                   {intakePulseStatus === "error" && (
                     <div className="mt-2 text-[11px] font-semibold text-[color:var(--gs-accent)]">
                       Live pulse unavailable, showing baseline.
+                    </div>
+                  )}
+                </div>
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4">
+                  <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    <span>Recent intents</span>
+                    <span className="font-mono text-[color:var(--gs-ink)]">
+                      {intakeFeedEntries.length}
+                    </span>
+                  </div>
+                  <div className="mt-3 grid gap-2">
+                    {intakeFeedEntries.length ? (
+                      intakeFeedEntries.map((entry) => (
+                        <div
+                          key={`intake-feed-${entry.id}`}
+                          className="flex items-center justify-between gap-3 rounded-xl border border-[color:var(--gs-ink-soft)]/70 bg-white/90 px-3 py-2"
+                        >
+                          <div>
+                            <div className="text-xs font-semibold text-[color:var(--gs-ink)]">
+                              {entry.track}
+                            </div>
+                            <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--gs-muted)]">
+                              {entry.regionLabel} · {entry.source}
+                            </div>
+                          </div>
+                          <div className="text-[10px] font-semibold text-[color:var(--gs-muted)]">
+                            {entry.timestamp}
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="rounded-xl border border-dashed border-[color:var(--gs-ink-soft)]/80 bg-white/80 px-3 py-3 text-[11px] font-semibold text-[color:var(--gs-muted)]">
+                        No recent intents logged yet.
+                      </div>
+                    )}
+                  </div>
+                  {intakeFeedStatus === "error" && (
+                    <div className="mt-2 text-[11px] font-semibold text-[color:var(--gs-accent)]">
+                      Live intake feed unavailable, showing baseline.
                     </div>
                   )}
                 </div>
