@@ -36,3 +36,7 @@
 
 ## 2026-02-08
 - Added 7-day intake momentum metrics (daily average + trend) to the intake pulse feed and surfaced them in the Studio pulse panel.
+
+## 2026-02-08
+- Added a 7-day intake cadence timeline sourced from production data, plus a new API endpoint to deliver filled daily counts for the Signal window.
+- Attempted Vercel production deploy; blocked by free tier deployment limit (api-deployments-free-per-day).
