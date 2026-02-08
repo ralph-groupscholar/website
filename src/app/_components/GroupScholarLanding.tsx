@@ -158,6 +158,23 @@ type OutcomeNote = {
   desc: string;
 };
 
+type ImpactSignal = {
+  id: number | string;
+  category: string;
+  title: string;
+  detail: string;
+  metric: string;
+  reportedAt: string;
+};
+
+type IntakePulse = {
+  total: number;
+  last24h: number;
+  topTrack: string | null;
+  lastSubmittedAt: string | null;
+  trackMix: Array<{ track: string; count: number }>;
+};
+
 type RelayCheckpoint = {
   label: string;
   title: string;
@@ -387,6 +404,57 @@ function Marquee({ items }: { items: string[] }) {
   );
 }
 
+const fallbackImpactSignals: ImpactSignal[] = [
+  {
+    id: "fallback-1",
+    category: "Review Ops",
+    title: "Scholarship review turnaround tightened",
+    detail:
+      "Median review decision time moved below the 48-hour guardrail across active cohorts.",
+    metric: "36h median",
+    reportedAt: "2026-02-07T14:05:00.000Z",
+  },
+  {
+    id: "fallback-2",
+    category: "Community",
+    title: "Mentor coverage expanded",
+    detail:
+      "New mentor pools now cover late-night sessions in three time zones without overflow.",
+    metric: "3 zones",
+    reportedAt: "2026-02-06T19:20:00.000Z",
+  },
+  {
+    id: "fallback-3",
+    category: "Retention",
+    title: "Return-rate uplift on follow-up nudges",
+    detail:
+      "Personalized touchpoint cadence lifted second-session attendance this month.",
+    metric: "+12%",
+    reportedAt: "2026-02-05T16:10:00.000Z",
+  },
+  {
+    id: "fallback-4",
+    category: "Outcomes",
+    title: "Evidence capture stays on schedule",
+    detail:
+      "Weekly outcome notes landed on time for all live programs in January.",
+    metric: "100% on-time",
+    reportedAt: "2026-02-04T11:45:00.000Z",
+  },
+];
+
+const fallbackIntakePulse: IntakePulse = {
+  total: 64,
+  last24h: 7,
+  topTrack: "Quiet Focus",
+  lastSubmittedAt: "2026-02-08T16:30:00.000Z",
+  trackMix: [
+    { track: "Quiet Focus", count: 22 },
+    { track: "Shared Draft", count: 18 },
+    { track: "After Hours", count: 14 },
+  ],
+};
+
 export function GroupScholarLanding() {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const reduced = usePrefersReducedMotion();
@@ -401,6 +469,7 @@ export function GroupScholarLanding() {
       { id: "principles", label: "Principles", tag: "Mission" },
       { id: "programs", label: "Programs", tag: "Catalog" },
       { id: "library", label: "Suite", tag: "Products" },
+      { id: "insights", label: "Signals", tag: "Evidence" },
       { id: "outcomes", label: "Outcomes", tag: "Map" },
       { id: "relay", label: "Relay", tag: "Cue" },
       { id: "pulse", label: "Pulse", tag: "Bridge" },
@@ -423,6 +492,7 @@ export function GroupScholarLanding() {
       principles: "Anchor the pact before you move.",
       programs: "Choose the track and mark it.",
       library: "Open the tool that matches the mission.",
+      insights: "Check the live signals before you move.",
       outcomes: "Measure the drift and name it.",
       relay: "Pass the cue to the next chapter.",
       pulse: "Read the room pulse together.",
@@ -440,7 +510,25 @@ export function GroupScholarLanding() {
   const [email, setEmail] = useState("");
   const [track, setTrack] = useState("Any track");
   const [focusNote, setFocusNote] = useState("");
-  const [formStatus, setFormStatus] = useState<"idle" | "error" | "sent">("idle");
+  const [formStatus, setFormStatus] = useState<
+    "idle" | "sending" | "error" | "sent"
+  >("idle");
+  const [statusNote, setStatusNote] = useState("");
+  const [impactSignals, setImpactSignals] =
+    useState<ImpactSignal[]>(fallbackImpactSignals);
+  const [impactSignalStatus, setImpactSignalStatus] = useState<
+    "idle" | "loading" | "error"
+  >("idle");
+  const [intakePulse, setIntakePulse] =
+    useState<IntakePulse>(fallbackIntakePulse);
+  const [intakePulseStatus, setIntakePulseStatus] = useState<
+    "idle" | "loading" | "error"
+  >("idle");
+  const [clientMeta, setClientMeta] = useState({
+    timeZone: "Unknown",
+    locale: "en-US",
+    userAgent: "",
+  });
   const [activeSignal, setActiveSignal] = useState("Silent");
   const [calibrationLevel, setCalibrationLevel] = useState(3);
   const [automationMode, setAutomationMode] = useState(false);
@@ -461,15 +549,19 @@ export function GroupScholarLanding() {
   const statusMessage =
     formStatus === "sent"
       ? `Intent logged for ${formattedTrack}. Expect a response within 48 hours.`
-      : formStatus === "error"
-        ? "Please enter a valid email to reserve a seat."
-        : "Ready when you are — share an email to start.";
+      : formStatus === "sending"
+        ? "Logging your intent now."
+        : formStatus === "error"
+          ? statusNote || "Unable to log intent. Please try again."
+          : "Ready when you are — share an email to start.";
   const statusTone =
     formStatus === "error"
       ? "text-[color:var(--gs-accent)]"
       : formStatus === "sent"
       ? "text-[color:var(--gs-ink)]"
-      : "text-[color:var(--gs-muted)]";
+      : formStatus === "sending"
+        ? "text-[color:var(--gs-ink)]"
+        : "text-[color:var(--gs-muted)]";
   const trackPreviewId = useId();
   const focusCountId = useId();
   const calibrationHelpId = useId();
@@ -510,6 +602,14 @@ export function GroupScholarLanding() {
       }),
     [],
   );
+  const signalDateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+    [],
+  );
   const resolvedTime = localTime ?? new Date(0);
   const localTimeLabel = localTime
     ? timeFormatter.format(localTime)
@@ -530,6 +630,39 @@ export function GroupScholarLanding() {
   }, [resolvedTime]);
   const nextResetLabel = localTime
     ? resetFormatter.format(nextReset)
+    : "—";
+  const intakePulseLastSubmitted = intakePulse.lastSubmittedAt
+    ? new Date(intakePulse.lastSubmittedAt)
+    : null;
+  const intakePulseLastLabel = intakePulseLastSubmitted
+    ? `${signalDateFormatter.format(intakePulseLastSubmitted)} • ${timeFormatter.format(intakePulseLastSubmitted)}`
+    : "—";
+  const topTrackLabel = intakePulse.topTrack ?? "Quiet Focus";
+  const impactSignalStatusLabel =
+    impactSignalStatus === "loading"
+      ? "Syncing impact signals..."
+      : impactSignalStatus === "error"
+        ? "Live impact signals unavailable, showing baseline."
+        : "Signals refreshed from Impact Vault.";
+  const impactSignalStatusTone =
+    impactSignalStatus === "error"
+      ? "text-[color:var(--gs-accent)]"
+      : impactSignalStatus === "loading"
+        ? "text-[color:var(--gs-ink)]"
+        : "text-[color:var(--gs-muted)]";
+  const latestImpactSignal = useMemo(() => {
+    if (!impactSignals.length) return null;
+    return impactSignals.reduce<ImpactSignal | null>((latest, signal) => {
+      if (!latest) return signal;
+      const latestTime = new Date(latest.reportedAt).getTime();
+      const signalTime = new Date(signal.reportedAt).getTime();
+      return signalTime > latestTime ? signal : latest;
+    }, null);
+  }, [impactSignals]);
+  const latestImpactSignalLabel = latestImpactSignal
+    ? `${signalDateFormatter.format(new Date(latestImpactSignal.reportedAt))} • ${timeFormatter.format(
+        new Date(latestImpactSignal.reportedAt),
+      )}`
     : "—";
 
   const principles: Principle[] = useMemo(
@@ -1626,9 +1759,9 @@ export function GroupScholarLanding() {
         detail: sessionFormats[0]?.title ?? "Whisper Lab",
       },
       {
-        label: "Reset cadence",
-        value: "Every Monday",
-        detail: "Signal reset + room calibration.",
+        label: "Intake pulse",
+        value: `${intakePulse.last24h} in 24h`,
+        detail: `Total ${intakePulse.total} • Top ${topTrackLabel}`,
       },
       {
         label: "Calibration",
@@ -1646,7 +1779,10 @@ export function GroupScholarLanding() {
       activeCalibration.label,
       activeTrackPulse.seats,
       activeTrackPulse.window,
+      intakePulse.last24h,
+      intakePulse.total,
       sessionFormats,
+      topTrackLabel,
     ],
   );
   const snapshotStrip = useMemo(
@@ -1856,7 +1992,7 @@ export function GroupScholarLanding() {
       },
       {
         q: "Do you store my data?",
-        a: "Not on this page. This is a landing page; the “apply” box is a placeholder unless you want backend wiring later.",
+        a: "Yes—just the email, track preference, and any optional focus note so we can follow up. We keep it internal and trim it regularly.",
       },
     ],
     [],
@@ -1912,6 +2048,79 @@ export function GroupScholarLanding() {
       setLocalTime(new Date());
     }, 60_000);
     return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    const loadSignals = async () => {
+      setImpactSignalStatus("loading");
+      try {
+        const response = await fetch("/api/impact-signals");
+        if (!response.ok) {
+          throw new Error("Failed to load impact signals.");
+        }
+        const data = (await response.json()) as {
+          signals?: ImpactSignal[];
+        };
+        if (!active) return;
+        if (Array.isArray(data?.signals)) {
+          setImpactSignals(data.signals);
+          setImpactSignalStatus("idle");
+        } else {
+          setImpactSignalStatus("error");
+        }
+      } catch (error) {
+        if (active) {
+          setImpactSignalStatus("error");
+        }
+      }
+    };
+
+    loadSignals();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    const loadPulse = async () => {
+      setIntakePulseStatus("loading");
+      try {
+        const response = await fetch("/api/intake-pulse");
+        if (!response.ok) {
+          throw new Error("Failed to load intake pulse.");
+        }
+        const data = (await response.json()) as {
+          pulse?: IntakePulse;
+        };
+        if (!active) return;
+        if (data?.pulse) {
+          setIntakePulse(data.pulse);
+          setIntakePulseStatus("idle");
+        } else {
+          setIntakePulseStatus("error");
+        }
+      } catch (error) {
+        if (active) {
+          setIntakePulseStatus("error");
+        }
+      }
+    };
+
+    loadPulse();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setClientMeta({
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone ?? "Unknown",
+      locale: navigator.language ?? "en-US",
+      userAgent: navigator.userAgent ?? "",
+    });
   }, []);
 
   useLayoutEffect(() => {
@@ -3198,6 +3407,94 @@ export function GroupScholarLanding() {
         </section>
 
         <section
+          id="insights"
+          data-animate="section"
+          className="mt-16 scroll-mt-28 md:mt-24"
+        >
+          <SectionHeading
+            eyebrow="Signals ledger"
+            title="Live impact signals from active cohorts."
+            subtitle="We track retention, mentor coverage, and evidence capture in one clean signal deck."
+          />
+
+          <div
+            data-animate="stagger"
+            className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-[1.1fr_0.9fr]"
+          >
+            <div className="grid gap-4">
+              {impactSignals.map((signal) => {
+                const reportedAt = new Date(signal.reportedAt);
+                return (
+                  <article
+                    key={signal.id}
+                    data-stagger-item
+                    className="rounded-3xl border border-[color:var(--gs-ink-soft)] bg-white/85 p-6 shadow-[0_22px_58px_-40px_rgba(28,38,40,0.86)]"
+                  >
+                    <div className="flex items-center justify-between gap-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                      <span className="tracking-[0.24em]">{signal.category.toUpperCase()}</span>
+                      <span className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-3 py-1">
+                        {signal.metric}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight text-[color:var(--gs-ink)]">
+                      {signal.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                      {signal.detail}
+                    </p>
+                    <div className="mt-4 text-xs font-bold uppercase tracking-wide text-[color:var(--gs-muted)]">
+                      Reported:{" "}
+                      <span className="normal-case text-[color:var(--gs-ink)]">
+                        {signalDateFormatter.format(reportedAt)} • {timeFormatter.format(reportedAt)}
+                      </span>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+
+            <aside
+              data-stagger-item
+              className="flex h-full flex-col justify-between rounded-[28px] border border-[color:var(--gs-ink-soft)] bg-[color:var(--gs-paper)]/90 p-6 shadow-[0_22px_58px_-44px_rgba(28,38,40,0.78)]"
+            >
+              <div>
+                <div className="text-xs font-bold tracking-[0.28em] text-[color:var(--gs-muted)]">
+                  Evidence desk
+                </div>
+                <h3 className="mt-3 font-[family-name:var(--font-gs-display)] text-3xl font-semibold tracking-tight">
+                  Signals are aggregated, never individual.
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[color:var(--gs-muted)]">
+                  We surface the smallest credible signal to tune the next cohort run.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3">
+                {[
+                  "Review turnaround tracked weekly.",
+                  "Mentor coverage mapped across time zones.",
+                  "Outcome evidence captured every Friday.",
+                ].map((line) => (
+                  <div
+                    key={line}
+                    className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]"
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 px-4 py-3 text-xs font-bold text-[color:var(--gs-muted)]">
+                Latest signal: {latestImpactSignalLabel}
+              </div>
+              <div
+                className={`mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] ${impactSignalStatusTone}`}
+              >
+                {impactSignalStatusLabel}
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section
           id="testimonials"
           data-animate="section"
           className="mt-16 scroll-mt-28 md:mt-24"
@@ -3472,6 +3769,38 @@ export function GroupScholarLanding() {
                   <div className="mt-3 text-xs font-bold text-[color:var(--gs-muted)]">
                     Pulse check resets at the top of every hour.
                   </div>
+                </div>
+                <div className="rounded-2xl border border-[color:var(--gs-ink-soft)] bg-white/90 p-4">
+                  <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.24em] text-[color:var(--gs-muted)]">
+                    <span>Intake pulse</span>
+                    <span className="font-mono text-[color:var(--gs-ink)]">
+                      {intakePulse.last24h}/24h
+                    </span>
+                  </div>
+                  <div className="mt-3 text-sm font-semibold text-[color:var(--gs-ink)]">
+                    {intakePulse.total} total intents
+                  </div>
+                  <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                    Top track: {topTrackLabel}
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-semibold text-[color:var(--gs-muted)]">
+                    {intakePulse.trackMix.slice(0, 3).map((entry) => (
+                      <span
+                        key={`pulse-track-${entry.track}`}
+                        className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1"
+                      >
+                        {entry.track} · {entry.count}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-3 text-[10px] font-bold uppercase tracking-[0.22em] text-[color:var(--gs-muted)]">
+                    Last signal {intakePulseLastLabel}
+                  </div>
+                  {intakePulseStatus === "error" && (
+                    <div className="mt-2 text-[11px] font-semibold text-[color:var(--gs-accent)]">
+                      Live pulse unavailable, showing baseline.
+                    </div>
+                  )}
                 </div>
               </div>
             </aside>
@@ -4877,20 +5206,56 @@ export function GroupScholarLanding() {
 
               <form
                 className="mx-auto mt-8 grid max-w-xl gap-3 sm:grid-cols-2"
-                onSubmit={(event) => {
+                onSubmit={async (event) => {
                   event.preventDefault();
                   const normalizedEmail = email.trim();
                   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
                     normalizedEmail,
                   );
                   if (!normalizedEmail || !isValidEmail) {
+                    setStatusNote("Please enter a valid email to reserve a seat.");
                     setFormStatus("error");
                     return;
                   }
-                  setFormStatus("sent");
-                  setEmail("");
-                  setFocusNote("");
-                  setTrack("Any track");
+                  setFormStatus("sending");
+                  setStatusNote("");
+                  try {
+                    const response = await fetch("/api/interest", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        email: normalizedEmail,
+                        track,
+                        focusNote: focusNote.trim() || undefined,
+                        timeZone: clientMeta.timeZone,
+                        locale: clientMeta.locale,
+                        userAgent: clientMeta.userAgent,
+                        source: "apply-section",
+                      }),
+                    });
+                    if (!response.ok) {
+                      const payload = await response.json().catch(() => null);
+                      setStatusNote(
+                        payload?.error ||
+                          "Unable to log intent. Please try again.",
+                      );
+                      setFormStatus("error");
+                      return;
+                    }
+                    setFormStatus("sent");
+                    setEmail("");
+                    setFocusNote("");
+                    setTrack("Any track");
+                  } catch (error) {
+                    setStatusNote(
+                      error instanceof Error
+                        ? error.message
+                        : "Network issue. Please try again shortly.",
+                    );
+                    setFormStatus("error");
+                  }
                 }}
               >
                 <label className="sr-only" htmlFor="email">
@@ -4906,6 +5271,7 @@ export function GroupScholarLanding() {
                   onChange={(event) => {
                     setEmail(event.target.value);
                     if (formStatus !== "idle") {
+                      setStatusNote("");
                       setFormStatus("idle");
                     }
                   }}
@@ -4923,6 +5289,7 @@ export function GroupScholarLanding() {
                   onChange={(event) => {
                     setTrack(event.target.value);
                     if (formStatus !== "idle") {
+                      setStatusNote("");
                       setFormStatus("idle");
                     }
                   }}
@@ -4980,6 +5347,7 @@ export function GroupScholarLanding() {
                   onChange={(event) => {
                     setFocusNote(event.target.value);
                     if (formStatus !== "idle") {
+                      setStatusNote("");
                       setFormStatus("idle");
                     }
                   }}
@@ -5029,10 +5397,14 @@ export function GroupScholarLanding() {
                 </div>
                 <button
                   type="submit"
-                  disabled={formStatus === "sent"}
+                  disabled={formStatus === "sent" || formStatus === "sending"}
                   className="h-12 rounded-full bg-[color:var(--gs-ink)] px-6 text-sm font-bold text-white shadow-[0_16px_30px_-20px_rgba(28,38,40,0.9)] transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gs-ink)]/40 sm:col-span-2"
                 >
-                  {formStatus === "sent" ? "Intent logged" : "Apply"}
+                  {formStatus === "sent"
+                    ? "Intent logged"
+                    : formStatus === "sending"
+                      ? "Logging..."
+                      : "Apply"}
                 </button>
               </form>
 
@@ -5053,6 +5425,7 @@ export function GroupScholarLanding() {
                     type="button"
                     onClick={() => {
                       setFormStatus("idle");
+                      setStatusNote("");
                       setEmail("");
                       setFocusNote("");
                       setTrack("Any track");

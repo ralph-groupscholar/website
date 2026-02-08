@@ -16,3 +16,6 @@
 
 ## 2026-02-08
 - Ran production database seed script to create groupscholar_website tables and insert initial intake intent rows.
+
+## 2026-02-08
+- Added a new Signals Ledger section to surface live impact signals, status messaging, and latest refresh timing from the production data feed.
