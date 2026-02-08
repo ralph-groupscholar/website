@@ -173,6 +173,8 @@ type IntakePulse = {
   topTrack: string | null;
   lastSubmittedAt: string | null;
   trackMix: Array<{ track: string; count: number }>;
+  topSource: string | null;
+  sourceMix: Array<{ source: string; count: number }>;
   topTimeZone: string | null;
   topLocale: string | null;
   focusNotes: number;
@@ -465,6 +467,12 @@ const fallbackIntakePulse: IntakePulse = {
     { track: "Shared Draft", count: 18 },
     { track: "After Hours", count: 14 },
   ],
+  topSource: "website",
+  sourceMix: [
+    { source: "website", count: 28 },
+    { source: "apply-section", count: 21 },
+    { source: "landing", count: 15 },
+  ],
   topTimeZone: "America/New_York",
   topLocale: "en-US",
   focusNotes: 18,
@@ -695,6 +703,9 @@ export function GroupScholarLanding() {
     ? `${signalDateFormatter.format(intakePulseLastSubmitted)} • ${timeFormatter.format(intakePulseLastSubmitted)}`
     : "—";
   const topTrackLabel = intakePulse.topTrack ?? "Quiet Focus";
+  const topSourceLabel = intakePulse.topSource
+    ? formatSourceLabel(intakePulse.topSource)
+    : "Website";
   const topTimeZoneLabel = intakePulse.topTimeZone ?? "America/New_York";
   const topLocaleLabel = intakePulse.topLocale ?? "en-US";
   const focusNoteSummary =
@@ -1837,7 +1848,7 @@ export function GroupScholarLanding() {
       {
         label: "Intake pulse",
         value: `${intakePulse.last24h} in 24h`,
-        detail: `Total ${intakePulse.total} • Top ${topTrackLabel}`,
+        detail: `Total ${intakePulse.total} • Top ${topTrackLabel} • ${topSourceLabel}`,
       },
       {
         label: "Calibration",
@@ -1859,6 +1870,7 @@ export function GroupScholarLanding() {
       intakePulse.total,
       sessionFormats,
       topTrackLabel,
+      topSourceLabel,
     ],
   );
   const snapshotStrip = useMemo(
@@ -3895,6 +3907,9 @@ export function GroupScholarLanding() {
                     Top time zone: {topTimeZoneLabel}
                   </div>
                   <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
+                    Top source: {topSourceLabel}
+                  </div>
+                  <div className="mt-2 text-xs font-bold text-[color:var(--gs-muted)]">
                     Locale pulse: {topLocaleLabel}
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-semibold text-[color:var(--gs-muted)]">
@@ -3904,6 +3919,16 @@ export function GroupScholarLanding() {
                         className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1"
                       >
                         {entry.track} · {entry.count}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-2 text-[11px] font-semibold text-[color:var(--gs-muted)]">
+                    {intakePulse.sourceMix.slice(0, 3).map((entry) => (
+                      <span
+                        key={`pulse-source-${entry.source}`}
+                        className="rounded-full border border-[color:var(--gs-ink-soft)] bg-white px-2.5 py-1"
+                      >
+                        {formatSourceLabel(entry.source)} · {entry.count}
                       </span>
                     ))}
                   </div>
