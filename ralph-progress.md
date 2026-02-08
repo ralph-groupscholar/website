@@ -8,3 +8,10 @@
 
 - Added a Product Suite roadmap row that previews Eligibility Oracle, Review Queue Forecaster, and Pacing Console with status tags.
 - Deployed updates to https://groupscholar.com.
+
+## 2026-02-08
+- Wired the “Apply” form to a new intent logging API backed by Postgres, added client metadata capture, and updated messaging around data retention.
+- Added the production database schema/table for intent tracking and attempted to seed starter rows (database connection reset; will retry).
+
+## 2026-02-08
+- Ran production database seed script to create groupscholar_website tables and insert initial intake intent rows.
